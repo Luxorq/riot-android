@@ -119,14 +119,15 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             }
         };
 
-        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_people);
-        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_people_secondary);
+        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.bg_grey);
+        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.primary_color_dark);
+        getVectorActivity().getSupportActionBar().setTitle(R.string.direct_chats_header);
 
         initViews();
 
         mOnRoomChangedListener = this;
 
-        mMatrixUserOnlyCheckbox.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MATRIX_USER_ONLY_PREF_KEY, false));
+        //mMatrixUserOnlyCheckbox.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MATRIX_USER_ONLY_PREF_KEY, false));
 
         mAdapter.onFilterDone(mCurrentFilter);
 

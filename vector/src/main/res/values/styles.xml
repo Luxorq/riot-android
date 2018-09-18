@@ -171,6 +171,7 @@
     <!-- no action bar window -->
     <style name="AppTheme.NoActionBar" parent="@style/Theme.Vector.Light">
 
+        <item name="primary_dark_color">@color/primary</item>
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
 
@@ -197,6 +198,10 @@
 
     <!-- home activity -->
     <style name="HomeActivityTheme" parent="AppTheme.NoActionBar">
+        <item name="colorAccent">@color/primary</item>
+        <item name="primary_color">@color/bg_grey</item>
+        <item name="primary_dark_color">@color/primary_color_dark</item>
+        <item name="primary_text_color">@color/black</item>
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
@@ -271,11 +276,13 @@
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">@color/vector_green_color</item>
+        <item name="colorControlActivated">@color/white</item>
     </style>
 
     <!-- login & registration activities -->
     <style name="LoginAppTheme" parent="AppTheme.NoActionBar">
+        <item name="primary_dark_color">@color/primary</item>
+        <item name="primary_color">@color/primary_color_light</item>
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
         <item name="colorAccent">?attr/editTextColor</item>
@@ -453,7 +460,7 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">@color/vector_green_color</item>
+        <item name="colorControlActivated">@color/white</item>
     </style>
 
     <style name="LoginAppTheme.Dark" parent="AppTheme.NoActionBar.Dark">
@@ -610,7 +617,7 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">@color/vector_green_color</item>
+        <item name="colorControlActivated">@color/white</item>
     </style>
 
     <style name="LoginAppTheme.Black" parent="AppTheme.NoActionBar.Black">
@@ -692,6 +699,30 @@
 
     <style name="Floating_Actions_Menu.Light">
         <item name="android:background">@drawable/vector_background_fab_label_light</item>
+    </style>
+
+    <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/grey600</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextLabelRegistered" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/grey700</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CaptchaAppTheme" parent="AppTheme.NoActionBar">
+        <item name="primary_dark_color">@color/primary</item>
+    </style>
+
+    <style name="RoomActivityTheme" parent="AppTheme.NoActionBar">
+        <item name="colorAccent">@color/primary</item>
+        <item name="primary_color">@color/bg_grey</item>
+        <item name="primary_dark_color">@color/primary_color_dark</item>
+        <item name="primary_text_color">@color/black</item>
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
 </resources>

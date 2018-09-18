@@ -35,7 +35,7 @@ import im.vector.VectorApp;
 public class VectorContentProvider extends ContentProvider {
     private static final String LOG_TAG = VectorContentProvider.class.getSimpleName();
 
-    private static final String AUTHORITIES = "im.vector.VectorApp.provider";
+    private static final String AUTHORITIES = "im.kedr.VectorApp.provider";
 
     private static final String BUG_SEPARATOR = "bugreport";
 

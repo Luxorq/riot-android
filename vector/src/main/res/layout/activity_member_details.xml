@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/riot_primary_background_color"
+    android:background="@color/bg_grey"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/member_details_action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/primary_color">
+        android:background="@color/white">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/member_details_toolbar"
+            style="@style/VectorToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:background="@color/bg_grey"
+            android:elevation="2dp">
+
+        </android.support.v7.widget.Toolbar>
 
         <RelativeLayout
             android:id="@+id/action_bar_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/member_details_toolbar"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:visibility="visible">
@@ -33,8 +43,8 @@
                 <include
                     android:id="@+id/memberDetails_roundAvatar"
                     layout="@layout/vector_large_round_avatar"
-                    android:layout_width="84dp"
-                    android:layout_height="84dp" />
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
             </RelativeLayout>
 
             <ImageView
@@ -56,10 +66,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/member_avatar_container"
                 android:layout_marginTop="10dp"
-                android:singleLine="true"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <!-- the member presence -->
             <TextView
@@ -68,25 +79,132 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/member_details_name"
                 android:layout_marginBottom="16dp"
-                android:maxLines="1"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
-                android:textColor="?attr/default_text_light_color"
+                android:maxLines="1"
+                android:textColor="@color/grey500"
                 android:textSize="14sp" />
         </RelativeLayout>
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/member_details_toolbar"
-            style="@style/VectorToolbarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            app:contentInsetEnd="0dp"
-            app:contentInsetStart="0dp">
-
-        </android.support.v7.widget.Toolbar>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/parentPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/member_details_action_bar"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/audio"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/contact_audio" />
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/audio"
+            android:gravity="center_horizontal"
+            android:text="@string/audio"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/chat"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/audio"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/contact_chat" />
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/chat"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/audio"
+            android:gravity="center_horizontal"
+            android:text="@string/chat"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/video"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_toRightOf="@id/chat"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/contact_video" />
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/video"
+            android:layout_toRightOf="@id/chat"
+            android:gravity="center_horizontal"
+            android:text="@string/video"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/parentPanel"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:elevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/push_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="20dp"
+                android:drawableStart="@drawable/contact_mute"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:paddingStart="15dp"
+                android:singleLine="true"
+                android:text="@string/room_settings_mute"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/mute_swtich"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/media_files"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="?attr/selectableItemBackground"
+            android:drawablePadding="20dp"
+            android:drawableStart="@drawable/contact_media"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:singleLine="true"
+            android:text="@string/room_details_files"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <!-- the member actions list: start new room, Make admin, block.. -->
     <ExpandableListView
@@ -97,7 +215,8 @@
         android:cacheColorHint="@android:color/transparent"
         android:divider="#00000000"
         android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"
+        android:visibility="gone" />
 
     <include
         android:id="@+id/devices_header_view"
@@ -133,7 +252,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:elevation="2dp">
 
         <ProgressBar
             android:id="@+id/progress_bar_view"

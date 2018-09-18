@@ -1,0 +1,189 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_grey">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="2dp"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include
+                        android:id="@+id/room_avatar"
+                        layout="@layout/vector_room_header_round_avatar"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="15dp" />
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="100dp"
+                        android:src="@drawable/make_photo" />
+                </FrameLayout>
+
+                <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
+
+                <TextView
+                    android:id="@+id/action_bar_header_room_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    tools:text="a room name here" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/invite_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:text="@string/invite"
+                    android:textColor="@color/grey500"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:drawablePadding="20dp"
+                    android:drawableStart="@drawable/invite"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:text="@string/invite_contacts"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="65dp"
+                    android:text="@string/invite_direct"
+                    android:textColor="@color/grey500"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:elevation="2dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:text="@string/room_sliding_menu_settings"
+                    android:textColor="@color/grey500"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/change_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="20dp"
+                    android:drawableStart="@drawable/change_password"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:text="@string/settings_change_password"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/push_notifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:drawablePadding="20dp"
+                        android:drawableStart="@drawable/notifications"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:paddingStart="15dp"
+                        android:singleLine="true"
+                        android:text="@string/push_notifications"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/enable_push"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="15dp" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/vector_settings_spinner_views"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/waiting_background_color"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/vector_settings_spinner"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="visible" />
+    </FrameLayout>
+</RelativeLayout>

@@ -110,12 +110,12 @@
     <string name="system_alerts_header">"System Alerts"</string>
 
     <!-- People fragment -->
-    <string name="direct_chats_header">Conversations</string>
+    <string name="direct_chats_header">Chats</string>
     <string name="local_address_book_header">Local address book</string>
     <string name="user_directory_header">User directory</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
+    <string name="no_contact_access_placeholder">You didn\'t allow KEDR to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
 
     <!-- Rooms fragment -->
@@ -155,7 +155,7 @@
     <string name="join_room">Join Room</string>
     <string name="username">Username</string>
     <string name="create_account">Register</string>
-    <string name="login">Log in</string>
+    <string name="login">Login</string>
     <string name="logout">Log out</string>
     <string name="hs_url">Home Server URL</string>
     <string name="identity_url">Identity Server URL</string>
@@ -185,8 +185,8 @@
     <string name="error_no_external_application_found">Sorry, no external application has been found to complete this action.</string>
 
     <!-- Authentication -->
-    <string name="auth_login">Log in</string>
-    <string name="auth_register">Register</string>
+    <string name="auth_login">Login</string>
+    <string name="auth_register">Registration</string>
     <string name="auth_submit">Submit</string>
     <string name="auth_skip">Skip</string>
     <string name="auth_send_reset_email">Send Reset Email</string>
@@ -221,7 +221,7 @@
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
     <string name="auth_email_validation_message">Please check your email to continue registration</string>
     <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>
-    <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
+    <string name="auth_recaptcha_message">We want to make sure you are not a robot</string>
     <string name="auth_username_in_use">Username in use</string>
     <string name="auth_home_server">Home Server:</string>
     <string name="auth_identity_server">Identity Server:</string>
@@ -260,7 +260,7 @@
     <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Request sent</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Please launch Riot on another device that can decrypt the message so it can send the keys to this device.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Please launch KEDR on another device that can decrypt the message so it can send the keys to this device.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -319,14 +319,14 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Riot needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
-    <string name="permissions_rationale_msg_camera">Riot needs permission to access your camera to take pictures and video calls.</string>
+    <string name="permissions_rationale_msg_storage">KEDR needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
+    <string name="permissions_rationale_msg_camera">KEDR needs permission to access your camera to take pictures and video calls.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot needs permission to access your microphone to perform audio calls.</string>
+    <string name="permissions_rationale_msg_record_audio">KEDR needs permission to access your microphone to perform audio calls.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
+    <string name="permissions_rationale_msg_camera_and_audio">KEDR needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <string name="permissions_rationale_msg_contacts">KEDR needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from KEDR.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">KEDR needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow KEDR to access your contacts ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
 
@@ -493,7 +493,7 @@
     <!-- Room Details -->
     <string name="room_details_title">Room Details</string>
     <string name="room_details_people">People</string>
-    <string name="room_details_files">Files</string>
+    <string name="room_details_files">Media files</string>
     <string name="room_details_settings">Settings</string>
     <plurals name="room_details_selected">
         <item quantity="one">1 selected</item>
@@ -589,7 +589,7 @@
     <string name="settings_title_app_info_link">Application info</string>
 
     <string name="settings_notification_privacy">Notification privacy</string>
-    <string name="settings_notification_privacy_warning">Riot.im runs in the background to keep your notification message content private. You can change this option to reduce battery usage.</string>
+    <string name="settings_notification_privacy_warning">KEDR.io runs in the background to keep your notification message content private. You can change this option to reduce battery usage.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_power_saving">Power-saving Options</string>
     <string name="settings_notification_privacy_low_detail">Low detail notifications</string>
@@ -640,7 +640,7 @@
     <string name="settings_advanced">Advanced</string>
     <string name="settings_cryptography">Cryptography</string>
     <string name="settings_notifications_targets">Notification Targets</string>
-    <string name="settings_contact">Local contacts</string>
+    <string name="settings_contact">My contacts</string>
     <string name="settings_contacts_app_permission">Contacts permission</string>
     <string name="settings_contacts_phonebook_country">Phonebook country</string>
     <string name="settings_home_display">Home display</string>
@@ -663,17 +663,17 @@
 
     <!-- startup -->
     <string name="startup_notification_privacy_title">Notification Privacy</string>
-    <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately (this might affect battery usage).</string>
+    <string name="startup_notification_privacy_message">KEDR can run in the background to manage your notifications securely and privately (this might affect battery usage).</string>
     <string name="startup_notification_privacy_button_grant">Grant permission</string>
     <string name="startup_notification_privacy_button_other">Choose another option</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_out_of_analytics_summary">KEDR collects anonymous analytics to allow us to improve the application.</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve Riot.</string>
+    <string name="settings_opt_in_of_analytics_summary">KEDR collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve KEDR.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
     <string name="settings_data_save_mode">Data save mode</string>
@@ -706,9 +706,9 @@
     <string name="account_phone_number_already_used_error">This phone number is already in use</string>
 
     <string name="settings_change_password">Change password</string>
-    <string name="settings_old_password">old password</string>
-    <string name="settings_new_password">new password</string>
-    <string name="settings_confirm_password">confirm password</string>
+    <string name="settings_old_password">Old password</string>
+    <string name="settings_new_password">New password</string>
+    <string name="settings_confirm_password">Confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
@@ -877,7 +877,7 @@
     <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. \nIf it doesn\'t, then someone else is intercepting this device and you should probably blacklist it.\nIn future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
-    <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
+    <string name="e2e_enabling_on_app_update">KEDR now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Room contains unknown devices</string>
@@ -1063,4 +1063,23 @@
     <!-- Parameter %s will be replaced by the value of string resource_limit_contact_admin -->
     <string name="resource_limit_hard_contact">"Please %s to continue using this service."</string>
 
+    <string name="invite_contacts">Invite contacts</string>
+    <string name="auth_registration">Registration</string>
+    <string name="encrypted_messenger">Encrypted messenger</string>
+    <string name="register_label">Chat absolutely safe with fully encrypted messages.</string>
+    <string name="already_registered">Already registered?&#160;</string>
+    <string name="login_here">Login here</string>
+    <string name="no_account">Have no account?&#160;</string>
+    <string name="register_here">Register here</string>
+    <string name="push_notifications">Push notifications</string>
+    <string name="invite_text">I use strong security chat KEDR for Android. You can download it with https://kedr.io\nMy username in KEDR is: %s</string>
+    <string name="invite_direct">Invite friend sending him download link to KEDR and my Username to start chat.</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
+    <string name="chat">Chat</string>
+    <string name="contact">Contact</string>
+    <string name="invite_sent">Invite sent</string>
+    <string name="invite_wait">waiting for acceptance and encryption keys exchange</string>
+    <string name="outgoing_call">Outgoing call</string>
+    <string name="room_empty">Room is empty. Leaving…</string>
 </resources>

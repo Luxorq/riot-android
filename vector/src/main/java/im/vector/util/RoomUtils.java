@@ -515,6 +515,21 @@ public class RoomUtils {
 
             BingRulesManager.RoomNotificationState state = session.getDataHandler().getBingRulesManager().getRoomNotificationState(room.getRoomId());
 
+            item = popup.getMenu().findItem(R.id.ic_action_notifications_noisy);
+            item.setVisible(false);
+            item = popup.getMenu().findItem(R.id.ic_action_notifications_all_message);
+            item.setVisible(false);
+            item = popup.getMenu().findItem(R.id.ic_action_notifications_mention_only);
+            item.setVisible(false);
+            item = popup.getMenu().findItem(R.id.ic_action_notifications_mute);
+            item.setVisible(true);
+            item = popup.getMenu().findItem(R.id.ic_action_select_fav);
+            item.setVisible(false);
+            item = popup.getMenu().findItem(R.id.ic_action_select_deprioritize);
+            item.setVisible(false);
+            item = popup.getMenu().findItem(R.id.ic_action_select_direct_chat);
+            item.setVisible(false);
+
             if (BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY != state) {
                 item = popup.getMenu().findItem(R.id.ic_action_notifications_noisy);
                 item.setIcon(null);

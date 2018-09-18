@@ -117,7 +117,7 @@
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/LoginAppTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -131,7 +131,8 @@
         <activity
             android:name=".activity.AccountCreationCaptchaActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/create_account" />
+            android:label="@string/create_account"
+            android:theme="@style/CaptchaAppTheme"/>
         <activity
             android:name=".activity.FallbackLoginActivity"
             android:configChanges="orientation|screenSize"
@@ -194,6 +195,17 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".activity.VectorHomeActivity"
             android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorHomeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.PasswordChangeActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_change_password"
+            android:parentActivityName=".activity.VectorHomeActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/LoginAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorHomeActivity" />

@@ -12,7 +12,7 @@
         <item name="primary_dark_color">#5EA584</item>
 
         <!-- application bar background color -->
-        <item name="primary_color">@color/primary_color_light</item>
+        <item name="primary_color">@color/white</item>
 
         <!-- application bar text color -->
         <item name="primary_text_color">@android:color/white</item>

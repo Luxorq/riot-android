@@ -147,7 +147,7 @@ class NotificationAreaView @JvmOverloads constructor(
 
     private fun renderTyping(state: State.Typing) {
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.vector_typing)
+        imageView.setImageResource(R.drawable.typing)
         messageView.text = SpannableString(state.message)
         messageView.setTextColor(ThemeUtils.getColor(context, R.attr.room_notification_text_color))
     }

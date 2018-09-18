@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "610043583884",
+    "firebase_url": "https://kedr-f7dde.firebaseio.com",
+    "project_id": "kedr-f7dde",
+    "storage_bucket": "kedr-f7dde.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610043583884:android:ca0f194cbe7b323b",
+        "android_client_info": {
+          "package_name": "im.kedr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "610043583884-9odlun5irndk01s6jkej2u6fimepvjoc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "im.kedr",
+            "certificate_hash": "337d8c95a9d94309f164c519d41e1ea34c52681c"
+          }
+        },
+        {
+          "client_id": "610043583884-91q43d5s0u1juef85sb21fiqjs4fk5c0.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "610043583884-91q43d5s0u1juef85sb21fiqjs4fk5c0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz7Pnk2v9ZYeeYH642WxQWk1gxbFucO0I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610043583884-91q43d5s0u1juef85sb21fiqjs4fk5c0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

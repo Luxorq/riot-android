@@ -122,6 +122,7 @@ import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
+import im.vector.fragments.SettingsFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -183,6 +184,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
     private static final String TAG_FRAGMENT_GROUPS = "TAG_FRAGMENT_GROUPS";
+    private static final String TAG_FRAGMENT_SETTINGS = "TAG_FRAGMENT_SETTINGS";
+
 
     // Key used to restore the proper fragment after orientation change
     private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
@@ -225,13 +228,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @BindView(R.id.home_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
-
-    @BindView(R.id.navigation_view)
-    NavigationView navigationView;
 
     // calls
     @BindView(R.id.listView_pending_callview)
@@ -319,8 +317,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         setupNavigation();
 
-        initSlidingMenu();
-
         mSession = Matrix.getInstance(this).getDefaultSession();
         mRoomsViewModel = new HomeRoomsViewModel(mSession);
         // track if the application update
@@ -340,7 +336,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // Check whether the user has agreed to the use of analytics tracking
 
         if (!PreferencesManager.didAskToUseAnalytics(this)) {
-            promptForAnalyticsTracking();
+            //promptForAnalyticsTracking();
         }
 
         // process intent parameters
@@ -491,9 +487,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         final View selectedMenu;
         if (isFirstCreation()) {
-            selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_home);
+            selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_people);
         } else {
-            selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
+            selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_people));
         }
         if (selectedMenu != null) {
             selectedMenu.performClick();
@@ -510,7 +506,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Display the Floating Action Menu if it is required
      */
     private void showFloatingActionMenuIfRequired() {
-        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
+        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups) || mCurrentMenuId == R.id.bottom_action_settings) {
             concealFloatingActionMenu();
         } else {
             revealFloatingActionMenu();
@@ -556,8 +552,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         showFloatingActionMenuIfRequired();
-
-        refreshSlidingMenu();
 
         mVectorPendingCallView.checkPendingCall();
 
@@ -716,7 +710,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public int getMenuRes() {
-        return R.menu.vector_home;
+        return -1;
     }
 
     @Override
@@ -752,11 +746,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerVisible(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            return;
-        }
-
         if (!TextUtils.isEmpty(mSearchView.getQuery().toString())) {
             mSearchView.setQuery("", true);
             return;
@@ -902,6 +891,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
+                mSearchView.setVisibility(View.VISIBLE);
                 break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
@@ -920,6 +910,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                mSearchView.setVisibility(View.VISIBLE);
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -939,6 +930,16 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
                 break;
+            case R.id.bottom_action_settings:
+                Log.d(LOG_TAG, "onNavigationItemSelected SETTINGS");
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_SETTINGS);
+                if (fragment == null) {
+                    fragment = SettingsFragment.newInstance();
+                }
+                mCurrentFragmentTag = TAG_FRAGMENT_SETTINGS;
+                mSearchView.setVisibility(View.GONE);
+                break;
+
         }
 
         if (mShowFloatingActionButtonRunnable != null && mFloatingActionsMenu != null) {
@@ -1084,8 +1085,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         ));
 
         mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.ic_add_white),
-                ContextCompat.getColor(this, android.R.color.white)
+                ContextCompat.getDrawable(this, R.drawable.chats_create_new),
+                ContextCompat.getColor(this, R.color.grey600)
         ));
 
         mFabJoinRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
@@ -1763,166 +1764,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         });
     }
 
-    void initSlidingMenu() {
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                /* host Activity */
-                this,
-                /* DrawerLayout object */
-                mDrawerLayout,
-                mToolbar,
-                /* "open drawer" description */
-                R.string.action_open,
-                /* "close drawer" description */
-                R.string.action_close) {
-
-            @Override
-            public void onDrawerClosed(View view) {
-                switch (mSlidingMenuIndex) {
-                    case R.id.sliding_menu_settings: {
-                        // launch the settings activity
-                        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
-                        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        startActivity(settingsIntent);
-                        break;
-                    }
-
-                    case R.id.sliding_menu_send_bug_report: {
-                        BugReporter.sendBugReport();
-                        break;
-                    }
-
-                    case R.id.sliding_menu_exit: {
-                        if (EventStreamService.getInstance() != null) {
-                            EventStreamService.getInstance().stopNow();
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
-                                System.exit(0);
-                            }
-                        });
-
-                        break;
-                    }
-
-                    case R.id.sliding_menu_sign_out: {
-                        new AlertDialog.Builder(VectorHomeActivity.this)
-                                .setMessage(R.string.action_sign_out_confirmation)
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.action_sign_out,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                showWaitingView();
-                                                CommonActivityUtils.logout(VectorHomeActivity.this);
-                                            }
-                                        })
-                                .setNeutralButton(R.string.encryption_export_export, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                exportKeysAndSignOut();
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton(R.string.cancel, null)
-                                .show();
-
-                        break;
-                    }
-
-                    case R.id.sliding_copyright_terms: {
-                        VectorUtils.displayAppCopyright();
-                        break;
-                    }
-
-                    case R.id.sliding_menu_app_tac: {
-                        VectorUtils.displayAppTac();
-                        break;
-                    }
-
-                    case R.id.sliding_menu_privacy_policy: {
-                        VectorUtils.displayAppPrivacyPolicy();
-                        break;
-                    }
-
-                    case R.id.sliding_menu_third_party_notices: {
-                        VectorUtils.displayThirdPartyLicenses();
-                        break;
-                    }
-                }
-
-                mSlidingMenuIndex = -1;
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-            }
-        };
-
-        NavigationView.OnNavigationItemSelectedListener listener = new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                mDrawerLayout.closeDrawers();
-                mSlidingMenuIndex = menuItem.getItemId();
-                return true;
-            }
-        };
-
-        navigationView.setNavigationItemSelectedListener(listener);
-        mDrawerLayout.setDrawerListener(drawerToggle);
-
-        // display the home and title button
-        if (null != getSupportActionBar()) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(ThemeUtils.INSTANCE.tintDrawable(this,
-                    ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
-        }
-    }
-
-    private void refreshSlidingMenu() {
-        Menu menuNav = navigationView.getMenu();
-        MenuItem aboutMenuItem = menuNav.findItem(R.id.sliding_menu_version);
-
-        if (null != aboutMenuItem) {
-            String version = getString(R.string.room_sliding_menu_version) + " " + VectorUtils.getApplicationVersion(this);
-            aboutMenuItem.setTitle(version);
-        }
-
-        // init the main menu
-        TextView displayNameTextView = navigationView.findViewById(R.id.home_menu_main_displayname);
-
-        if (null != displayNameTextView) {
-            displayNameTextView.setText(mSession.getMyUser().displayname);
-        }
-
-        TextView userIdTextView = navigationView.findViewById(R.id.home_menu_main_matrix_id);
-        if (null != userIdTextView) {
-            userIdTextView.setText(mSession.getMyUserId());
-        }
-
-        ImageView mainAvatarView = navigationView.findViewById(R.id.home_menu_main_avatar);
-
-        if (null != mainAvatarView) {
-            VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
-        } else {
-            // on Android M, the mNavigationView is not loaded at launch
-            // so launch asap it is rendered.
-            navigationView.post(new Runnable() {
-                @Override
-                public void run() {
-                    refreshSlidingMenu();
-                }
-            });
-        }
-    }
-
     //==============================================================================================================
     // VOIP call management
     //==============================================================================================================
@@ -2322,7 +2163,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
             @Override
             public void onAccountInfoUpdate(MyUser myUser) {
-                refreshSlidingMenu();
+
             }
 
             @Override

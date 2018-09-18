@@ -1417,8 +1417,8 @@ public class CommonActivityUtils {
             Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");
             return;
         }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activiy);
+        session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, callback);
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(activiy);
         LayoutInflater inflater = activiy.getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.encrypted_verify_device, null);
@@ -1451,7 +1451,7 @@ public class CommonActivityUtils {
                         }
                     }
                 })
-                .show();
+                .show();*/
     }
 
     /**

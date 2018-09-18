@@ -1224,7 +1224,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             mActiveWidgetsBanner.onActivityResume();
         }
 
-        displayE2eRoomAlert();
+        //displayE2eRoomAlert();
 
         // init the auto-completion list from the room members
         mEditText.initAutoCompletions(mSession, mRoom);

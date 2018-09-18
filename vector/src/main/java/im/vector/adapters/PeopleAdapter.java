@@ -106,8 +106,8 @@ public class PeopleAdapter extends AbsAdapter {
         mKnownContactsSection.setIsHiddenWhenNoFilter(true);
 
         addSection(mDirectChatsSection);
-        addSection(mLocalContactsSection);
-        addSection(mKnownContactsSection);
+        //addSection(mLocalContactsSection);
+        //addSection(mKnownContactsSection);
     }
 
     /*

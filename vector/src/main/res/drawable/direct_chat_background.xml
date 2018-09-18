@@ -4,8 +4,4 @@
 
     <!-- required on android < 4.2 devices -->
     <solid android:color="@android:color/transparent" />
-
-    <stroke
-        android:width="4dp"
-        android:color="@color/direct_chat_ring_color" />
 </shape>

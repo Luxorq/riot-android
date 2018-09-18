@@ -165,7 +165,7 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
             // common error message
             private void onError(String errorMessage) {
                 Log.e(LOG_TAG, "## onError() : errorMessage");
-                Toast.makeText(AccountCreationCaptchaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                /*Toast.makeText(AccountCreationCaptchaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
 
                 // on error case, close this activity
                 runOnUiThread(new Runnable() {
@@ -173,7 +173,7 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
                     public void run() {
                         finish();
                     }
-                });
+                });*/
             }
 
             @Override

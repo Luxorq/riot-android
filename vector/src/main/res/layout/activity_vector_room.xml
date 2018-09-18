@@ -24,7 +24,7 @@
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/primary_color"
+            android:background="@color/bg_grey"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
 
@@ -241,7 +241,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
-                    android:layout_toRightOf="@id/room_self_avatar"
                     android:minHeight="56dp">
 
                     <ImageView
@@ -251,7 +250,8 @@
                         android:layout_gravity="center_vertical"
                         android:scaleType="fitCenter"
                         android:src="@drawable/e2e_verified"
-                        android:tint="?attr/default_icon_tint_color" />
+                        android:tint="?attr/default_icon_tint_color"
+                        android:visibility="gone"/>
 
                     <im.vector.view.VectorAutoCompleteTextView
                         android:id="@+id/editText_messageBox"
@@ -279,7 +279,7 @@
                         android:contentDescription="@string/send"
                         android:padding="8dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_material_file" />
+                        android:src="@drawable/chat_toolbar_attach_icon" />
 
                     <ImageView
                         android:id="@+id/room_start_call_image_view"
@@ -319,7 +319,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_toRightOf="@id/room_self_avatar"
                     android:text="@string/room_do_not_have_permission_to_post"
                     android:textColor="?attr/riot_primary_text_color"
                     android:textSize="14sp"

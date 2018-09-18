@@ -2,13 +2,14 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/primary">
 
     <RelativeLayout
         android:id="@+id/captcha_logo_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="30dp">
 
         <ImageView
@@ -16,8 +17,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/logo_login"/>
-
+            android:src="@drawable/kedr_logo" />
     </RelativeLayout>
 
     <TextView
@@ -28,6 +28,8 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:textColor="@color/white"
+        android:gravity="center"
         android:text="@string/auth_recaptcha_message"
         android:textSize="16sp" />
 

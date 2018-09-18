@@ -2,5 +2,8 @@
 <resources>
 
     <item name="ic_action_re_request_e2e_key" type="id" />
+    <item name="bottom_action_groups" type="id"/>
+    <item name="bottom_action_rooms" type="id"/>
+    <item name="bottom_action_favourites" type="id"/>
 
 </resources>

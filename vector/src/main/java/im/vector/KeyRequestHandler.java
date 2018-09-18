@@ -321,8 +321,8 @@ public class KeyRequestHandler {
             mCurrentDevice = null;
             return;
         }
-
-        final Activity activity = VectorApp.getCurrentActivity();
+        onDisplayKeyShareDialogClose(true, false);
+        /*final Activity activity = VectorApp.getCurrentActivity();
 
         String deviceName = TextUtils.isEmpty(deviceInfo.displayName()) ? deviceInfo.deviceId : deviceInfo.displayName();
         String dialogText = wasNewDevice ? activity.getString(R.string.you_added_a_new_device, deviceName)
@@ -364,6 +364,6 @@ public class KeyRequestHandler {
                         onDisplayKeyShareDialogClose(false, true);
                     }
                 })
-                .show();
+                .show();*/
     }
 }

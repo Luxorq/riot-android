@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -37,8 +38,11 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -177,9 +181,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // the password 1 name
     private EditText mCreationPassword1TextView;
 
-    // the password 2 name
-    private EditText mCreationPassword2TextView;
-
     // forgot my password
     private TextView mPasswordForgottenTxtView;
 
@@ -225,6 +226,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private EditText mPhoneNumber;
     private Button mSubmitThreePidButton;
     private Button mSkipThreePidButton;
+
+    private TextView mLabel;
+    private TextView mLabelRegister;
 
     // Home server options
     private View mHomeServerOptionLayout;
@@ -405,7 +409,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // account creation
         mCreationUsernameTextView = findViewById(R.id.creation_your_name);
         mCreationPassword1TextView = findViewById(R.id.creation_password1);
-        mCreationPassword2TextView = findViewById(R.id.creation_password2);
 
         // account creation - three pid
         mThreePidInstructions = findViewById(R.id.instructions);
@@ -436,6 +439,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mRegisterButton = findViewById(R.id.button_register);
         mForgotPasswordButton = findViewById(R.id.button_reset_password);
         mForgotValidateEmailButton = findViewById(R.id.button_forgot_email_validate);
+        mLabelRegister = findViewById(R.id.label_register_switcher);
+        mLabel = findViewById(R.id.login_large_label);
 
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
         mUseCustomHomeServersCheckbox = findViewById(R.id.display_server_url_expand_checkbox);
@@ -474,6 +479,19 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             @Override
             public void onClick(View view) {
                 onRegisterClick(true);
+            }
+        });
+
+        mLabelRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMode == MODE_LOGIN) {
+                    mMode = MODE_ACCOUNT_CREATION;
+                } else if (mMode == MODE_ACCOUNT_CREATION) {
+                    mMode = MODE_LOGIN;
+                }
+                refreshDisplay();
+                updateBottomText();
             }
         });
 
@@ -1568,7 +1586,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // parameters
         final String name = mCreationUsernameTextView.getText().toString().trim();
         final String password = mCreationPassword1TextView.getText().toString().trim();
-        final String passwordCheck = mCreationPassword2TextView.getText().toString().trim();
 
         if (checkRegistrationValues) {
             if (TextUtils.isEmpty(name)) {
@@ -1579,9 +1596,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return;
             } else if (password.length() < 6) {
                 Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
-                return;
-            } else if (!TextUtils.equals(password, passwordCheck)) {
-                Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 String expression = "^[a-z0-9.\\-_]+$";
@@ -1854,7 +1868,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         mCreationUsernameTextView.setText(savedInstanceState.getString(SAVED_CREATION_USER_NAME));
         mCreationPassword1TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD1));
-        mCreationPassword2TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD2));
 
         mForgotEmailTextView.setText(savedInstanceState.getString(SAVED_FORGOT_EMAIL_ADDRESS));
         mForgotPassword1TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD1));
@@ -1902,10 +1915,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (!TextUtils.isEmpty(mCreationPassword1TextView.getText().toString().trim())) {
             savedInstanceState.putString(SAVED_CREATION_PASSWORD1, mCreationPassword1TextView.getText().toString().trim());
-        }
-
-        if (!TextUtils.isEmpty(mCreationPassword2TextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_CREATION_PASSWORD2, mCreationPassword2TextView.getText().toString().trim());
         }
 
         if (!TextUtils.isEmpty(mForgotEmailTextView.getText().toString().trim())) {
@@ -1964,8 +1973,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         loginLayout.setVisibility((mMode == MODE_LOGIN) ? View.VISIBLE : View.GONE);
         creationLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION) ? View.VISIBLE : View.GONE);
-        forgetPasswordLayout.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
-        threePidLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION_THREE_PID) ? View.VISIBLE : View.GONE);
+        //forgetPasswordLayout.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
+        //threePidLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION_THREE_PID) ? View.VISIBLE : View.GONE);
 
         boolean isLoginMode = mMode == MODE_LOGIN;
 
@@ -1974,24 +1983,28 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
         mLoginButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
         mRegisterButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
-        mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);
+        //mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);
+        mLoginButton.setVisibility(mMode == MODE_LOGIN ? View.VISIBLE : View.GONE);
+        mRegisterButton.setVisibility(mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
+
         mForgotValidateEmailButton.setVisibility(mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION ? View.VISIBLE : View.GONE);
         mSubmitThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.VISIBLE : View.GONE);
         mSkipThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID && RegistrationManager.getInstance().canSkip() ? View.VISIBLE : View.GONE);
-        mHomeServerOptionLayout.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.GONE : View.VISIBLE);
+        //mHomeServerOptionLayout.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.GONE : View.VISIBLE);
 
         // update the button text to the current status
         // 1 - the user does not warn that he clicks on the email validation
         // 2 - the password has been resetted and the user is invited to switch to the login screen
         mForgotValidateEmailButton.setText(mIsPasswordResetted ? R.string.auth_return_to_login : R.string.auth_reset_password_next_step_button);
 
-        @ColorInt final int green = ContextCompat.getColor(this, R.color.vector_green_color);
+        /*@ColorInt final int green = ContextCompat.getColor(this, R.color.vector_green_color);
         @ColorInt final int white = ContextCompat.getColor(this, android.R.color.white);
 
         mLoginButton.setBackgroundColor(isLoginMode ? green : white);
         mLoginButton.setTextColor(!isLoginMode ? green : white);
         mRegisterButton.setBackgroundColor(!isLoginMode ? green : white);
-        mRegisterButton.setTextColor(isLoginMode ? green : white);
+        mRegisterButton.setTextColor(isLoginMode ? green : white);*/
+        updateBottomText();
     }
 
     /**
@@ -2017,8 +2030,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // forgot password mode
         // the register and the login buttons are hidden
-        mRegisterButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
-        mLoginButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
+        //mRegisterButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
+        //mLoginButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
 
         mForgotPasswordButton.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
         mForgotPasswordButton.setAlpha(enabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
@@ -2477,10 +2490,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         } else {
             if (RegistrationManager.getInstance().canAddThreePid()) {
                 // Show next screen with email/phone number
-                showMainLayout();
+                /*showMainLayout();
                 mMode = MODE_ACCOUNT_CREATION_THREE_PID;
                 initThreePidView();
-                refreshDisplay();
+                refreshDisplay();*/
+                createAccount();
             } else {
                 // Start registration
                 createAccount();
@@ -2493,4 +2507,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         enableLoadingScreen(false);
         mResourceLimitDialogHelper.displayDialog(e);
     }
+
+    private void updateBottomText() {
+        boolean isLogin = mRegisterButton.getVisibility() == View.GONE;
+        String partOne = getString(isLogin ? R.string.no_account : R.string.already_registered);
+        String partTwo = getString(isLogin ? R.string.register_here : R.string.login_here);
+        SpannableStringBuilder spannable = new SpannableStringBuilder();
+        spannable.append(partOne).append(partTwo);
+        spannable.setSpan(new ForegroundColorSpan(Color.BLACK), partOne.length(), spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mLabelRegister.setText(spannable, TextView.BufferType.SPANNABLE);
+        mLabel.setText(isLogin ? R.string.auth_login : R.string.auth_registration);
+    }
+
 }
