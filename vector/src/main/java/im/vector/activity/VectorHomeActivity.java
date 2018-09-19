@@ -506,7 +506,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Display the Floating Action Menu if it is required
      */
     private void showFloatingActionMenuIfRequired() {
-        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups) || mCurrentMenuId == R.id.bottom_action_settings) {
+        if ((mCurrentMenuId == R.id.bottom_action_favourites)
+                || (mCurrentMenuId == R.id.bottom_action_groups)
+                || (mCurrentMenuId == R.id.bottom_action_settings)
+                || (mCurrentMenuId == R.id.bottom_action_home)) {
             concealFloatingActionMenu();
         } else {
             revealFloatingActionMenu();
@@ -556,7 +559,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         mVectorPendingCallView.checkPendingCall();
 
         if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
-            // crash reported by a rage shake
+            // crash reported by a rage shakeномер
             try {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.send_bug_report_app_crashed)

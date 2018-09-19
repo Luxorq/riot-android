@@ -422,7 +422,7 @@
     <string name="room_participants_action_ignore">Hide all messages from this user</string>
     <string name="room_participants_action_unignore">Show all messages from this user</string>
     <string name="room_participants_action_unignore_prompt">Show all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
-    <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
+    <string name="room_participants_invite_search_another_user">Username</string>
     <string name="room_participants_action_mention">Mention</string>
     <string name="room_participants_action_devices_list">Show Device List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
@@ -444,8 +444,8 @@
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
-    <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
-    <string name="people_search_user_directory">USER DIRECTORY (%s)</string>
+    <string name="people_search_local_contacts">Results (%d)</string>
+    <string name="people_search_user_directory">Results (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
 
     <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>

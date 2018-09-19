@@ -80,17 +80,19 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
                 final RoomInvitationViewHolder invitationViewHolder = (RoomInvitationViewHolder) viewHolder;
                 invitationViewHolder.populateViews(mContext, mSession, room, mRoomInvitationListener, mMoreActionListener);
             } else {
-                viewHolder.populateViews(mContext, mSession, room, room.isDirect(), false, mMoreActionListener);
+                //viewHolder.populateViews(mContext, mSession, room, room.isDirect(), false, mMoreActionListener);
+                viewHolder.populateViews(mContext, mSession, room);
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
+                        //mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
+                        mListener.onSelectRoom(room, viewHolder.getAdapterPosition(), (String) v.getTag());
                     }
                 });
                 viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
+                        //mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
                         return true;
                     }
                 });
@@ -222,7 +224,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      */
 
     public interface OnSelectRoomListener {
-        void onSelectRoom(Room room, int position);
+        void onSelectRoom(Room room, int position, String userId);
 
         void onLongClickRoom(View v, Room room, int position);
     }

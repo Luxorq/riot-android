@@ -227,6 +227,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 List<ParticipantAdapterItem> items =
                         (List<ParticipantAdapterItem>) data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS);
                 mParticipants.addAll(items);
+                mAdapter.clear();
                 mAdapter.addAll(items);
                 mAdapter.sort(mAlphaComparator);
             } else if (1 == mParticipants.size()) {

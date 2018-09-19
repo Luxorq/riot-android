@@ -130,13 +130,13 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (0 == position) {
-            if (convertView == null) {
-                convertView = mLayoutInflater.inflate(mAddMemberLayoutResourceId, parent, false);
-            }
-
-            return convertView;
-        }
+//        if (0 == position) {
+//            if (convertView == null) {
+//                convertView = mLayoutInflater.inflate(mAddMemberLayoutResourceId, parent, false);
+//            }
+//
+//            return convertView;
+//        }
 
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mMemberLayoutResourceId, parent, false);
@@ -196,7 +196,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         checkBox.setVisibility(View.GONE);
 
         final View removeParticipantImageView = convertView.findViewById(R.id.filtered_list_remove_button);
-        removeParticipantImageView.setVisibility(View.VISIBLE);
+        removeParticipantImageView.setVisibility(View.GONE);
 
         removeParticipantImageView.setOnClickListener(new View.OnClickListener() {
             @Override

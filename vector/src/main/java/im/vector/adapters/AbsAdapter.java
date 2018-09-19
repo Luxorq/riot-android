@@ -80,11 +80,11 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
 
         mSections = new ArrayList<>();
 
-        mInviteSection = new AdapterSection<>(context, context.getString(R.string.room_recents_invites), -1, R.layout.adapter_item_room_view,
-                TYPE_HEADER_DEFAULT, TYPE_ROOM_INVITATION, new ArrayList<Room>(), null);
-        mInviteSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
-        mInviteSection.setIsHiddenWhenEmpty(true);
-        addSection(mInviteSection);
+//        mInviteSection = new AdapterSection<>(context, context.getString(R.string.room_recents_invites), -1, R.layout.adapter_item_room_view,
+//                TYPE_HEADER_DEFAULT, TYPE_ROOM_INVITATION, new ArrayList<Room>(), null);
+//        mInviteSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
+//        mInviteSection.setIsHiddenWhenEmpty(true);
+//        addSection(mInviteSection);
     }
 
 

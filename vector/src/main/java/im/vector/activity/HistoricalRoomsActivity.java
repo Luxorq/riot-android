@@ -368,7 +368,7 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
     }
 
     @Override
-    public void onSelectRoom(Room room, int position) {
+    public void onSelectRoom(Room room, int position, String userId) {
         showWaitingView();
         CommonActivityUtils.previewRoom(this, mSession, room.getRoomId(), "", new ApiCallback<Void>() {
             @Override

@@ -647,28 +647,28 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         mFirstEntryPosition = -1;
-        mParticipantsListsList.clear();
-        if (firstEntryList.size() > 0) {
-            mParticipantsListsList.add(firstEntryList);
-            mFirstEntryPosition = 0;
-        }
-        if (ContactsManager.getInstance().isContactBookAccessAllowed()) {
-            mLocalContactsSectionPosition = mFirstEntryPosition + 1;
-            mKnownContactsSectionPosition = mLocalContactsSectionPosition + 1;
-            // display the local contacts
-            // -> if there are some
-            // -> the PIDS retrieval is in progress
-            // -> the user displays only the matrix id (if there is no contact with matrix Id, it could impossible to deselect the toggle
-            // -> always displays when there is something to search to let the user toggles the matrix id checkbox.
-            if ((contactBookList.size() > 0) || !ContactsManager.getInstance().arePIDsRetrieved() || mShowMatrixUserOnly || !TextUtils.isEmpty(mPattern)) {
-                // the contacts are sorted by alphabetical method
-                Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
-            }
-            mParticipantsListsList.add(contactBookList);
-        } else {
-            mKnownContactsSectionPosition = mFirstEntryPosition + 1;
-        }
-
+//        mParticipantsListsList.clear();
+//        if (firstEntryList.size() > 0) {
+//            mParticipantsListsList.add(firstEntryList);
+//            mFirstEntryPosition = 0;
+//        }
+//        if (ContactsManager.getInstance().isContactBookAccessAllowed()) {
+//            mLocalContactsSectionPosition = mFirstEntryPosition + 1;
+//            mKnownContactsSectionPosition = mLocalContactsSectionPosition + 1;
+//            // display the local contacts
+//            // -> if there are some
+//            // -> the PIDS retrieval is in progress
+//            // -> the user displays only the matrix id (if there is no contact with matrix Id, it could impossible to deselect the toggle
+//            // -> always displays when there is something to search to let the user toggles the matrix id checkbox.
+//            if ((contactBookList.size() > 0) || !ContactsManager.getInstance().arePIDsRetrieved() || mShowMatrixUserOnly || !TextUtils.isEmpty(mPattern)) {
+//                // the contacts are sorted by alphabetical method
+//                Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
+//            }
+//            mParticipantsListsList.add(contactBookList);
+//        } else {
+//            mKnownContactsSectionPosition = mFirstEntryPosition + 1;
+//        }
+        mKnownContactsSectionPosition = mFirstEntryPosition + 1;
         if (!TextUtils.isEmpty(mPattern)) {
             if ((roomContactsList.size() > 0) && sort) {
                 Collections.sort(roomContactsList, mSortMethod);
@@ -873,7 +873,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
             }
             // display a search toggle for the local contacts
-            matrixView.setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
+            //matrixView.setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
 
             // matrix user checkbox
             CheckBox checkBox = convertView.findViewById(R.id.contacts_filter_checkbox);
@@ -992,8 +992,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 statusTextView.setText(participant.mContact.getPhonenumbers().get(0).mRawPhoneNumber);
             }
         } else {
-            statusTextView.setText(status);
-            matrixUserBadge.setVisibility(View.GONE);
+            //statusTextView.setText(status);
+            statusTextView.setText(TextUtils.isEmpty(status) ? participant.mUserId : status);
         }
 
         // Add alpha if cannot be invited
@@ -1003,8 +1003,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         final CheckBox checkBox = convertView.findViewById(R.id.filtered_list_checkbox);
         checkBox.setVisibility(View.GONE);
 
-        final View addParticipantImageView = convertView.findViewById(R.id.filtered_list_add_button);
-        addParticipantImageView.setVisibility(mWithAddIcon ? View.VISIBLE : View.GONE);
+        //final View addParticipantImageView = convertView.findViewById(R.id.filtered_list_add_button);
+        //addParticipantImageView.setVisibility(mWithAddIcon ? View.VISIBLE : View.GONE);
 
         return convertView;
     }

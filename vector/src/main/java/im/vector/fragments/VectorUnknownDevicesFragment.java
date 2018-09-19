@@ -76,6 +76,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSession = Matrix.getMXSession(getActivity(), getArguments().getString(ARG_SESSION_ID));
+        dismiss();
     }
 
     // current session
@@ -85,7 +86,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
     // Devices list
     private List<Pair<String, List<MXDeviceInfo>>> mDevicesList;
     // Tells if the dialog has been closed by tapping on the "Send anyway" button
-    private boolean mIsSendAnywayTapped = false;
+    private boolean mIsSendAnywayTapped = true;
 
     /**
      * Convert a MXUsersDevicesMap to a list of List
@@ -113,124 +114,124 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         return res;
     }
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Get the layout inflater
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View v = inflater.inflate(R.layout.dialog_unknown_devices, null);
-        mExpandableListView = v.findViewById(R.id.unknown_devices_list_view);
-
-        mDevicesList = getDevicesList();
-        final VectorUnknownDevicesAdapter adapter = new VectorUnknownDevicesAdapter(getContext(), mDevicesList);
-
-        adapter.setListener(new VectorUnknownDevicesAdapter.IVerificationAdapterListener() {
-            /**
-             * Refresh the adapter
-             */
-            private void refresh() {
-                adapter.notifyDataSetChanged();
-            }
-
-            /**
-             * Common callback
-             */
-            final ApiCallback<Void> mCallback = new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    refresh();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    refresh();
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    refresh();
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    refresh();
-                }
-            };
-
-            @Override
-            public void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo) {
-                switch (aDeviceInfo.mVerified) {
-                    case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
-                        mSession.getCrypto()
-                                .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
-                        break;
-
-                    case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
-                    default: // Blocked
-                        CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, aDeviceInfo.userId, mSession, getActivity(), mCallback);
-                        break;
-                }
-            }
-
-            @Override
-            public void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo) {
-                if (aDeviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
-                    mSession.getCrypto()
-                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
-                } else {
-                    mSession.getCrypto()
-                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
-                }
-                refresh();
-            }
-        });
-
-        mExpandableListView.addHeaderView(inflater.inflate(R.layout.dialog_unknown_devices_header, null));
-        mExpandableListView.setGroupIndicator(null);
-        mExpandableListView.setAdapter(adapter);
-        // expand each group by default
-        mExpandableListView.post(new Runnable() {
-            @Override
-            public void run() {
-                int count = adapter.getGroupCount();
-
-                for (int i = 0; i < count; i++) {
-                    mExpandableListView.expandGroup(i);
-                }
-            }
-        });
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setView(v)
-                .setTitle(R.string.unknown_devices_alert_title);
-
-        if (null != mListener) {
-            // Add action buttons
-            builder.setPositiveButton(R.string.send_anyway, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    mIsSendAnywayTapped = true;
-                }
-            });
-            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    // nothing : everything will be done on onDismiss()
-                }
-            });
-
-        } else {
-            // Add action buttons
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    // nothing : everything will be done on onDismiss()
-                }
-            });
-        }
-
-        return builder.create();
-    }
+//    @Override
+//    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        // Get the layout inflater
+//        LayoutInflater inflater = getActivity().getLayoutInflater();
+//
+//        View v = inflater.inflate(R.layout.dialog_unknown_devices, null);
+//        mExpandableListView = v.findViewById(R.id.unknown_devices_list_view);
+//
+//        mDevicesList = getDevicesList();
+//        final VectorUnknownDevicesAdapter adapter = new VectorUnknownDevicesAdapter(getContext(), mDevicesList);
+//
+//        adapter.setListener(new VectorUnknownDevicesAdapter.IVerificationAdapterListener() {
+//            /**
+//             * Refresh the adapter
+//             */
+//            private void refresh() {
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            /**
+//             * Common callback
+//             */
+//            final ApiCallback<Void> mCallback = new ApiCallback<Void>() {
+//                @Override
+//                public void onSuccess(Void info) {
+//                    refresh();
+//                }
+//
+//                @Override
+//                public void onNetworkError(Exception e) {
+//                    refresh();
+//                }
+//
+//                @Override
+//                public void onMatrixError(MatrixError e) {
+//                    refresh();
+//                }
+//
+//                @Override
+//                public void onUnexpectedError(Exception e) {
+//                    refresh();
+//                }
+//            };
+//
+//            @Override
+//            public void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo) {
+//                switch (aDeviceInfo.mVerified) {
+//                    case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
+//                        mSession.getCrypto()
+//                                .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+//                        break;
+//
+//                    case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
+//                    default: // Blocked
+//                        CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, aDeviceInfo.userId, mSession, getActivity(), mCallback);
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo) {
+//                if (aDeviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
+//                    mSession.getCrypto()
+//                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+//                } else {
+//                    mSession.getCrypto()
+//                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+//                }
+//                refresh();
+//            }
+//        });
+//
+//        mExpandableListView.addHeaderView(inflater.inflate(R.layout.dialog_unknown_devices_header, null));
+//        mExpandableListView.setGroupIndicator(null);
+//        mExpandableListView.setAdapter(adapter);
+//        // expand each group by default
+//        mExpandableListView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                int count = adapter.getGroupCount();
+//
+//                for (int i = 0; i < count; i++) {
+//                    mExpandableListView.expandGroup(i);
+//                }
+//            }
+//        });
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+//                .setView(v)
+//                .setTitle(R.string.unknown_devices_alert_title);
+//
+//        if (null != mListener) {
+//            // Add action buttons
+//            builder.setPositiveButton(R.string.send_anyway, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int id) {
+//                    mIsSendAnywayTapped = true;
+//                }
+//            });
+//            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int id) {
+//                    // nothing : everything will be done on onDismiss()
+//                }
+//            });
+//
+//        } else {
+//            // Add action buttons
+//            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int id) {
+//                    // nothing : everything will be done on onDismiss()
+//                }
+//            });
+//        }
+//
+//        return builder.create();
+//    }
 
 
     @Override

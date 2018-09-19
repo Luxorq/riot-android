@@ -55,6 +55,8 @@ import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorAutoCompleteTextView;
 
+import static im.vector.fragments.SettingsFragment.inviteContacts;
+
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
@@ -227,30 +229,50 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             }
         });
 
-        View inviteByIdTextView = findViewById(R.id.search_invite_by_id);
+        View inviteByIdTextView = findViewById(R.id.invite_contacts);
         inviteByIdTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayInviteByUserId();
+                //displayInviteByUserId();
+                inviteContacts(VectorRoomInviteMembersActivity.this, mSession.getMyUser());
             }
         });
 
         // Check permission to access contacts
-        PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_MEMBERS_SEARCH, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
+        //PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_MEMBERS_SEARCH, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
     }
+
+    private void onContactSelected(final ParticipantAdapterItem item) {
+        if (item.mIsValid) {
+            Intent startRoomInfoIntent = new Intent(this, VectorMemberDetailsActivity.class);
+            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, item.mUserId);
+
+            if (!TextUtils.isEmpty(item.mAvatarUrl)) {
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_AVATAR_URL, item.mAvatarUrl);
+            }
+
+            if (!TextUtils.isEmpty(item.mDisplayName)) {
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_DISPLAY_NAME, item.mDisplayName);
+            }
+
+            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            startActivity(startRoomInfoIntent);
+        }
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
-        ContactsManager.getInstance().addListener(mContactsListener);
+        //ContactsManager.getInstance().addListener(mContactsListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mSession.getDataHandler().removeListener(mEventsListener);
-        ContactsManager.getInstance().removeListener(mContactsListener);
+        //ContactsManager.getInstance().removeListener(mContactsListener);
     }
 
     @Override
@@ -282,12 +304,12 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         // wait that the local contacts are populated
-        if (!ContactsManager.getInstance().didPopulateLocalContacts()) {
-            Log.d(LOG_TAG, "## onPatternUpdate() : The local contacts are not yet populated");
-            mAdapter.reset();
-            showWaitingView();
-            return;
-        }
+//        if (!ContactsManager.getInstance().didPopulateLocalContacts()) {
+//            Log.d(LOG_TAG, "## onPatternUpdate() : The local contacts are not yet populated");
+//            mAdapter.reset();
+//            showWaitingView();
+//            return;
+//        }
 
         mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override

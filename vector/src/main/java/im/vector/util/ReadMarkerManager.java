@@ -380,7 +380,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
         if (isLiveMode() && showJumpToView) {
             mJumpToUnreadViewSpinner.setVisibility(View.GONE);
             mCloseJumpToUnreadView.setVisibility(View.VISIBLE);
-            mJumpToUnreadView.setVisibility(View.VISIBLE);
+            mJumpToUnreadView.setVisibility(View.GONE);
         } else {
             mJumpToUnreadView.setVisibility(View.GONE);
         }

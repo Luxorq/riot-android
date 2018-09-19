@@ -31,7 +31,11 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,6 +86,9 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     @Nullable
     View vRoomMoreActionAnchor;
 
+    @BindView(R.id.room_more_action_ic)
+    @Nullable
+    View vMore;
 
     public RoomViewHolder(final View itemView) {
         super(itemView);
@@ -205,7 +212,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         if (mDirectChatIndicator != null) {
             mDirectChatIndicator.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
         }
-        vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
+        //vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
 
         if (vRoomUnreadIndicator != null) {
             // set bing view background colour
@@ -228,4 +235,104 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             });
         }
     }
+
+    public void populateViews(final Context context, final MXSession session, final Room room) {
+        // sanity check
+        if (null == room) {
+            Log.e(LOG_TAG, "## populateViews() : null room");
+            return;
+        }
+
+        if (null == session) {
+            Log.e(LOG_TAG, "## populateViews() : null session");
+            return;
+        }
+
+        if (null == session.getDataHandler()) {
+            Log.e(LOG_TAG, "## populateViews() : null dataHandler");
+            return;
+        }
+
+        IMXStore store = session.getDataHandler().getStore(room.getRoomId());
+
+        if (null == store) {
+            Log.e(LOG_TAG, "## populateViews() : null Store");
+            return;
+        }
+
+        final RoomSummary roomSummary = store.getSummary(room.getRoomId());
+
+        if (null == roomSummary) {
+            Log.e(LOG_TAG, "## populateViews() : null roomSummary");
+            return;
+        }
+
+        vRoomUnreadCount.setVisibility(View.INVISIBLE);
+
+
+        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+        if (vRoomNameServer != null) {
+            // This view holder is for the home page, we have up to two lines to display the name
+            if (MXSession.isRoomAlias(roomName)) {
+                // Room alias, split to display the server name on second line
+                final String[] roomAliasSplitted = roomName.split(":");
+                final String firstLine = roomAliasSplitted[0] + ":";
+                final String secondLine = roomAliasSplitted[1];
+                vRoomName.setLines(1);
+                vRoomName.setText(firstLine);
+                vRoomNameServer.setText(secondLine);
+                vRoomNameServer.setVisibility(View.VISIBLE);
+                vRoomNameServer.setTypeface(null, Typeface.NORMAL);
+            } else {
+                // Allow the name to take two lines
+                vRoomName.setLines(2);
+                vRoomNameServer.setVisibility(View.GONE);
+                vRoomName.setText(roomName);
+            }
+        } else {
+            vRoomName.setText(roomName);
+        }
+        vRoomName.setTypeface(null, Typeface.NORMAL);
+
+        VectorUtils.loadRoomAvatar(context, session, vRoomAvatar, room);
+
+        String userId = "";
+        ArrayList<RoomMember> members = (ArrayList<RoomMember>) room.getActiveMembers();
+        for (RoomMember member : members) {
+            if (!member.getUserId().equals(session.getMyUserId())) {
+                userId = member.getUserId();
+                itemView.setTag(userId);
+                break;
+            }
+        }
+
+        if (null != vRoomLastMessage) {
+            final String finalUserId = userId;
+            vRoomLastMessage.setText(VectorUtils.getUserOnlineStatus(context, session, userId, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    vRoomLastMessage.setText(VectorUtils.getUserOnlineStatus(context, session, finalUserId, null));
+                }
+            }));
+        }
+
+
+        if (mDirectChatIndicator != null) {
+            mDirectChatIndicator.setVisibility(View.INVISIBLE);
+        }
+        vRoomEncryptedIcon.setVisibility(View.INVISIBLE);
+
+        if (vRoomUnreadIndicator != null) {
+            vRoomUnreadIndicator.setVisibility(View.INVISIBLE);
+        }
+
+        if (vRoomTimestamp != null) {
+            vRoomTimestamp.setVisibility(View.INVISIBLE);
+        }
+
+        if (vMore != null) {
+            vMore.setVisibility(View.INVISIBLE);
+        }
+    }
+
 }

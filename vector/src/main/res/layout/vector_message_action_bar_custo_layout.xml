@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:singleLine="true"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="20sp"
             tools:text="title" />
 
@@ -33,7 +33,7 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             tools:text="topic" />
 
     </LinearLayout>
@@ -46,6 +46,16 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:contentDescription="@string/open_chat_header"
-        android:src="@drawable/ic_arrow_drop_down_white" />
+        android:src="@drawable/ic_arrow_drop_down_white"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/room_self_avatar"
+        layout="@layout/vector_room_round_avatar"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

@@ -881,9 +881,11 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
                         // set to GONE after the fade out, so buttons can not not be accessed by the user
                         if (ViewUtilKt.UTILS_OPACITY_NONE == aOpacity) {
                             mButtonsContainerView.setVisibility(View.GONE);
+                            mSwitchRearFrontCameraImageView.setVisibility(View.GONE);
                         } else {
                             // restore visibility after fade in
                             mButtonsContainerView.setVisibility(View.VISIBLE);
+                            mSwitchRearFrontCameraImageView.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -995,8 +997,8 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
      */
     private void refreshMuteMicButton() {
         // update icon
-        int iconId = CallSoundsManager.getSharedInstance(this).isMicrophoneMute() ? R.drawable.ic_material_mic_off_pink_red
-                : R.drawable.ic_material_mic_off_grey;
+        int iconId = CallSoundsManager.getSharedInstance(this).isMicrophoneMute() ? R.drawable.call_mute_button
+                : R.drawable.call_mute_button_inactive;
         mMuteMicImageView.setImageResource(iconId);
     }
 
@@ -1005,8 +1007,8 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
      */
     public void refreshSpeakerButton() {
         // update icon
-        int iconId = CallSoundsManager.getSharedInstance(this).isSpeakerphoneOn() ? R.drawable.ic_material_speaker_phone_pink_red
-                : R.drawable.ic_material_speaker_phone_grey;
+        int iconId = CallSoundsManager.getSharedInstance(this).isSpeakerphoneOn() ? R.drawable.call_speaker_button
+                : R.drawable.call_speaker_button_inactive;
         mSpeakerSelectionView.setImageResource(iconId);
     }
 
@@ -1021,11 +1023,11 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
             Log.d(LOG_TAG, "## refreshMuteVideoButton(): isMuted=" + isMuted);
 
             // update icon
-            int iconId = isMuted ? R.drawable.ic_material_videocam_off_pink_red : R.drawable.ic_material_videocam_off_grey;
+            int iconId = isMuted ? R.drawable.call_video_button_inactive : R.drawable.call_video_button_active;
             mMuteLocalCameraView.setImageResource(iconId);
         } else {
             Log.d(LOG_TAG, "## refreshMuteVideoButton(): View.INVISIBLE");
-            mMuteLocalCameraView.setVisibility(View.INVISIBLE);
+            mMuteLocalCameraView.setVisibility(View.GONE);
         }
     }
 
@@ -1042,7 +1044,7 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
             Log.d(LOG_TAG, "## refreshSwitchRearFrontCameraButton(): isSwitched=" + isSwitched);
 
             // update icon
-            int iconId = isSwitched ? R.drawable.ic_material_switch_video_pink_red : R.drawable.ic_material_switch_video_grey;
+            int iconId = isSwitched ? R.drawable.call_camera_switch : R.drawable.call_camera_switch;
             mSwitchRearFrontCameraImageView.setImageResource(iconId);
         } else {
             Log.d(LOG_TAG, "## refreshSwitchRearFrontCameraButton(): View.INVISIBLE");

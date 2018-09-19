@@ -241,6 +241,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
+                    android:layout_toRightOf="@id/room_self_avatar"
                     android:minHeight="56dp">
 
                     <ImageView
@@ -259,6 +260,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="6dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:dropDownAnchor="@+id/room_sending_message_layout"
@@ -273,7 +275,7 @@
 
                     <ImageView
                         android:id="@+id/room_send_image_view"
-                        android:layout_width="38dp"
+                        android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:layout_gravity="bottom"
                         android:contentDescription="@string/send"
@@ -319,6 +321,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:layout_toRightOf="@id/room_self_avatar"
                     android:text="@string/room_do_not_have_permission_to_post"
                     android:textColor="?attr/riot_primary_text_color"
                     android:textSize="14sp"

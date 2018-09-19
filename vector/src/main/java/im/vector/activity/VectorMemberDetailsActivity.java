@@ -23,10 +23,12 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -41,6 +43,7 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -50,6 +53,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -134,6 +138,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private ExpandableListView mExpandableListView;
     private ListView mDevicesListView;
     private View mDevicesListHeaderView;
+
+    private SwitchCompat mSwitch;
+    private ImageView mAudio;
+    private ImageView mChat;
+    private ImageView mVideo;
 
     // direct message
     /**
@@ -812,10 +821,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             selfPowerLevel = powerLevels.getUserPowerLevel(selfUserId);
 
             if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
-                mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                mMemberAvatarBadgeImageView.setVisibility(View.GONE);
                 mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
             } else if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
-                mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                mMemberAvatarBadgeImageView.setVisibility(View.GONE);
                 mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
             }
 
@@ -951,7 +960,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             Log.w(LOG_TAG, "## updateListViewItemsContent(): list view adapter not initialized");
         } else {
             // reset action lists & allocate items list
-            List<VectorMemberDetailsAdapter.AdapterMemberActionItems> uncategorizedActions = new ArrayList<>();
+            /*List<VectorMemberDetailsAdapter.AdapterMemberActionItems> uncategorizedActions = new ArrayList<>();
             List<VectorMemberDetailsAdapter.AdapterMemberActionItems> adminActions = new ArrayList<>();
             List<VectorMemberDetailsAdapter.AdapterMemberActionItems> callActions = new ArrayList<>();
             List<VectorMemberDetailsAdapter.AdapterMemberActionItems> directMessagesActions = new ArrayList<>();
@@ -1076,6 +1085,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
 
             mListViewAdapter.setDirectCallsActionsList(directMessagesActions);
+            */
             mListViewAdapter.notifyDataSetChanged();
 
             mExpandableListView.post(new Runnable() {
@@ -1228,6 +1238,112 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if (!isFirstCreation() && getSavedInstanceState().getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
                 displayFullScreenAvatar();
             }
+
+            mSwitch = findViewById(R.id.mute_swtich);
+            BingRulesManager.RoomNotificationState state = mSession.getDataHandler().getBingRulesManager().getRoomNotificationState(mRoom.getRoomId());
+            mSwitch.setChecked(BingRulesManager.RoomNotificationState.MUTE == state);
+            mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                    final CompoundButton.OnCheckedChangeListener listener = this;
+                    showWaitingView();
+                    mSession.getDataHandler().getBingRulesManager().updateRoomNotificationState(mRoom.getRoomId(),
+                            isChecked ? BingRulesManager.RoomNotificationState.MUTE : BingRulesManager.RoomNotificationState.ALL_MESSAGES,
+                            new BingRulesManager.onBingRuleUpdateListener() {
+                                @Override
+                                public void onBingRuleUpdateSuccess() {
+                                    onRequestDone(null);
+                                }
+
+                                @Override
+                                public void onBingRuleUpdateFailure(final String errorMessage) {
+                                    onRequestDone(errorMessage);
+                                    mSwitch.setOnCheckedChangeListener(null);
+                                    mSwitch.setChecked(!isChecked);
+                                    mSwitch.setOnCheckedChangeListener(listener);
+                                }
+                            });
+                }
+            });
+            mAudio = findViewById(R.id.audio);
+            mVideo = findViewById(R.id.video);
+            mChat = findViewById(R.id.chat);
+            mAudio.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mSession.isAlive()) {
+                        Log.e(LOG_TAG, "performItemAction : the session is not anymore valid");
+                        return;
+                    }
+                    startCheckCallPermissions(false);
+                }
+            });
+            mChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openRoom(mRoom);
+                }
+            });
+            mVideo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mSession.isAlive()) {
+                        Log.e(LOG_TAG, "performItemAction : the session is not anymore valid");
+                        return;
+                    }
+                    startCheckCallPermissions(true);
+                }
+            });
+
+        }
+    }
+
+    void openRoom(final Room room) {
+        // sanity checks
+        // reported by GA
+        if ((null == mSession.getDataHandler()) || (null == mSession.getDataHandler().getStore())) {
+            return;
+        }
+
+        final String roomId;
+        // cannot join a leaving room
+        if (room == null || room.isLeaving()) {
+            roomId = null;
+        } else {
+            roomId = room.getRoomId();
+        }
+
+        if (roomId != null) {
+            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
+
+            if (null != roomSummary) {
+                room.sendReadReceipt();
+            }
+
+            // Update badge unread count in case device is offline
+            CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, this);
+
+            // Launch corresponding room activity
+            HashMap<String, Object> params = new HashMap<>();
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+            CommonActivityUtils.goToRoomPage(this, mSession, params);
+        }
+    }
+
+    private void onRequestDone(final String errorMessage) {
+        if (!isFinishing()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideWaitingView();
+                    if (!TextUtils.isEmpty(errorMessage)) {
+                        Toast.makeText(VectorMemberDetailsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
         }
     }
 

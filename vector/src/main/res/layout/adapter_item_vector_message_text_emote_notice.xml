@@ -16,7 +16,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        android:background="@drawable/chat_bubble_own">
 
         <include
             android:id="@+id/messagesAdapter_roundAvatar"
@@ -85,7 +89,8 @@
                             android:id="@+id/message_adapter_e2e_icon"
                             android:layout_width="14dp"
                             android:layout_height="14dp"
-                            android:src="@drawable/e2e_verified" />
+                            android:src="@drawable/e2e_verified"
+                            android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/messagesAdapter_body"
@@ -94,6 +99,7 @@
                             android:layout_gravity="left"
                             android:layout_marginLeft="4dp"
                             android:layout_toRightOf="@id/message_adapter_e2e_icon"
+                            android:textColor="@color/white"
                             android:autoLink="all"
                             android:textIsSelectable="false"
                             android:textSize="14sp"

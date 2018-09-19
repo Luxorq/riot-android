@@ -307,7 +307,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
      */
 
     @Override
-    public void onSelectRoom(Room room, int position) {
+    public void onSelectRoom(Room room, int position, String userId) {
         openRoom(room);
     }
 

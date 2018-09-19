@@ -973,11 +973,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
-        View avatarLayout = findViewById(R.id.room_self_avatar);
-
-        if (null != avatarLayout) {
-            mAvatarImageView = avatarLayout.findViewById(R.id.avatar_img);
-        }
+//        View avatarLayout = findViewById(R.id.room_self_avatar);
+//
+//        if (null != avatarLayout) {
+//            mAvatarImageView = avatarLayout.findViewById(R.id.avatar_img);
+//        }
 
         refreshSelfAvatar();
 
@@ -2373,7 +2373,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void manageSendMoreButtons() {
         boolean hasText = (mEditText.getText().length() > 0);
-        mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
+        mSendImageView.setImageResource(hasText ? R.drawable.chat_toolbar_send_icon : R.drawable.chat_toolbar_attach_icon);
     }
 
     /**
@@ -2631,7 +2631,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Widget activeWidget = mVectorOngoingConferenceCallView.getActiveWidget();
 
             if ((null == call) && (null == activeWidget)) {
-                mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0)) ? View.VISIBLE : View.GONE);
+                //mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0)) ? View.VISIBLE : View.GONE);
+                mStartCallLayout.setVisibility(View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else if (null != activeWidget) {
                 mStartCallLayout.setVisibility(View.GONE);
@@ -3076,7 +3077,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // set the arrow to up
             mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_up_white);
             // enable the header view to make it visible
-            mRoomHeaderView.setVisibility(View.VISIBLE);
+            mRoomHeaderView.setVisibility(View.GONE);
             toolbar.setBackgroundColor(Color.TRANSPARENT);
         } else {
             // hide the room header only if it is displayed
@@ -3867,7 +3868,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             // Send file
             messagesList.add(R.string.option_send_files);
-            iconsList.add(R.drawable.ic_material_file);
+            iconsList.add(R.drawable.ic_attach_black);
 
             // Send voice
             if (PreferencesManager.isSendVoiceFeatureEnabled(VectorRoomActivity.this)) {

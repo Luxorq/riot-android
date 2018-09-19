@@ -812,7 +812,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         if (null != childRoom) {
             directChatIcon.setVisibility(RoomUtils.isDirectChat(mMxSession, childRoom.getRoomId()) ? View.VISIBLE: View.GONE);
-            encryptedIcon.setVisibility(childRoom.isEncrypted() ? View.VISIBLE : View.GONE);
+            encryptedIcon.setVisibility(View.GONE);
         } else {
             directChatIcon.setVisibility(View.GONE);
             encryptedIcon.setVisibility(View.GONE);

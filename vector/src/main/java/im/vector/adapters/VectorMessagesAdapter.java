@@ -435,31 +435,31 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // customization methods
     private int getDefaultMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.editTextColor);
     }
 
     private int getNoticeTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.notice_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.editTextColor);
     }
 
     private int getEncryptingMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.encrypting_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.editTextColor);
     }
 
     private int getSendingMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.sending_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.editTextColor);
     }
 
     private int getHighlightMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.highlighted_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.editTextColor);
     }
 
     private int getSearchHighlightMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.highlighted_searched_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.editTextColor);
     }
 
     private int getNotSentMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.unsent_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.editTextColor);
     }
 
     /*
@@ -817,7 +817,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             inflatedView.setTag(viewType);
         }
 
-        displayE2eIcon(inflatedView, position);
+        //displayE2eIcon(inflatedView, position);
 
         displayE2eReRequest(inflatedView, position);
 
