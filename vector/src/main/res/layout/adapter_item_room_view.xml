@@ -11,7 +11,8 @@
         android:layout_width="8dp"
         android:layout_height="match_parent"
         android:layout_marginRight="8dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/darker_gray"
+        android:visibility="invisible"/>
 
     <include
         android:id="@+id/room_avatar_layout"
@@ -29,7 +30,6 @@
         android:layout_alignLeft="@+id/room_avatar_layout"
         android:layout_alignRight="@+id/room_avatar_layout"
         android:layout_alignTop="@+id/room_avatar_layout"
-        android:background="@drawable/direct_chat_background"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -42,7 +42,7 @@
         android:layout_marginRight="-4dp"
         android:src="@drawable/e2e_verified"
         android:visibility="invisible"
-        tools:visibility="visible"
+        tools:visibility="invisible"
         android:tint="?attr/default_icon_tint_color"/>
 
     <RelativeLayout
@@ -60,9 +60,10 @@
             android:layout_toLeftOf="@+id/room_unread_count"
             android:ellipsize="end"
             android:fontFamily="sans-serif-regular"
-            android:maxLines="1"
-            android:textColor="?attr/riot_primary_text_color"
+            android:textColor="@color/black"
             android:textSize="16sp"
+            android:lines="2"
+            android:layout_marginRight="10dp"
             tools:text="Room name a bit long to be displayed completely" />
 
         <TextView
@@ -75,6 +76,7 @@
             android:maxLines="1"
             android:textColor="?attr/default_text_light_color"
             android:textSize="14sp"
+            android:layout_marginRight="30dp"
             tools:text="First message of the room is a bit too long to be displayed" />
 
         <ImageView
@@ -86,7 +88,7 @@
             android:layout_alignTop="@+id/room_name"
             android:layout_marginLeft="10dp"
             android:src="@drawable/vector_actions_9b"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/room_update_date"
@@ -104,17 +106,15 @@
             android:id="@+id/room_unread_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/room_name"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/room_update_date"
             android:gravity="center"
             android:minWidth="25dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
+            android:layout_below="@+id/room_name"
+            android:layout_marginTop="6dp"
+            android:layout_alignParentRight="true"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             tools:background="#AAff00ff"
+
             tools:text="3.6K" />
     </RelativeLayout>
 
@@ -128,7 +128,8 @@
     <View
         android:id="@+id/room_more_action_click_area"
         android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true" />
-
+        android:layout_height="72dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp" />
 </RelativeLayout>

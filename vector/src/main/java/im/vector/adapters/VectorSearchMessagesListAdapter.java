@@ -161,26 +161,26 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             }
 
             // display the day
-            View dayLayout = convertView.findViewById(R.id.messagesAdapter_search_message_day_separator);
-
-            // day separator
-            String headerMessage = headerMessage(position);
-
-            if (!TextUtils.isEmpty(headerMessage)) {
-                dayLayout.setVisibility(View.VISIBLE);
-
-                TextView headerText = convertView.findViewById(R.id.messagesAdapter_message_header_text);
-                headerText.setText(headerMessage);
-
-                dayLayout.findViewById(R.id.messagesAdapter_message_header_top_margin).setVisibility(View.GONE);
-                dayLayout.findViewById(R.id.messagesAdapter_message_header_bottom_margin).setVisibility(View.GONE);
-            } else {
-                dayLayout.setVisibility(View.GONE);
-            }
-
-            // message separator is only displayed when a message is not the last message in a day section
-            convertView.findViewById(R.id.messagesAdapter_search_separator_line)
-                    .setVisibility(!TextUtils.isEmpty(headerMessage(position + 1)) ? View.GONE : View.VISIBLE);
+//            View dayLayout = convertView.findViewById(R.id.messagesAdapter_search_message_day_separator);
+//
+//            // day separator
+//            String headerMessage = headerMessage(position);
+//
+//            if (!TextUtils.isEmpty(headerMessage)) {
+//                dayLayout.setVisibility(View.VISIBLE);
+//
+//                TextView headerText = convertView.findViewById(R.id.messagesAdapter_message_header_text);
+//                headerText.setText(headerMessage);
+//
+//                dayLayout.findViewById(R.id.messagesAdapter_message_header_top_margin).setVisibility(View.GONE);
+//                dayLayout.findViewById(R.id.messagesAdapter_message_header_bottom_margin).setVisibility(View.GONE);
+//            } else {
+//                dayLayout.setVisibility(View.GONE);
+//            }
+//
+//            // message separator is only displayed when a message is not the last message in a day section
+//            convertView.findViewById(R.id.messagesAdapter_search_separator_line)
+//                    .setVisibility(!TextUtils.isEmpty(headerMessage(position + 1)) ? View.GONE : View.VISIBLE);
 
             final int fPosition = position;
 

@@ -19,6 +19,7 @@ package im.vector.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -65,11 +66,13 @@ import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
 import org.matrix.androidsdk.rest.model.PowerLevels;
+import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomCreateContent;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
@@ -284,6 +287,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             return null;
         }
     };
+    private long mLastTime;
 
     /**
      * Creates a messages adapter with the default layouts.
@@ -394,8 +398,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         mLocale = VectorApp.getApplicationLocale();
 
-        mAlwaysShowTimeStamps = PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
-        mHideReadReceipts = PreferencesManager.hideReadReceipts(VectorApp.getInstance());
+        mAlwaysShowTimeStamps = true;//PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
+        mHideReadReceipts = true;//PreferencesManager.hideReadReceipts(VectorApp.getInstance());
 
         mPadlockDrawable = ThemeUtils.INSTANCE.tintDrawable(mContext,
                 ContextCompat.getDrawable(mContext, R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color);
@@ -898,18 +902,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     public void onEventTap(Event event) {
         // the tap to select is only enabled when the adapter is not in search mode.
-        if (!mIsSearchMode) {
-            if (null == mSelectedEvent) {
-                mSelectedEvent = event;
-            } else {
-                mSelectedEvent = null;
-            }
-            notifyDataSetChanged();
-
-            if (mVectorMessagesAdapterEventsListener != null) {
-                mVectorMessagesAdapterEventsListener.onSelectedEventChange(mSelectedEvent);
-            }
-        }
+//        if (!mIsSearchMode) {
+//            if (null == mSelectedEvent) {
+//                mSelectedEvent = event;
+//            } else {
+//                mSelectedEvent = null;
+//            }
+//            notifyDataSetChanged();
+//
+//            if (mVectorMessagesAdapterEventsListener != null) {
+//                mVectorMessagesAdapterEventsListener.onSelectedEventChange(mSelectedEvent);
+//            }
+//        }
     }
 
     /**
@@ -1187,17 +1191,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         isMergedView = mergeView(event, position, isMergedView);
 
         // init senders
-        mHelper.setSenderValue(convertView, row, isMergedView);
+        //mHelper.setSenderValue(convertView, row, isMergedView);
 
         // message timestamp
         TextView tsTextView = VectorMessagesAdapterHelper.setTimestampValue(convertView, getFormattedTimestamp(event));
 
         if (null != tsTextView) {
-            if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
-                tsTextView.setTextColor(mNotSentMessageTextColor);
-            } else {
-                tsTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color));
-            }
+//            if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+//                tsTextView.setTextColor(mNotSentMessageTextColor);
+//            } else {
+//                tsTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.editTextColor));
+//            }
+            tsTextView.setTextColor(mContext.getResources().getColor(event.isCallEvent()? R.color.black : R.color.grey400));
 
             tsTextView.setVisibility((((position + 1) == getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
         }
@@ -1262,11 +1267,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
             final List<TextView> textViews;
+            TextView bodyTextView = null;
 
             if (ROW_TYPE_CODE == viewType) {
                 textViews = populateRowTypeCode(message, convertView, shouldHighlighted);
             } else {
-                final TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
+                bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
 
                 // cannot refresh it
                 if (null == bodyTextView) {
@@ -1298,6 +1304,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             int textColor;
+            int drawable = 0;
 
             if (row.getEvent().isEncrypting()) {
                 textColor = mEncryptingMessageTextColor;
@@ -1306,12 +1313,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 textColor = mNotSentMessageTextColor;
             } else {
-                textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
+                textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;                String userId = null;
+                for (RoomMember member : row.getRoomState().getMembers()) {
+                    if (!member.getUserId().equals(mSession.getMyUserId())) {
+                        userId = member.getUserId();
+                        break;
+                    }
+                }
+                drawable = getReadDrawable(row, userId, event);
             }
 
             for (final TextView tv : textViews) {
                 tv.setTextColor(textColor);
             }
+            bodyTextView.setLinkTextColor(mContext.getResources().getColor(R.color.tab_groups_secondary));
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
             manageSubView(position, convertView, textLayout, viewType);
@@ -1321,11 +1336,84 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             mHelper.manageURLPreviews(message, convertView, event.eventId);
+            ImageView status = convertView.findViewById(R.id.messagesAdapter_state);
+            ViewGroup messageParent = convertView.findViewById(R.id.messagesAdapter_body_view);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) messageParent.getLayoutParams();
+            Resources res = mContext.getResources();
+            if (event.getSender().equals(mSession.getMyUserId())) {
+                messageParent.setBackgroundResource(R.drawable.chat_bubble_outgoing);
+                params.gravity = Gravity.END;
+                params.setMargins(res.getDimensionPixelSize(R.dimen.message_start_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin),
+                        res.getDimensionPixelSize(R.dimen.message_end_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin));
+                bodyTextView.setTextColor(mContext.getResources().getColor(R.color.black));
+                if (drawable != 0) {
+                    status.setVisibility(View.VISIBLE);
+                    status.setImageResource(drawable);
+                } else {
+                    status.setVisibility(View.GONE);
+                }
+            } else {
+                messageParent.setBackgroundResource(R.drawable.chat_bubble_incoming);
+                params.gravity = Gravity.START;
+                params.setMargins(res.getDimensionPixelSize(R.dimen.message_end_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin),
+                        res.getDimensionPixelSize(R.dimen.message_start_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin));
+                bodyTextView.setTextColor(mContext.getResources().getColor(R.color.white));
+                status.setVisibility(View.GONE);
+            }
+            messageParent.setLayoutParams(params);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
+    }
+
+    private int getReadDrawable(MessageRow row, String userId, Event event){
+        int drawable = 0;
+        if (isRead(row, mIsPreviewMode, userId)) {
+            drawable = R.drawable.chat_message_read;
+            mLastTime = event.getOriginServerTs();
+        } else if (event.getOriginServerTs() <= mLastTime){
+            drawable = R.drawable.chat_message_read;
+        } else {
+            drawable = R.drawable.chat_message_delivered;
+        }
+        return drawable;
+    }
+
+    private boolean isRead(MessageRow row, boolean isPreviewMode, String userId) {
+        if (TextUtils.isEmpty(userId)) {
+            return false;
+        }
+
+        if (!mSession.isAlive()) {
+            return false;
+        }
+
+        final String eventId = row.getEvent().eventId;
+        RoomState roomState = row.getRoomState();
+
+        IMXStore store = mSession.getDataHandler().getStore();
+
+        if (null == roomState) {
+            return false;
+        }
+
+        if (isPreviewMode) {
+            return false;
+        }
+
+        List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
+
+        if ((null == receipts) || receipts.isEmpty()) {
+            return false;
+        }
+        return userId.equals(receipts.get(0).userId);
+
     }
 
     /**
@@ -1447,7 +1535,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else if (type == ROW_TYPE_VIDEO) {
 
                 message = JsonUtils.toVideoMessage(event.getContent());
-                waterMarkResourceId = R.drawable.filetype_video;
+                waterMarkResourceId = R.drawable.camera_play;
 
             } else if (type == ROW_TYPE_STICKER) {
 
@@ -1490,6 +1578,51 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
             addContentViewListeners(convertView, imageView, position, type);
+            int drawable = 0;
+            if (row.getEvent().isEncrypting()) {
+                //TODO
+            } else if (row.getEvent().isSending() || row.getEvent().isUnsent()) {
+                //TODO
+            } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+                //TODO
+            } else {
+                String userId = null;
+                for (RoomMember member : row.getRoomState().getMembers()) {
+                    if (!member.getUserId().equals(mSession.getMyUserId())) {
+                        userId = member.getUserId();
+                        break;
+                    }
+                }
+                drawable = getReadDrawable(row, userId, event);
+            }
+
+            ImageView status = convertView.findViewById(R.id.messagesAdapter_state);
+            ViewGroup messageParent = convertView.findViewById(R.id.messagesAdapter_body_view);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) messageParent.getLayoutParams();
+            Resources res = mContext.getResources();
+            if (event.getSender().equals(mSession.getMyUserId())) {
+                messageParent.setBackgroundResource(R.drawable.chat_bubble_outgoing);
+                params.gravity = Gravity.END;
+                params.setMargins(res.getDimensionPixelSize(R.dimen.message_start_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin),
+                        res.getDimensionPixelSize(R.dimen.message_end_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin));
+                if (drawable != 0) {
+                    status.setVisibility(View.VISIBLE);
+                    status.setImageResource(drawable);
+                } else {
+                    status.setVisibility(View.GONE);
+                }
+            } else {
+                messageParent.setBackgroundResource(R.drawable.chat_bubble_incoming);
+                params.gravity = Gravity.START;
+                params.setMargins(res.getDimensionPixelSize(R.dimen.message_end_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin),
+                        res.getDimensionPixelSize(R.dimen.message_start_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin));
+                status.setVisibility(View.GONE);
+            }
+            messageParent.setLayoutParams(params);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage(), e);
         }
@@ -1527,12 +1660,32 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 return convertView;
             }
 
-            if (TextUtils.isEmpty(notice)) {
-                noticeTextView.setText("");
+            if (msg.isCallEvent()) {
+                ImageView callIcon = convertView.findViewById(R.id.message_adapter_e2e_icon);
+                callIcon.setVisibility(View.VISIBLE);
+                if (msg.getType().equals(Event.EVENT_TYPE_CALL_INVITE)){
+                    String [] arr = notice.toString().split(" ");
+                    int icon = 0;
+                    if (arr.length > 0){
+                        if (arr[0].equalsIgnoreCase(mSession.getMyUser().displayname)){
+                            icon = R.drawable.call_outgoing;
+                            noticeTextView.setText(mContext.getString(R.string.outgoing_call));
+                        } else {
+                            icon = R.drawable.call_incommig;
+                            noticeTextView.setText(mContext.getString(R.string.incoming_call));
+                        }
+                    }
+                    callIcon.setImageResource(icon);
+                }
             } else {
-                SpannableStringBuilder strBuilder = new SpannableStringBuilder(notice);
-                MatrixURLSpan.refreshMatrixSpans(strBuilder, mVectorMessagesAdapterEventsListener);
-                noticeTextView.setText(strBuilder);
+                convertView.findViewById(R.id.message_adapter_e2e_icon).setVisibility(View.GONE);
+                if (TextUtils.isEmpty(notice)) {
+                    noticeTextView.setText("");
+                } else {
+                    SpannableStringBuilder strBuilder = new SpannableStringBuilder(notice);
+                    MatrixURLSpan.refreshMatrixSpans(strBuilder, mVectorMessagesAdapterEventsListener);
+                    noticeTextView.setText(strBuilder);
+                }
             }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
@@ -1548,7 +1701,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             // I don't understand why the render graph fails to do it.
             // the patch apply the alpha to the text color but it does not work for the hyperlinks.
             noticeTextView.setAlpha(1.0f);
-            noticeTextView.setTextColor(getNoticeTextColor());
+            //noticeTextView.setTextColor(getNoticeTextColor());
 
             Message message = JsonUtils.toMessage(msg.getContent());
             mHelper.manageURLPreviews(message, convertView, msg.eventId);
@@ -1675,6 +1828,54 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
 
             addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
+            int drawable = 0;
+            if (row.getEvent().isEncrypting()) {
+                //TODO
+            } else if (row.getEvent().isSending() || row.getEvent().isUnsent()) {
+                //TODO
+            } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+                //TODO
+            } else {
+                String userId = null;
+                for (RoomMember member : row.getRoomState().getMembers()) {
+                    if (!member.getUserId().equals(mSession.getMyUserId())) {
+                        userId = member.getUserId();
+                        break;
+                    }
+                }
+                drawable = getReadDrawable(row, userId, event);
+            }
+
+            ImageView status = convertView.findViewById(R.id.messagesAdapter_state);
+            ViewGroup messageParent = convertView.findViewById(R.id.messagesAdapter_body_view);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) messageParent.getLayoutParams();
+            Resources res = mContext.getResources();
+            if (event.getSender().equals(mSession.getMyUserId())) {
+                messageParent.setBackgroundResource(R.drawable.chat_bubble_outgoing);
+                params.gravity = Gravity.END;
+                params.setMargins(res.getDimensionPixelSize(R.dimen.message_start_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin),
+                        res.getDimensionPixelSize(R.dimen.message_end_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin));
+                fileTextView.setTextColor(mContext.getResources().getColor(R.color.black));
+                if (drawable != 0) {
+                    status.setVisibility(View.VISIBLE);
+                    status.setImageResource(drawable);
+                } else {
+                    status.setVisibility(View.GONE);
+                }
+            } else {
+                messageParent.setBackgroundResource(R.drawable.chat_bubble_incoming);
+                params.gravity = Gravity.START;
+                params.setMargins(res.getDimensionPixelSize(R.dimen.message_end_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin),
+                        res.getDimensionPixelSize(R.dimen.message_start_margin),
+                        res.getDimensionPixelSize(R.dimen.message_height_margin));
+                fileTextView.setTextColor(mContext.getResources().getColor(R.color.white));
+                status.setVisibility(View.GONE);
+            }
+            messageParent.setLayoutParams(params);
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage(), e);
         }
@@ -1780,9 +1981,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             });
 
             // set the message marker
-            convertView.findViewById(R.id.messagesAdapter_highlight_message_marker)
-                    .setBackgroundColor(ContextCompat.getColor(mContext,
-                            TextUtils.equals(mHighlightedEventId, event.eventId) ? R.color.vector_green_color : android.R.color.transparent));
+//            convertView.findViewById(R.id.messagesAdapter_highlight_message_marker)
+//                    .setBackgroundColor(ContextCompat.getColor(mContext,
+//                            TextUtils.equals(mHighlightedEventId, event.eventId) ? R.color.vector_green_color : android.R.color.transparent));
 
             // display the day separator
             VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
@@ -1915,7 +2116,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         if (event.isValidOriginServerTs()) {
-            res = AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true);
+            //res = AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true);
+            res = AdapterUtils.tsToString(mContext, event.getOriginServerTs());
         } else {
             res = " ";
         }
@@ -2060,19 +2262,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
             });
 
-            contentView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (!mIsSearchMode) {
-                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-
-                        onEventTap(event);
-                        return true;
-                    }
-
-                    return false;
-                }
-            });
+//            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    if (!mIsSearchMode) {
+//                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+//
+//                        onEventTap(event);
+//                        return true;
+//                    }
+//
+//                    return false;
+//                }
+//            });
         }
     }
 
@@ -2137,25 +2339,25 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
         });
 
-        contentView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                // GA issue
-                if (position < getCount()) {
-                    MessageRow row = getItem(position);
-                    Event event = row.getEvent();
-
-                    if (!mIsSearchMode) {
-                        onMessageClick(event, getEventText(contentView, event, msgType), convertView.findViewById(R.id.messagesAdapter_action_anchor));
-
-                        onEventTap(event);
-                        return true;
-                    }
-                }
-
-                return true;
-            }
-        });
+//        contentView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                // GA issue
+//                if (position < getCount()) {
+//                    MessageRow row = getItem(position);
+//                    Event event = row.getEvent();
+//
+//                    if (!mIsSearchMode) {
+//                        onMessageClick(event, getEventText(contentView, event, msgType), convertView.findViewById(R.id.messagesAdapter_action_anchor));
+//
+//                        onEventTap(event);
+//                        return true;
+//                    }
+//                }
+//
+//                return true;
+//            }
+//        });
     }
 
     /*
@@ -2226,7 +2428,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     private void displayE2eReRequest(View inflatedView, int position) {
-        TextView reRequestE2EKeyTextView = inflatedView.findViewById(R.id.messagesAdapter_re_request_e2e_key);
+        TextView reRequestE2EKeyTextView = null;//inflatedView.findViewById(R.id.messagesAdapter_re_request_e2e_key);
 
         if (reRequestE2EKeyTextView != null) {
             MessageRow row = getItem(position);

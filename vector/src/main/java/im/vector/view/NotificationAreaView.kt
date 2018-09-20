@@ -162,8 +162,8 @@ class NotificationAreaView @JvmOverloads constructor(
     private fun renderScrollToBottom(state: State.ScrollToBottom) {
         visibility = View.VISIBLE
         if (state.unreadCount > 0) {
-            imageView.setImageResource(R.drawable.newmessages)
-            messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
+            imageView.setImageResource(R.drawable.scrolldown)
+            messageView.setTextColor(ContextCompat.getColor(context, R.color.primary))
             messageView.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount))
         } else {
             imageView.setImageResource(R.drawable.scrolldown)

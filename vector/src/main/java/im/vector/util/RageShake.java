@@ -176,7 +176,7 @@ public class RageShake implements SensorEventListener {
                         mLastShakeTimestamp = System.currentTimeMillis();
 
                         if (PreferencesManager.useRageshake(mContext)) {
-                            promptForReport();
+                            //promptForReport();
                         }
                     } else {
                         Log.d(LOG_TAG, "Suppress shaking - not passed interval. Ms to go: " + (mTimeToNextShakeMs -

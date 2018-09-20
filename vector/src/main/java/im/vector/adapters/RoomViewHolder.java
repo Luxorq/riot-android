@@ -142,7 +142,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
 
         // Setup colors
         int mFuchsiaColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
-        int mGreenColor = ContextCompat.getColor(context, R.color.vector_green_color);
+        int mGreenColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
         int mSilverColor = ContextCompat.getColor(context, R.color.vector_silver_color);
 
         highlightCount = roomSummary.getHighlightCount();
@@ -217,7 +217,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         if (vRoomUnreadIndicator != null) {
             // set bing view background colour
             vRoomUnreadIndicator.setBackgroundColor(bingUnreadColor);
-            vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.VISIBLE);
+            vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.INVISIBLE);
         }
 
         if (vRoomTimestamp != null) {

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/vector_message_header"
-        android:visibility="gone"
-        tools:visibility="visible" />
+    <!--<include-->
+    <!--layout="@layout/vector_message_header"-->
+    <!--android:visibility="gone"-->
+    <!--tools:visibility="visible" />-->
 
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
         <include
             android:id="@+id/messagesAdapter_roundAvatar"
@@ -31,43 +31,46 @@
             android:background="#f00" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingBottom="5dp">
+            android:paddingTop="10dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <FrameLayout
                     android:id="@+id/messagesAdapter_body_layout"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:paddingRight="4dp">
 
                     <!-- the body is here -->
                     <RelativeLayout
                         android:id="@+id/messagesAdapter_text_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/message_adapter_e2e_icon"
                             android:layout_width="14dp"
                             android:layout_height="14dp"
-                            android:src="@drawable/e2e_verified" />
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="3dp"
+                            android:src="@drawable/call_incommig"
+                            app:tint="@color/black" />
 
                         <LinearLayout
                             android:id="@+id/message_timestamp_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginTop="1dp"
+                            android:gravity="center_vertical"
+                            android:layout_toRightOf="@+id/messagesAdapter_body"
                             android:orientation="horizontal">
 
                             <include layout="@layout/vector_message_timestamp" />
@@ -75,14 +78,12 @@
 
                         <TextView
                             android:id="@+id/messagesAdapter_body"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginLeft="4dp"
-                            android:layout_toLeftOf="@+id/message_timestamp_layout"
                             android:layout_toRightOf="@id/message_adapter_e2e_icon"
                             android:autoLink="all"
-                            tools:text="A body"
+                            android:text="A body"
+                            android:textColor="@color/grey500"
                             android:textIsSelectable="false"
                             android:textSize="14sp" />
                     </RelativeLayout>

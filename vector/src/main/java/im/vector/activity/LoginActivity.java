@@ -405,10 +405,40 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         R.attr.settings_icon_tint_color),
                 null);
         mLoginPasswordTextView = findViewById(R.id.login_password);
+        mLoginPasswordTextView.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        // Identifier of the action. This will be either the identifier you supplied,
+                        // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
+                        if (v != null) {
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            return true;
+                        }
+                        // Return true if you have consumed the action, else false.
+                        return false;
+                    }
+                });
 
         // account creation
         mCreationUsernameTextView = findViewById(R.id.creation_your_name);
         mCreationPassword1TextView = findViewById(R.id.creation_password1);
+        mCreationPassword1TextView.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        // Identifier of the action. This will be either the identifier you supplied,
+                        // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
+                        if (v != null) {
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            return true;
+                        }
+                        // Return true if you have consumed the action, else false.
+                        return false;
+                    }
+                });
 
         // account creation - three pid
         mThreePidInstructions = findViewById(R.id.instructions);

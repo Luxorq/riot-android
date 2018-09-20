@@ -46,7 +46,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
 
     // Supported path
     public static final String SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION = "/_matrix/identity/api/v1/validate/email/submitToken";
-    private static final List<String> mSupportedHosts = Arrays.asList("vector.im", "riot.im");
+    private static final List<String> mSupportedHosts = Arrays.asList("kedr.io");
 
 
     // mail validation url query parameters

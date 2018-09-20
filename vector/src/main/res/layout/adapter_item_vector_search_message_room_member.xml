@@ -6,9 +6,9 @@
     android:orientation="vertical">
 
     <!-- header -->
-    <include
-        android:id="@+id/messagesAdapter_search_message_day_separator"
-        layout="@layout/vector_message_header" />
+    <!--<include-->
+        <!--android:id="@+id/messagesAdapter_search_message_day_separator"-->
+        <!--layout="@layout/vector_message_header" />-->
 
     <RelativeLayout
         android:id="@+id/messagesAdapter_message_room_name_layout"

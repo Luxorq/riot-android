@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/room_action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -24,15 +24,19 @@
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/bg_grey"
+            android:elevation="2dp"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
 
             <include layout="@layout/vector_message_action_bar_custo_layout" />
 
         </android.support.v7.widget.Toolbar>
-
-    </FrameLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/toolbar"
+            android:visibility="invisible"/>
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/room_sync_in_progress"
@@ -193,7 +197,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/riot_primary_background_color"
+            android:background="@color/grey50"
             android:paddingBottom="0dp"
             android:paddingTop="0dp">
 
@@ -224,16 +228,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="16dp">
+                android:background="@color/white">
 
-                <include
-                    android:id="@+id/room_self_avatar"
-                    layout="@layout/vector_room_round_avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp" />
+            <ImageView
+                    android:id="@+id/room_send_image_view"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom"
+                    android:contentDescription="@string/send"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/chat_toolbar_send_icon" />
 
                 <LinearLayout
                     android:id="@+id/room_sending_message_layout"
@@ -241,7 +246,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
-                    android:layout_toRightOf="@id/room_self_avatar"
+                    android:layout_toRightOf="@id/room_send_image_view"
                     android:minHeight="56dp">
 
                     <ImageView
@@ -260,7 +265,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="6dp"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="6dp"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:dropDownAnchor="@+id/room_sending_message_layout"
@@ -274,7 +279,7 @@
                         tools:text="line 1" />
 
                     <ImageView
-                        android:id="@+id/room_send_image_view"
+                        android:id="@+id/room_send_view"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:layout_gravity="bottom"
@@ -321,7 +326,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_toRightOf="@id/room_self_avatar"
+                    android:layout_toRightOf="@id/room_send_image_view"
                     android:text="@string/room_do_not_have_permission_to_post"
                     android:textColor="?attr/riot_primary_text_color"
                     android:textSize="14sp"
@@ -336,7 +341,7 @@
                 android:layout_height="1dp"
                 android:layout_above="@id/room_bottom_layout"
                 android:layout_alignParentLeft="true"
-                android:background="?attr/room_activity_divider_color" />
+                android:background="@color/grey200" />
 
             <im.vector.view.NotificationAreaView
                 android:id="@+id/room_notifications_area"
@@ -347,6 +352,7 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
                 android:visibility="invisible"
+                android:background="@color/grey50"
                 tools:background="@color/vector_fuchsia_color"
                 tools:visibility="visible" />
 
@@ -387,6 +393,36 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/not_joined_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/room_action_bar"
+        android:background="@color/grey50"
+        android:gravity="center"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/invite_sent"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/invite_wait"
+            android:textColor="@color/grey500"
+            android:layout_marginTop="5dp"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/main_progress_layout"

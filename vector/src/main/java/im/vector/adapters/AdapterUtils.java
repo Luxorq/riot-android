@@ -95,4 +95,24 @@ public class AdapterUtils {
 
         return res;
     }
+
+    public static String tsToString(Context context, long ts) {
+        long daysDiff = (new Date().getTime() - zeroTimeDate(new Date(ts)).getTime()) / MS_IN_DAY;
+
+        String res;
+
+        if (0 == daysDiff) {
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | getTimeDisplay(context));
+        } else if (1 == daysDiff) {
+            res = context.getString(R.string.yesterday) + " " + DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | getTimeDisplay(context));
+        } else if (7 > daysDiff) {
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_ALL | getTimeDisplay(context));
+        } else if (365 > daysDiff) {
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_SHOW_DATE);
+        } else {
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
+        }
+
+        return res;
+    }
 }

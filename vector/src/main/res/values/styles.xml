@@ -68,7 +68,6 @@
 
     <!-- main text -->
     <style name="ActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
@@ -202,6 +201,7 @@
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
+        <item name="default_text_light_color">@color/white</item>
     </style>
 
     <!-- call activity -->
@@ -210,6 +210,14 @@
         <item name="windowNoTitle">true</item>
         <!-- status bar color -->
         <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="primary_control_color">@color/white</item>
+    </style>
+
+    <style name="MediaActivityTheme" parent="AppTheme.Dark">
+        <item name="primary_control_color">@color/white</item>
+        <item name="actionbar_text_color">@color/white</item>
     </style>
 
     <!-- NoActionBar + FullScreen -->
@@ -274,6 +282,7 @@
 
         <!-- switch color -->
         <item name="colorControlActivated">@color/white</item>
+        <item name="actionbar_text_color">@color/primary</item>
     </style>
 
     <!-- login & registration activities -->

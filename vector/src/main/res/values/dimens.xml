@@ -11,4 +11,9 @@
 
     <dimen name="quote_width">4dp</dimen>
     <dimen name="quote_gap">8dp</dimen>
+
+    <dimen name="message_start_margin">70dp</dimen>
+    <dimen name="message_end_margin">15dp</dimen>
+    <dimen name="message_height_margin">8dp</dimen>
+
 </resources>

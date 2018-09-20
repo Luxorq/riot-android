@@ -69,7 +69,7 @@ public class FallbackLoginActivity extends VectorAppCompatActivity {
         mWebView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
-        mHomeServerUrl = "https://matrix.org/";
+        mHomeServerUrl = "https://kedr.io/";
 
         if (intent.hasExtra(EXTRA_HOME_SERVER_ID)) {
             mHomeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_ID);

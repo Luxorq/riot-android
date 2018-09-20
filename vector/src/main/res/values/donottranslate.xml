@@ -25,7 +25,7 @@
     <string name="room_settings_read_history_entry_value_members_only_joined" translatable="false">joined</string>
 
     <string-array name="room_directory_servers" translatable="false">
-        <item>matrix.org</item>
+        <item>kedr.io</item>
     </string-array>
 
     <string-array name="theme_codes">

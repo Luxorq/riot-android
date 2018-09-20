@@ -365,8 +365,14 @@ public class RoomUtils {
         if (null != roomSummary) {
             if (roomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new EventDisplay(context, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
-                eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(context, R.attr.room_notification_text_color));
+                eventDisplay.setPrependMessagesWithAuthor(false);
+                if (roomSummary.getLatestReceivedEvent().getCryptoError() != null){
+                    messageToDisplay = "";
+                } else if (roomSummary.getLatestReceivedEvent().getType().equals(Event.EVENT_TYPE_MESSAGE_ENCRYPTION)) {
+                    messageToDisplay = context.getString(R.string.invite_sent);
+                } else {
+                    messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(context, R.attr.room_notification_text_color));
+                }
             }
 
             // check if this is an invite
@@ -529,6 +535,9 @@ public class RoomUtils {
             item.setVisible(false);
             item = popup.getMenu().findItem(R.id.ic_action_select_direct_chat);
             item.setVisible(false);
+            item = popup.getMenu().findItem(R.id.ic_action_add_homescreen_shortcut);
+            item.setVisible(false);
+
 
             if (BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY != state) {
                 item = popup.getMenu().findItem(R.id.ic_action_notifications_noisy);
@@ -597,8 +606,8 @@ public class RoomUtils {
                                 break;
 
                             case R.id.ic_action_notifications_mute:
-                                moreActionListener.onUpdateRoomNotificationsState(session,
-                                        room.getRoomId(), BingRulesManager.RoomNotificationState.MUTE);
+                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(),
+                                        item.getIcon() != null ? BingRulesManager.RoomNotificationState.ALL_MESSAGES : BingRulesManager.RoomNotificationState.MUTE);
                                 break;
 
                             case R.id.ic_action_select_fav: {

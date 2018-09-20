@@ -351,14 +351,16 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      */
     private void startCheckCallPermissions(boolean aIsVideoCall) {
         final int requestCode;
-
+        final int permissions;
         if (aIsVideoCall) {
+            permissions = PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL;
             requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
         } else {
+            permissions = PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
             requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
         }
 
-        if (PermissionsToolsKt.checkPermissions(requestCode, this, requestCode)) {
+        if (PermissionsToolsKt.checkPermissions(permissions, this, requestCode)) {
             startCall(aIsVideoCall);
         }
     }
@@ -1271,30 +1273,39 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mAudio.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!mSession.isAlive()) {
-                        Log.e(LOG_TAG, "performItemAction : the session is not anymore valid");
-                        return;
-                    }
-                    startCheckCallPermissions(false);
+                    performItemAction(ITEM_ACTION_START_VOICE_CALL);
                 }
             });
             mChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openRoom(mRoom);
+                    performItemAction(ITEM_ACTION_START_CHAT);
+                    //openRoom(mRoom);
                 }
             });
             mVideo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!mSession.isAlive()) {
-                        Log.e(LOG_TAG, "performItemAction : the session is not anymore valid");
-                        return;
-                    }
-                    startCheckCallPermissions(true);
+                    performItemAction(ITEM_ACTION_START_VIDEO_CALL);
                 }
             });
 
+            findViewById(R.id.media_files).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    launchRoomDetails(0);
+                }
+            });
+        }
+    }
+
+    private void launchRoomDetails(int selectedTab) {
+        if ((null != mSession) && (null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
+            Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorRoomDetailsActivity.class);
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_SELECTED_TAB_ID, selectedTab);
+            startActivity(intent);
         }
     }
 

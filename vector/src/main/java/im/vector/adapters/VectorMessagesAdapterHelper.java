@@ -1029,10 +1029,9 @@ class VectorMessagesAdapterHelper {
 //            return display.getTextualDisplay() != null;
             return false;
         } else if (event.isCallEvent()) {
-//            return Event.EVENT_TYPE_CALL_INVITE.equals(eventType) ||
-//                    Event.EVENT_TYPE_CALL_ANSWER.equals(eventType) ||
-//                    Event.EVENT_TYPE_CALL_HANGUP.equals(eventType);
-            return false;
+            return Event.EVENT_TYPE_CALL_INVITE.equals(eventType);// ||
+                    //Event.EVENT_TYPE_CALL_ANSWER.equals(eventType) ||
+                    //Event.EVENT_TYPE_CALL_HANGUP.equals(eventType);
         } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
             // if we can display text for it, it's valid.
 //            EventDisplay display = new RiotEventDisplay(context, event, roomState);

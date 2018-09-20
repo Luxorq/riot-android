@@ -506,10 +506,12 @@ object NotificationUtils {
 
         builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
 
-        builder.addAction(
-                R.drawable.vector_notification_open,
-                context.getString(R.string.action_open),
-                stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+        if (!roomsNotifications.mIsInvitationEvent) {
+            builder.addAction(
+                    R.drawable.vector_notification_open,
+                    context.getString(R.string.action_open),
+                    stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+        }
 
         // wearable
         if (!roomsNotifications.mIsInvitationEvent) {
@@ -537,7 +539,7 @@ object NotificationUtils {
      */
     @SuppressLint("NewApi")
     private fun manageNotificationSound(context: Context, builder: NotificationCompat.Builder, isBackground: Boolean, isBing: Boolean) {
-        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
+        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.grey500)
         val defaultColor = Color.TRANSPARENT
 
         if (isBackground) {

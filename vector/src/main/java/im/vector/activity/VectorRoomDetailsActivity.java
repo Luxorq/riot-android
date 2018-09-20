@@ -30,8 +30,10 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
+import java.util.Collection;
 import java.util.List;
 
 import im.vector.Matrix;
@@ -42,6 +44,7 @@ import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PermissionsToolsKt;
+import im.vector.util.RoomUtils;
 
 /**
  * This class implements the room details screen, using a tab UI pattern.
@@ -66,8 +69,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     // a tab can be selected at launch (with EXTRA_SELECTED_TAB_ID)
     // so the tab index must be fixed.
-    public static final int PEOPLE_TAB_INDEX = 0;
-    public static final int FILE_TAB_INDEX = 1;
+    public static final int PEOPLE_TAB_INDEX = 1;
+    public static final int FILE_TAB_INDEX = 0;
     public static final int SETTINGS_TAB_INDEX = 2;
 
     private int mCurrentTabIndex = -1;
@@ -152,8 +155,40 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         // tab creation and restore tabs UI context
         mActionBar = getSupportActionBar();
-        createNavigationTabs(selectedTab);
+        showFiles();
+        //createNavigationTabs(selectedTab);
+        if (null != getSupportActionBar()) {
+            Collection<RoomMember> members = mRoom.getMembers();
+            if (RoomUtils.isDirectChat(mSession, mRoom.getRoomId())) {
+                for (RoomMember member : members) {
+                    if (!member.getUserId().equals(mSession.getMyUserId())) {
+                        getSupportActionBar().setSubtitle(member.displayname);
+                        break;
+                    }
+                }
+            }
+            getSupportActionBar().setTitle(this.getResources().getString(R.string.room_details_files));
+
+        }
+
     }
+
+    private void showFiles() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        mSearchFilesFragment = (VectorSearchRoomFilesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);
+        if (null == mSearchFilesFragment) {
+            mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId, mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            ft.replace(R.id.room_details_fragment_container, mSearchFilesFragment, TAG_FRAGMENT_FILES_DETAILS);
+            Log.d(LOG_TAG, "## onTabSelected() file frag replace");
+        } else {
+            ft.attach(mSearchFilesFragment);
+            Log.d(LOG_TAG, "## onTabSelected() file frag attach");
+        }
+        ft.commitAllowingStateLoss();
+        mCurrentTabIndex = FILE_TAB_INDEX;
+        startFileSearch();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {

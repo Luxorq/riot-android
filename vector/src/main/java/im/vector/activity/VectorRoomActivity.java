@@ -65,6 +65,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallListener;
 import org.matrix.androidsdk.call.MXCallListener;
+import org.matrix.androidsdk.crypto.MXCryptoAlgorithms;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
@@ -220,6 +221,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.room_send_image_view)
     ImageView mSendImageView;
 
+    @BindView(R.id.room_send_view)
+    ImageView mSendView;
+
     @BindView(R.id.editText_messageBox)
     VectorAutoCompleteTextView mEditText;
 
@@ -358,6 +362,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // progress bar to warn that the sync is not yet done
     @BindView(R.id.room_sync_in_progress)
     View mSyncInProgressView;
+
+    private String participantId;
 
     private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
         @Override
@@ -718,6 +724,31 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         });
 
         mRoom = mSession.getDataHandler().getRoom(roomId, false);
+        if (!mRoom.isEncrypted()) {
+            mRoom.enableEncryptionWithAlgorithm(MXCryptoAlgorithms.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    if (!isFinishing() && mRoom != null && mSession != null && mEditText != null) {
+                        mEditText.setHint((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ? R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+
+                }
+
+                @Override
+                public void onMatrixError(MatrixError matrixError) {
+
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+
+                }
+            });
+        }
 
         mEditText.setAddColonOnFirstItem(true);
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -985,7 +1016,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mVectorRoomMediasSender.resumeResizeMediaAndSend();
 
         // header visibility has launched
-        enableActionBarHeader(intent.getBooleanExtra(EXTRA_EXPAND_ROOM_HEADER, false) ? SHOW_ACTION_BAR_HEADER : HIDE_ACTION_BAR_HEADER);
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
         // the both flags are only used once
         intent.removeExtra(EXTRA_EXPAND_ROOM_HEADER);
@@ -1103,7 +1134,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     protected void onResume() {
         Log.d(LOG_TAG, "++ Resume the activity");
         super.onResume();
+        processOnResume();
+        Log.d(LOG_TAG, "-- Resume the activity");
+    }
 
+    private void processOnResume() {
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
         if (null != mRoom) {
@@ -2382,9 +2417,36 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void refreshSelfAvatar() {
         // sanity check
         if (null != mAvatarImageView) {
-            VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
+//            VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
+            Collection<RoomMember> members = mRoom.getMembers();
+            if (RoomUtils.isDirectChat(mSession, mRoom.getRoomId())) {
+                for (RoomMember member : members) {
+                    if (!member.getUserId().equals(mSession.getMyUserId())) {
+                        participantId = member.getUserId();
+                        VectorUtils.loadRoomMemberAvatar(this, mSession, mAvatarImageView, member);
+                        break;
+                    }
+                }
+            }
+            mAvatarImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openDetails(mRoom, participantId);
+                }
+            });
+            //VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
         }
     }
+
+    private void openDetails(Room room, String userId) {
+        Intent roomDetailsIntent = new Intent(this, VectorMemberDetailsActivity.class);
+
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, room.getRoomId());
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+        startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
+    }
+
 
     /**
      * Sanitize the display name.
@@ -2820,7 +2882,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
             } else {
                 // wait the touch up to display the room settings page
-                launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+                launchRoomDetails(VectorRoomDetailsActivity.FILE_TAB_INDEX);
             }
         }
         return true;
@@ -2985,58 +3047,88 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void updateRoomHeaderMembersStatus() {
         if (null != mActionBarHeaderActiveMembersLayout) {
             // refresh only if the action bar is hidden
-            if (mActionBarCustomTitle.getVisibility() == View.GONE) {
-                if ((null != mRoom) || (null != sRoomPreviewData)) {
-                    // update the members status: "active members"/"members"
-                    int joinedMembersCount = 0;
-                    int activeMembersCount = 0;
 
-                    RoomState roomState = (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
+            if ((null != mRoom) || (null != sRoomPreviewData)) {
+                // update the members status: "active members"/"members"
+                int joinedMembersCount = 0;
+                int activeMembersCount = 0;
 
-                    if (null != roomState) {
-                        Collection<RoomMember> members = roomState.getDisplayableMembers();
+                RoomState roomState = (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
 
-                        for (RoomMember member : members) {
-                            if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                                joinedMembersCount++;
+                if (null != roomState) {
+                    Collection<RoomMember> members = roomState.getDisplayableMembers();
 
-                                User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+                    for (RoomMember member : members) {
+                        if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                            joinedMembersCount++;
 
-                                if ((null != user) && user.isActive()) {
-                                    activeMembersCount++;
-                                }
+                            User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+
+                            if ((null != user) && user.isActive()) {
+                                activeMembersCount++;
                             }
                         }
+                    }
 
-                        // in preview mode, the room state might be a publicRoom
-                        // so try to use the public room info.
-                        if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
-                            activeMembersCount = joinedMembersCount = ((PublicRoom) roomState).numJoinedMembers;
-                        }
+                    // in preview mode, the room state might be a publicRoom
+                    // so try to use the public room info.
+                    if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
+                        activeMembersCount = joinedMembersCount = ((PublicRoom) roomState).numJoinedMembers;
+                    }
 
-                        String text;
+                    String text;
 
-                        if (joinedMembersCount == 1) {
-                            text = getString(R.string.room_title_one_member);
-                        } else if (null != sRoomPreviewData) {
-                            text = getResources().getQuantityString(R.plurals.room_title_members, joinedMembersCount, joinedMembersCount);
-                        } else {
-                            text = activeMembersCount + "/" +
-                                    getResources().getQuantityString(R.plurals.room_header_active_members_count, joinedMembersCount, joinedMembersCount);
-                        }
+                    if (joinedMembersCount == 1) {
+                        text = getResources().getString(R.string.room_title_one_member);
+                    } else if (null != sRoomPreviewData) {
+                        text = getResources().getQuantityString(R.plurals.room_title_members, joinedMembersCount, joinedMembersCount);
+                    } else {
+                        text = activeMembersCount + "/" +
+                                getResources().getQuantityString(R.plurals.room_header_active_members_count, joinedMembersCount, joinedMembersCount);
+                    }
+                    if (mActionBarCustomTitle != null && mActionBarCustomTitle.getText().equals(getString(R.string.room_displayname_no_title))) {
+                        mRoom.leave(new ApiCallback<Void>() {
+                            private void onDone() {
+                                if (!isFinishing()) {
+                                    VectorRoomActivity.this.finish();
+                                    Toast.makeText(VectorApp.getInstance(), R.string.room_empty, Toast.LENGTH_SHORT).show();
+                                }
+                            }
 
-                        if (!TextUtils.isEmpty(text)) {
-                            mActionBarHeaderActiveMembersTextView.setText(text);
-                            mActionBarHeaderActiveMembersLayout.setVisibility(View.VISIBLE);
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                onDone();
+                            }
 
-                            // display the both action buttons only when it makes sense
-                            // i.e not a room preview
-                            boolean hideMembersButtons = (null == mRoom) || !TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData);
-                            mActionBarHeaderActiveMembersListButton.setVisibility(hideMembersButtons ? View.INVISIBLE : View.VISIBLE);
-                            mActionBarHeaderActiveMembersInviteButton.setVisibility(hideMembersButtons ? View.INVISIBLE : View.VISIBLE);
-                        } else {
-                            mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onDone();
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError matrixError) {
+                                onDone();
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onDone();
+                            }
+                        });
+                    } else if (mActionBarCustomTitle != null && !mActionBarCustomTitle.getText().equals(getString(R.string.room_displayname_no_title)) && joinedMembersCount == 1) {
+                        findViewById(R.id.not_joined_view).setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.not_joined_view).setVisibility(View.GONE);
+                    }
+                    if (!TextUtils.isEmpty(text)) {
+                        mActionBarHeaderActiveMembersTextView.setText(text);
+                        mActionBarHeaderActiveMembersLayout.setVisibility(View.VISIBLE);
+
+                        // display the both action buttons only when it makes sense
+                        // i.e not a room preview
+                        boolean hideMembersButtons = (null == mRoom) || !TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData);
+                        mActionBarHeaderActiveMembersListButton.setVisibility(hideMembersButtons ? View.INVISIBLE : View.VISIBLE);
+                        mActionBarHeaderActiveMembersInviteButton.setVisibility(hideMembersButtons ? View.INVISIBLE : View.VISIBLE);
                     } else {
                         mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
                     }
@@ -3047,6 +3139,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
             }
         }
+
     }
 
     /**
@@ -3848,7 +3941,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
     }
 
-    @OnClick(R.id.room_send_image_view)
+    @OnClick(R.id.room_send_view)
     void onSendClick() {
         if (!TextUtils.isEmpty(mEditText.getText())) {
             sendTextMessage();

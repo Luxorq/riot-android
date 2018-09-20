@@ -226,7 +226,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     private HomeRoomsViewModel mRoomsViewModel;
 
-    @BindView(R.id.home_toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
@@ -1002,7 +1002,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         mFabStartChat.setColorNormal(primaryColor);
         mFabStartChat.setColorPressed(secondaryColor);
 
-        mVectorPendingCallView.updateBackgroundColor(primaryColor);
+        mVectorPendingCallView.updateBackgroundColor(getResources().getColor(R.color.primary));
         mSyncInProgressView.setBackgroundColor(primaryColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(secondaryColor));

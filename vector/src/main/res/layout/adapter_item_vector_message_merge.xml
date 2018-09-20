@@ -5,10 +5,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/vector_message_header"
-        android:visibility="gone"
-        tools:visibility="visible" />
+    <!--<include-->
+        <!--layout="@layout/vector_message_header"-->
+        <!--android:visibility="gone"-->
+        <!--tools:visibility="visible" />-->
 
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"

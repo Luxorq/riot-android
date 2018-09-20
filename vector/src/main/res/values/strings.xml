@@ -357,7 +357,7 @@
     <string name="room_preview_room_interactions_disabled">This is a preview of this room. Room interactions have been disabled.</string>
 
     <!-- Chat creation -->
-    <string name="room_creation_title">New Chat</string>
+    <string name="room_creation_title">Start Chat</string>
     <string name="room_creation_add_member">Add member</string>
     <plurals name="room_header_active_members_count">
         <item quantity="one">1 active members</item>
@@ -491,7 +491,7 @@
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
-    <string name="room_details_title">Room Details</string>
+    <string name="room_details_title">@string/room_details_files</string>
     <string name="room_details_people">People</string>
     <string name="room_details_files">Media files</string>
     <string name="room_details_settings">Settings</string>

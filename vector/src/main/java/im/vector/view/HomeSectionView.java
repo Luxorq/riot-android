@@ -65,6 +65,7 @@ public class HomeSectionView extends RelativeLayout {
     private String mNoItemPlaceholder;
     private String mNoResultPlaceholder;
     private String mCurrentFilter;
+    private boolean isContact;
 
     public HomeSectionView(Context context) {
         super(context);
@@ -137,7 +138,7 @@ public class HomeSectionView extends RelativeLayout {
 
                 setVisibility(mHideIfEmpty && isEmpty ? GONE : VISIBLE);
                 mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
-                mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
+                mBadge.setVisibility(badgeCount == 0 || isContact ? GONE : VISIBLE);
                 mRecyclerView.setVisibility(hasNoResult ? GONE : VISIBLE);
                 mPlaceHolder.setVisibility(hasNoResult ? VISIBLE : GONE);
             } catch (Exception e) {
@@ -158,6 +159,7 @@ public class HomeSectionView extends RelativeLayout {
      * @param title new title
      */
     public void setTitle(@StringRes final int title) {
+        isContact = title == R.string.settings_contact;
         mHeader.setText(title);
     }
 

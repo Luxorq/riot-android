@@ -248,7 +248,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         // whatever the user clicks
         // we assume that the devices are now known because they have been displayed.
-        setDevicesKnown(mDevicesList);
+        setDevicesKnown(getDevicesList());
     }
 
     /**

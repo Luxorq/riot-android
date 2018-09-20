@@ -88,7 +88,7 @@ public class PeopleAdapter extends AbsAdapter {
                 TYPE_ROOM,
                 new ArrayList<Room>(),
                 RoomUtils.getRoomsDateComparator(mSession, false));
-        mDirectChatsSection.setEmptyViewPlaceholder(context.getString(R.string.no_conversation_placeholder), context.getString(R.string.no_result_placeholder));
+        //mDirectChatsSection.setEmptyViewPlaceholder(context.getString(R.string.no_conversation_placeholder), context.getString(R.string.no_result_placeholder));
 
         mLocalContactsSection = new AdapterSection<>(context,
                 context.getString(R.string.local_address_book_header),

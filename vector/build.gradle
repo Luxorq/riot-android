@@ -88,7 +88,7 @@ android {
     flavorDimensions "kedr"
 
     productFlavors {
-        app {
+        kedr {
             applicationId "im.kedr"
             // use the version name
             versionCode rootProject.ext.versionCodeProp
@@ -224,8 +224,8 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appImplementation 'com.google.firebase:firebase-core:16.0.3'
-    appImplementation 'com.google.firebase:firebase-messaging:17.3.1'
+    kedrImplementation 'com.google.firebase:firebase-core:16.0.3'
+    kedrImplementation 'com.google.firebase:firebase-messaging:17.3.2'
 
     // fdroid flavor only
 }

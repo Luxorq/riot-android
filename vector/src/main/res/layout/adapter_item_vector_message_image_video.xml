@@ -5,22 +5,26 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/vector_message_header"
-        android:visibility="gone"
-        tools:visibility="visible" />
+    <!--<include-->
+        <!--layout="@layout/vector_message_header"-->
+        <!--android:visibility="gone"-->
+        <!--tools:visibility="visible" />-->
 
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/chat_bubble_own"
+        android:paddingBottom="5dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="8dp">
 
         <include
             android:id="@+id/messagesAdapter_roundAvatar"
-            layout="@layout/vector_room_round_avatar" />
+            layout="@layout/vector_room_round_avatar"
+            android:visibility="gone"/>
 
         <View
             android:id="@+id/messagesAdapter_highlight_message_marker"
@@ -28,47 +32,22 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            tools:background="@color/vector_green_color" />
+            tools:background="@color/vector_green_color"
+            android:visibility="gone"/>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingBottom="5dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/message_timestamp_layout"
-                    android:orientation="horizontal">
-
-                    <include layout="@layout/vector_message_sender" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/message_timestamp_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:orientation="horizontal">
-
-                    <include layout="@layout/vector_message_timestamp" />
-                </LinearLayout>
-            </RelativeLayout>
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -76,27 +55,25 @@
                         android:id="@+id/message_adapter_e2e_icon"
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:src="@drawable/e2e_verified" />
+                        android:src="@drawable/e2e_verified"
+                        android:visibility="gone"/>
 
                     <FrameLayout
                         android:id="@+id/messagesAdapter_body_layout"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingRight="4dp">
+                        android:layout_height="wrap_content">
 
                         <RelativeLayout
                             android:id="@+id/messagesAdapter_image_layout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right">
+                            android:layout_height="wrap_content">
 
                             <!-- the media -->
                             <ImageView
                                 android:id="@+id/messagesAdapter_image"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginLeft="4dp"
+                                android:layout_centerHorizontal="true"
                                 android:adjustViewBounds="true"
                                 android:scaleType="center" />
 
@@ -105,8 +82,8 @@
                                 android:id="@+id/messagesAdapter_image_type"
                                 android:layout_width="@dimen/chat_avatar_size"
                                 android:layout_height="@dimen/chat_avatar_size"
-                                android:layout_alignLeft="@+id/messagesAdapter_image"
-                                android:src="@drawable/filetype_image" />
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/camera_play" />
 
                             <!-- the upload fails -->
                             <ImageView
@@ -163,6 +140,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/message_timestamp_layout"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <include layout="@layout/vector_message_timestamp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

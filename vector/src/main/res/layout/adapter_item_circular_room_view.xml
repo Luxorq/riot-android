@@ -88,7 +88,7 @@
         android:textSize="12sp"
         android:visibility="gone"
         tools:background="#220000ff"
-        tools:text="matrix.org"
+        tools:text="kedr.io"
         tools:visibility="visible" />
 
 </RelativeLayout>

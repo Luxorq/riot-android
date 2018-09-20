@@ -178,6 +178,7 @@
                             android:singleLine="true"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
+                            android:imeOptions="actionDone"
                             android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"/>
                     </android.support.design.widget.TextInputLayout>
 

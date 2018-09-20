@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission
@@ -181,7 +180,6 @@
         <activity
             android:name=".activity.VectorRoomDetailsActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/room_details_title"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorRoomActivity"
             android:windowSoftInputMode="adjustResize">
@@ -216,7 +214,7 @@
             android:label="@string/title_activity_member_details"
             android:parentActivityName=".activity.VectorRoomActivity"
             android:theme="@style/HomeActivityTheme"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.LockScreenActivity"
             android:clearTaskOnLaunch="true"
@@ -239,6 +237,7 @@
             android:label="a filename"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorRoomActivity"
+            android:theme="@style/MediaActivityTheme"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -331,7 +330,7 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="vector.im" />
+                <data android:host="kedr.io" />
                 <data android:pathPrefix="/app/" />
                 <data android:pathPrefix="/beta/" />
                 <data android:pathPrefix="/develop/" />
@@ -417,7 +416,7 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="vector.im" />
+                <data android:host="kedr.io" />
                 <data android:pathPrefix="/app/" />
                 <data android:pathPrefix="/beta/" />
                 <data android:pathPrefix="/develop/" />
@@ -454,7 +453,7 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="vector.im" />
+                <data android:host="kedr.io" />
                 <!-- mail validation -->
                 <data android:pathPrefix="/_matrix/" />
             </intent-filter>
