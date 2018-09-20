@@ -31,8 +31,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -92,6 +94,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
+import im.vector.util.PreferencesManager;
 import im.vector.util.ThemeUtils;
 import im.vector.util.ViewUtilKt;
 import kotlin.Pair;
@@ -293,6 +296,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private Dialog mCurrentDialog;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (!PreferencesManager.isIntroShown(this)) {
+            startActivity(new Intent(this, IntroActivity.class));
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         if (mLoginPhoneNumberHandler != null) {
             mLoginPhoneNumberHandler.release();
@@ -412,7 +423,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         // Identifier of the action. This will be either the identifier you supplied,
                         // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
                         if (v != null) {
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                             return true;
                         }
@@ -431,7 +442,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         // Identifier of the action. This will be either the identifier you supplied,
                         // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
                         if (v != null) {
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                             return true;
                         }
@@ -2010,7 +2021,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         mButtonsView.setVisibility(View.VISIBLE);
 
-        mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
+        mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.GONE : View.GONE);
         mLoginButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
         mRegisterButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
         //mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);

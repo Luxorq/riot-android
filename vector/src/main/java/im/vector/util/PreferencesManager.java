@@ -719,4 +719,15 @@ public class PreferencesManager {
     public static boolean displayAllEvents(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISPLAY_ALL_EVENTS_KEY, false);
     }
+
+    public static boolean isIntroShown(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getResources().getString(R.string.key_intro), false);
+    }
+
+    public static void setIntroShown(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(context.getResources().getString(R.string.key_intro), true)
+                .apply();
+    }
 }

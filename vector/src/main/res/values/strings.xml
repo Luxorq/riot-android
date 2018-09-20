@@ -1082,4 +1082,14 @@
     <string name="invite_wait">waiting for acceptance and encryption keys exchange</string>
     <string name="outgoing_call">Outgoing call</string>
     <string name="room_empty">Room is empty. Leaving…</string>
+    <string name="slide_one_title">Safety</string>
+    <string name="slide_one_content">Chat, call other people, send voice messages and files with the highest encryption and security standards</string>
+    <string name="slide_two_title">Anonymity</string>
+    <string name="slide_two_content">No need to share your personal details like your telephone number and no requirement to access your contacts</string>
+    <string name="slide_three_title">Communication</string>
+    <string name="slide_three_content">Chat, call other people and send files with the highest encryption and security standards</string>
+    <string name="slide_four_title">Protection</string>
+    <string name="slide_four_content">Be calm for the safety of your conversation with colleagues and friends via chat or call</string>
+
+    <string name="key_intro">intro_key</string>
 </resources>
