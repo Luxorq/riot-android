@@ -157,10 +157,10 @@
                     android:id="@+id/login_inputs_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="30dp"
                     android:background="@drawable/login_input_bg"
                     android:orientation="vertical"
-                    android:padding="15dp">
+                    android:padding="20dp">
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"

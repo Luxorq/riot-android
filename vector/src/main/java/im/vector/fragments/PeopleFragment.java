@@ -121,7 +121,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
         mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.bg_grey);
         mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.primary_color_dark);
-        getVectorActivity().getSupportActionBar().setTitle(R.string.direct_chats_header);
 
         initViews();
 

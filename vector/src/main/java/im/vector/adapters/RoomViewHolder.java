@@ -86,9 +86,6 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     @Nullable
     View vRoomMoreActionAnchor;
 
-    @BindView(R.id.room_more_action_ic)
-    @Nullable
-    View vMore;
 
     public RoomViewHolder(final View itemView) {
         super(itemView);
@@ -142,7 +139,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
 
         // Setup colors
         int mFuchsiaColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
-        int mGreenColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
+        int mGreenColor = ContextCompat.getColor(context, R.color.vector_green_color);
         int mSilverColor = ContextCompat.getColor(context, R.color.vector_silver_color);
 
         highlightCount = roomSummary.getHighlightCount();
@@ -212,12 +209,12 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         if (mDirectChatIndicator != null) {
             mDirectChatIndicator.setVisibility(isDirectChat ? View.VISIBLE : View.INVISIBLE);
         }
-        //vRoomEncryptedIcon.setVisibility(room.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
+        vRoomEncryptedIcon.setVisibility(View.INVISIBLE);
 
         if (vRoomUnreadIndicator != null) {
             // set bing view background colour
             vRoomUnreadIndicator.setBackgroundColor(bingUnreadColor);
-            vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.INVISIBLE);
+            vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.VISIBLE);
         }
 
         if (vRoomTimestamp != null) {
@@ -236,7 +233,8 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void populateViews(final Context context, final MXSession session, final Room room) {
+    public void populateViews(final Context context, final MXSession session, final Room room,
+                              final boolean isDirectChat, final boolean isInvitation) {
         // sanity check
         if (null == room) {
             Log.e(LOG_TAG, "## populateViews() : null room");
@@ -267,8 +265,46 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             return;
         }
 
-        vRoomUnreadCount.setVisibility(View.INVISIBLE);
+        int unreadMsgCount = roomSummary.getUnreadEventsCount();
+        int highlightCount;
+        int notificationCount;
 
+        // Setup colors
+        int mFuchsiaColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
+        int mGreenColor = ContextCompat.getColor(context, R.color.vector_green_color);
+        int mSilverColor = ContextCompat.getColor(context, R.color.vector_silver_color);
+
+        highlightCount = roomSummary.getHighlightCount();
+        notificationCount = roomSummary.getNotificationCount();
+
+        // fix a crash reported by GA
+        if ((null != room.getDataHandler()) && room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room.getRoomId())) {
+            notificationCount = highlightCount;
+        }
+
+        int bingUnreadColor;
+        if (isInvitation || (0 != highlightCount)) {
+            bingUnreadColor = mFuchsiaColor;
+        } else if (0 != notificationCount) {
+            bingUnreadColor = mGreenColor;
+        } else if (0 != unreadMsgCount) {
+            bingUnreadColor = mSilverColor;
+        } else {
+            bingUnreadColor = Color.TRANSPARENT;
+        }
+
+        if (isInvitation || (notificationCount > 0)) {
+            vRoomUnreadCount.setText(isInvitation ? "!" : RoomUtils.formatUnreadMessagesCounter(notificationCount));
+            vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadius(100);
+            shape.setColor(bingUnreadColor);
+            vRoomUnreadCount.setBackground(shape);
+            vRoomUnreadCount.setVisibility(View.VISIBLE);
+        } else {
+            vRoomUnreadCount.setVisibility(View.GONE);
+        }
 
         String roomName = VectorUtils.getRoomDisplayName(context, session, room);
         if (vRoomNameServer != null) {
@@ -282,7 +318,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
                 vRoomName.setText(firstLine);
                 vRoomNameServer.setText(secondLine);
                 vRoomNameServer.setVisibility(View.VISIBLE);
-                vRoomNameServer.setTypeface(null, Typeface.NORMAL);
+                vRoomNameServer.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
             } else {
                 // Allow the name to take two lines
                 vRoomName.setLines(2);
@@ -292,7 +328,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         } else {
             vRoomName.setText(roomName);
         }
-        vRoomName.setTypeface(null, Typeface.NORMAL);
+        vRoomName.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
 
         VectorUtils.loadRoomAvatar(context, session, vRoomAvatar, room);
 
@@ -316,7 +352,6 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             }));
         }
 
-
         if (mDirectChatIndicator != null) {
             mDirectChatIndicator.setVisibility(View.INVISIBLE);
         }
@@ -327,12 +362,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (vRoomTimestamp != null) {
-            vRoomTimestamp.setVisibility(View.INVISIBLE);
-        }
-
-        if (vMore != null) {
-            vMore.setVisibility(View.INVISIBLE);
+            vRoomTimestamp.setText(RoomUtils.getRoomTimestamp(context, roomSummary.getLatestReceivedEvent()));
         }
     }
-
 }

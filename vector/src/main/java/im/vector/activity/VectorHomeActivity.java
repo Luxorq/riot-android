@@ -117,6 +117,8 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.fragments.AbsHomeFragment;
+import im.vector.fragments.CallsFragment;
+import im.vector.fragments.ContactsFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
@@ -180,6 +182,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     public static final String BROADCAST_ACTION_STOP_WAITING_VIEW = "im.vector.activity.ACTION_STOP_WAITING_VIEW";
 
     private static final String TAG_FRAGMENT_HOME = "TAG_FRAGMENT_HOME";
+    private static final String TAG_FRAGMENT_CALLS = "TAG_FRAGMENT_CALLS";
+    private static final String TAG_FRAGMENT_CONTACTS = "TAG_FRAGMENT_CONTACTS";
     private static final String TAG_FRAGMENT_FAVOURITES = "TAG_FRAGMENT_FAVOURITES";
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
@@ -211,9 +215,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.button_create_room)
     FloatingActionButton mFabCreateRoom;
 
-    @BindView(R.id.button_join_room)
-    FloatingActionButton mFabJoinRoom;
-
     // mFloatingActionButton is hidden for 1s when there is scroll. This Runnable will show it again
     private Runnable mShowFloatingActionButtonRunnable;
 
@@ -239,7 +240,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     ProgressBar mSyncInProgressView;
 
     @BindView(R.id.search_view)
-    SearchView mSearchView;
+    public SearchView mSearchView;
 
     @BindView(R.id.floating_action_menu_touch_guard)
     View touchGuard;
@@ -487,9 +488,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         final View selectedMenu;
         if (isFirstCreation()) {
-            selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_people);
+            selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_home);
         } else {
-            selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_people));
+            selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
         }
         if (selectedMenu != null) {
             selectedMenu.performClick();
@@ -509,7 +510,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if ((mCurrentMenuId == R.id.bottom_action_favourites)
                 || (mCurrentMenuId == R.id.bottom_action_groups)
                 || (mCurrentMenuId == R.id.bottom_action_settings)
-                || (mCurrentMenuId == R.id.bottom_action_home)) {
+                || (mCurrentMenuId == R.id.bottom_action_contacts)
+                || (mCurrentMenuId == R.id.bottom_action_calls)) {
             concealFloatingActionMenu();
         } else {
             revealFloatingActionMenu();
@@ -713,7 +715,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public int getMenuRes() {
-        return -1;
+        return R.menu.vector_home;
     }
 
     @Override
@@ -733,7 +735,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             case R.id.ic_action_global_search:
                 final Intent searchIntent = new Intent(this, VectorUnifiedSearchActivity.class);
 
-                if (R.id.bottom_action_people == mCurrentMenuId) {
+                if (R.id.bottom_action_home == mCurrentMenuId) {
                     searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_TAB_INDEX, VectorUnifiedSearchActivity.SEARCH_PEOPLE_TAB_POSITION);
                 }
 
@@ -896,6 +898,26 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
                 mSearchView.setVisibility(View.VISIBLE);
                 break;
+            case R.id.bottom_action_contacts:
+                Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_CONTACTS);
+                if (fragment == null) {
+                    fragment = ContactsFragment.newInstance();
+                }
+                mCurrentFragmentTag = TAG_FRAGMENT_CONTACTS;
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_contacts));
+                mSearchView.setVisibility(View.VISIBLE);
+                break;
+            case R.id.bottom_action_calls:
+                Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_CALLS);
+                if (fragment == null) {
+                    fragment = CallsFragment.newInstance();
+                }
+                mCurrentFragmentTag = TAG_FRAGMENT_CALLS;
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_calls));
+                mSearchView.setVisibility(View.VISIBLE);
+                break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
@@ -904,16 +926,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
-                break;
-            case R.id.bottom_action_people:
-                Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
-                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);
-                if (fragment == null) {
-                    fragment = PeopleFragment.newInstance();
-                }
-                mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
-                mSearchView.setVisibility(View.VISIBLE);
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -940,7 +952,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = SettingsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_SETTINGS;
-                mSearchView.setVisibility(View.GONE);
                 break;
 
         }
@@ -978,7 +989,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      */
     public void updateTabStyle(final int primaryColor, final int secondaryColor) {
         mToolbar.setBackgroundColor(primaryColor);
-
+        int colorP = getResources().getColor(R.color.grey600);
+        int colorS = getResources().getColor(R.color.grey800);
         Class menuClass = FloatingActionsMenu.class;
         try {
             Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
@@ -986,21 +998,19 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
             pressed.setAccessible(true);
 
-            normal.set(mFloatingActionsMenu, primaryColor);
-            pressed.set(mFloatingActionsMenu, secondaryColor);
+            normal.set(mFloatingActionsMenu, colorP);
+            pressed.set(mFloatingActionsMenu, colorS);
 
-            mFabMain.setColorNormal(primaryColor);
-            mFabMain.setColorPressed(secondaryColor);
+            mFabMain.setColorNormal(colorP);
+            mFabMain.setColorPressed(colorS);
         } catch (Exception ignored) {
 
         }
 
-        mFabJoinRoom.setColorNormal(primaryColor);
-        mFabJoinRoom.setColorPressed(secondaryColor);
-        mFabCreateRoom.setColorNormal(primaryColor);
-        mFabCreateRoom.setColorPressed(secondaryColor);
-        mFabStartChat.setColorNormal(primaryColor);
-        mFabStartChat.setColorPressed(secondaryColor);
+        mFabCreateRoom.setColorNormal(colorP);
+        mFabCreateRoom.setColorPressed(colorS);
+        mFabStartChat.setColorNormal(colorP);
+        mFabStartChat.setColorPressed(colorS);
 
         mVectorPendingCallView.updateBackgroundColor(getResources().getColor(R.color.primary));
         mSyncInProgressView.setBackgroundColor(primaryColor);
@@ -1017,7 +1027,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // Set color of toolbar search view
         EditText edit = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_text_color));
-        edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_hint_text_color));
+        edit.setHintTextColor(getResources().getColor(R.color.grey500));
     }
 
     /**
@@ -1083,18 +1093,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         mFabStartChat.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.ic_person_black_24dp),
+                ContextCompat.getDrawable(this, R.drawable.chats_create_new),
                 ContextCompat.getColor(this, android.R.color.white)
         ));
 
         mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.chats_create_new),
+                ContextCompat.getDrawable(this, R.drawable.ic_person_white),
                 ContextCompat.getColor(this, R.color.grey600)
-        ));
-
-        mFabJoinRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.riot_tab_rooms),
-                ContextCompat.getColor(this, android.R.color.white)
         ));
 
         mFloatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
@@ -1186,11 +1191,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             case R.id.bottom_action_home:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
                 break;
+            case R.id.bottom_action_calls:
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_CALLS);
+                break;
+            case R.id.bottom_action_contacts:
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_CONTACTS);
+                break;
             case R.id.bottom_action_favourites:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
-                break;
-            case R.id.bottom_action_people:
-                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);
                 break;
             case R.id.bottom_action_rooms:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
@@ -1198,7 +1206,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             case R.id.bottom_action_groups:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
                 break;
-
         }
 
         return fragment;
@@ -1589,7 +1596,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         List<Room> roomInvites = new ArrayList<>();
         switch (mCurrentMenuId) {
-            case R.id.bottom_action_people:
+            case R.id.bottom_action_home:
                 roomInvites.addAll(mDirectChatInvitations);
                 break;
             case R.id.bottom_action_rooms:
@@ -2008,7 +2015,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 for (Room room : favRooms) {
                     filteredRoomIdsSet.add(room.getRoomId());
                 }
-            } else if (id == R.id.bottom_action_people) {
+            } else if (id == R.id.bottom_action_home) {
                 filteredRoomIdsSet.addAll(mSession.getDataHandler().getDirectChatRoomIdsList());
                 // Add direct chat invitations
                 for (Room room : roomSummaryByRoom.keySet()) {
@@ -2127,12 +2134,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     void fabMenuCreateRoom() {
         mFloatingActionsMenu.collapse();
         createRoom();
-    }
-
-    @OnClick(R.id.button_join_room)
-    void fabMenuJoinRoom() {
-        mFloatingActionsMenu.collapse();
-        joinARoom();
     }
 
     //==============================================================================================================

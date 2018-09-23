@@ -22,6 +22,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:paddingBottom="3dp"
             android:elevation="2dp">
 
             <!-- The search view is added in the toolbar not in the menu
@@ -29,7 +30,8 @@
             <android.support.v7.widget.SearchView
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"/>
 
         </android.support.v7.widget.Toolbar>
 
@@ -99,6 +101,7 @@
             android:elevation="12dp"
             app:borderWidth="0dp"
             app:elevation="12dp"
+            android:layout_margin="10dp"
             app:fab_expandDirection="up"
             app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tint="@android:color/white"
-                app:fab_icon="@drawable/ic_person_black_24dp"
+                app:fab_icon="@drawable/chats_create_new"
                 app:fab_size="mini"
                 app:fab_title="@string/room_recents_start_chat"
                 tools:fab_colorNormal="@color/vector_fuchsia_color"
@@ -121,22 +124,11 @@
                 android:id="@+id/button_create_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_icon="@drawable/ic_add_white"
+                app:fab_icon="@drawable/ic_person_white"
                 app:fab_size="mini"
                 app:fab_title="@string/room_recents_create_room"
                 tools:fab_colorNormal="@color/vector_fuchsia_color"
                 tools:fab_colorPressed="@color/vector_fuchsia_color" />
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/button_join_room"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:fab_icon="@drawable/riot_tab_rooms"
-                app:fab_size="mini"
-                app:fab_title="@string/room_recents_join_room"
-                tools:fab_colorNormal="@color/vector_fuchsia_color"
-                tools:fab_colorPressed="@color/vector_fuchsia_color" />
-
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
         <FrameLayout

@@ -3,15 +3,21 @@
     <!-- define an empty title else lint fails -->
 
     <item
-        android:id="@+id/bottom_action_people"
-        android:contentDescription="@string/bottom_action_people"
+        android:id="@+id/bottom_action_home"
+        android:contentDescription="@string/bottom_action_home"
         android:enabled="true"
         android:icon="@drawable/tab_chats_active"
         android:title="" />
 
     <item
-        android:id="@+id/bottom_action_home"
-        android:contentDescription="@string/bottom_action_home"
+        android:id="@+id/bottom_action_calls"
+        android:contentDescription="@string/bottom_action_calls"
+        android:enabled="true"
+        android:icon="@drawable/tab_calls_active"
+        android:title="" />
+    <item
+        android:id="@+id/bottom_action_contacts"
+        android:contentDescription="@string/bottom_action_contacts"
         android:enabled="true"
         android:icon="@drawable/tab_contacts_active"
         android:title="" />

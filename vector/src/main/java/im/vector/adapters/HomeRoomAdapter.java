@@ -33,6 +33,7 @@ import im.vector.R;
 import im.vector.util.RoomUtils;
 
 public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
+    private final int mTab;
     private final int mLayoutRes;
     private final List<Room> mRooms;
     private final List<Room> mFilteredRooms;
@@ -45,11 +46,15 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      * Constructor
      * *********************************************************************************************
      */
-
     public HomeRoomAdapter(final Context context, @LayoutRes final int layoutRes, final OnSelectRoomListener listener,
                            final AbsAdapter.RoomInvitationListener invitationListener, final AbsAdapter.MoreRoomActionListener moreActionListener) {
-        super(context, invitationListener, moreActionListener);
+        this(context,layoutRes, listener, invitationListener, moreActionListener,  0);
+    }
 
+    public HomeRoomAdapter(final Context context, @LayoutRes final int layoutRes, final OnSelectRoomListener listener,
+                           final AbsAdapter.RoomInvitationListener invitationListener, final AbsAdapter.MoreRoomActionListener moreActionListener, int tab) {
+        super(context, invitationListener, moreActionListener);
+        mTab = tab;
         mRooms = new ArrayList<>();
         mFilteredRooms = new ArrayList<>();
 
@@ -80,19 +85,21 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
                 final RoomInvitationViewHolder invitationViewHolder = (RoomInvitationViewHolder) viewHolder;
                 invitationViewHolder.populateViews(mContext, mSession, room, mRoomInvitationListener, mMoreActionListener);
             } else {
-                //viewHolder.populateViews(mContext, mSession, room, room.isDirect(), false, mMoreActionListener);
-                viewHolder.populateViews(mContext, mSession, room);
+                if (mTab == 0) {
+                    viewHolder.populateViews(mContext, mSession, room, room.isDirect(), false, mMoreActionListener);
+                } else {
+                    viewHolder.populateViews(mContext, mSession, room, room.isDirect(), false);
+                }
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //mListener.onSelectRoom(room, viewHolder.getAdapterPosition());
                         mListener.onSelectRoom(room, viewHolder.getAdapterPosition(), (String) v.getTag());
                     }
                 });
                 viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        //mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
+                        mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
                         return true;
                     }
                 });

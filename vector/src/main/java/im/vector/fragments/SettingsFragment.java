@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -35,6 +37,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.PasswordChangeActivity;
 import im.vector.activity.VectorAppCompatActivity;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
@@ -65,8 +68,20 @@ public class SettingsFragment extends AbsHomeFragment {
         return new SettingsFragment();
     }
 
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+    }
+
+    @Override
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        VectorHomeActivity activity = (VectorHomeActivity) getActivity();
+        activity.mSearchView.setVisibility(View.GONE);
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 

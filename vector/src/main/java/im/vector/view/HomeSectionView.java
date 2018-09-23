@@ -200,12 +200,13 @@ public class HomeSectionView extends RelativeLayout {
                                       final boolean nestedScrollEnabled,
                                       final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
                                       final AbsAdapter.RoomInvitationListener invitationListener,
-                                      final AbsAdapter.MoreRoomActionListener moreActionListener) {
+                                      final AbsAdapter.MoreRoomActionListener moreActionListener,
+                                      final int tab) {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setNestedScrollingEnabled(nestedScrollEnabled);
 
-        mAdapter = new HomeRoomAdapter(getContext(), itemResId, onSelectRoomListener, invitationListener, moreActionListener);
+        mAdapter = new HomeRoomAdapter(getContext(), itemResId, onSelectRoomListener, invitationListener, moreActionListener, tab);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
