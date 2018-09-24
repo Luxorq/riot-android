@@ -81,6 +81,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
+import io.realm.Realm;
 
 /**
  * The main application injection point
@@ -196,7 +197,7 @@ public class VectorApp extends MultiDexApplication {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
-
+        Realm.init(this);
         instance = this;
         mCallsManager = new CallsManager(this);
         mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));

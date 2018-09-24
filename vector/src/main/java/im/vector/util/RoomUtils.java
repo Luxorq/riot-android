@@ -349,6 +349,18 @@ public class RoomUtils {
         return text;
     }
 
+    public static String getRoomTimestamp(final Context context, final long time) {
+        String text = AdapterUtils.tsToString(context, time, false);
+
+        // don't display the today before the time
+        String today = context.getString(R.string.today) + " ";
+        if (text.startsWith(today)) {
+            text = text.substring(today.length());
+        }
+
+        return text;
+    }
+
     /**
      * Retrieve the text to display for a RoomSummary.
      *
@@ -865,5 +877,17 @@ public class RoomUtils {
         } else {
             return null;
         }
+    }
+
+    public static String millisecToTime(long millisec) {
+        long sec = millisec/1000;
+        long second = sec % 60;
+        long minute = sec / 60;
+        if (minute >= 60) {
+            long hour = minute / 60;
+            minute %= 60;
+            return hour + ":" + (minute < 10 ? "0" + minute : minute) + ":" + (second < 10 ? "0" + second : second);
+        }
+        return minute + ":" + (second < 10 ? "0" + second : second);
     }
 }

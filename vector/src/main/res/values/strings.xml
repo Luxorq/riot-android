@@ -1095,5 +1095,9 @@
     <string name="slide_four_title">Protection</string>
     <string name="slide_four_content">Be calm for the safety of your conversation with colleagues and friends via chat or call</string>
 
+    <string name="call_invite">Cancelled call</string>
+    <string name="call_missed">Missed call</string>
+    <string name="call_outbound">Outbound call (%s)</string>
+    <string name="call_incoming">Incoming call (%s)</string>
     <string name="key_intro">intro_key</string>
 </resources>

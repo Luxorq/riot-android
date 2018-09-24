@@ -100,4 +100,16 @@ public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> ex
 
     protected abstract Filter createFilter();
 
+    public boolean isEmpty() {
+        return true;
+    }
+
+    public boolean hasNoResult() {
+        return false;
+    }
+
+    public int getBadgeCount() {
+        return 0;
+    }
+
 }

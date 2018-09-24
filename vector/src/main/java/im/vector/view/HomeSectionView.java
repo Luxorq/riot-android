@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
+import im.vector.adapters.AbsFilterableAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.util.ThemeUtils;
@@ -59,7 +60,7 @@ public class HomeSectionView extends RelativeLayout {
     @BindView(R.id.section_placeholder)
     TextView mPlaceHolder;
 
-    private HomeRoomAdapter mAdapter;
+    protected AbsFilterableAdapter mAdapter;
 
     private boolean mHideIfEmpty;
     private String mNoItemPlaceholder;
@@ -103,7 +104,7 @@ public class HomeSectionView extends RelativeLayout {
     /**
      * Setup the view
      */
-    private void setup() {
+    protected void setup() {
         inflate(getContext(), R.layout.home_section_view, this);
         ButterKnife.bind(this);
 
@@ -127,7 +128,7 @@ public class HomeSectionView extends RelativeLayout {
     /**
      * Update the views to reflect the new number of items
      */
-    private void onDataUpdated() {
+    protected void onDataUpdated() {
         if (null != mAdapter) {
             // reported by GA
             // the adapter value is tested by it seems crashed when calling getBadgeCount
@@ -138,7 +139,7 @@ public class HomeSectionView extends RelativeLayout {
 
                 setVisibility(mHideIfEmpty && isEmpty ? GONE : VISIBLE);
                 mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
-                mBadge.setVisibility(badgeCount == 0 || isContact ? GONE : VISIBLE);
+                mBadge.setVisibility(badgeCount == 0 || isContact ? GONE : GONE);
                 mRecyclerView.setVisibility(hasNoResult ? GONE : VISIBLE);
                 mPlaceHolder.setVisibility(hasNoResult ? VISIBLE : GONE);
             } catch (Exception e) {
@@ -206,7 +207,7 @@ public class HomeSectionView extends RelativeLayout {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setNestedScrollingEnabled(nestedScrollEnabled);
 
-        mAdapter = new HomeRoomAdapter(getContext(), itemResId, onSelectRoomListener, invitationListener, moreActionListener, tab);
+        mAdapter = getAdapter(itemResId, onSelectRoomListener, invitationListener, moreActionListener, tab);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -258,7 +259,8 @@ public class HomeSectionView extends RelativeLayout {
      */
     public void setRooms(final List<Room> rooms) {
         if (mAdapter != null) {
-            mAdapter.setRooms(rooms);
+            HomeRoomAdapter adapter = (HomeRoomAdapter) mAdapter;
+            adapter.setRooms(rooms);
         }
     }
 
@@ -269,5 +271,9 @@ public class HomeSectionView extends RelativeLayout {
      */
     public void scrollToPosition(int index) {
         mRecyclerView.scrollToPosition(index);
+    }
+
+    protected AbsFilterableAdapter getAdapter(int itemResId, HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener, AbsAdapter.RoomInvitationListener invitationListener, AbsAdapter.MoreRoomActionListener moreActionListener, int tab) {
+        return new HomeRoomAdapter(getContext(), itemResId, onSelectRoomListener, invitationListener, moreActionListener, tab);
     }
 }

@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <im.vector.view.HomeSectionView
+        <im.vector.view.RoomSectionView
             android:id="@+id/rooms_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

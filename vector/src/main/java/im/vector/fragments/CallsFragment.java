@@ -1,19 +1,22 @@
 package im.vector.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.matrix.androidsdk.data.Room;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import im.vector.CallsCallback;
 import im.vector.R;
+import im.vector.util.DB;
 import im.vector.util.HomeRoomsViewModel;
-import im.vector.util.PreferencesManager;
-import im.vector.util.RoomUtils;
+import im.vector.util.KedrCallHistory;
+import im.vector.view.CallSectionView;
 import im.vector.view.HomeSectionView;
 
 public class CallsFragment extends HomeFragment {
@@ -35,12 +38,25 @@ public class CallsFragment extends HomeFragment {
     }
 
     @Override
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_calls, container, false);
+    }
+
+    @Override
     void refreshData(HomeRoomsViewModel.Result result) {
-        final boolean pinMissedNotifications = PreferencesManager.pinMissedNotifications(getActivity());
-        final boolean pinUnreadMessages = PreferencesManager.pinUnreadMessages(getActivity());
-        final Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
-        sortAndDisplay(result.getDirectChats(), notificationComparator, mDirectChatsSection);
+        final CallSectionView sectionView = (CallSectionView) mDirectChatsSection;
         mActivity.hideWaitingView();
+        DB.getCalls(new CallsCallback() {
+            @Override
+            public void onResult(final List<KedrCallHistory> calls) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sectionView.setCalls(calls);
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -126,6 +126,7 @@ public class CallsManager {
             onHeadsetUpdate(true);
         }
     };
+    private long startTime;
 
 
     /**
@@ -250,6 +251,7 @@ public class CallsManager {
                             break;
 
                         case IMXCall.CALL_STATE_CONNECTED:
+                            startTime = System.currentTimeMillis();
                             if (EventStreamService.getInstance() != null) {
                                 EventStreamService.getInstance().displayCallInProgressNotification(mActiveCall.getSession(),
                                         mActiveCall.getRoom(), mActiveCall.getCallId());
@@ -604,7 +606,6 @@ public class CallsManager {
         if (null != mActiveCall) {
             final IMXCall call = mActiveCall;
             mActiveCall = null;
-
             if (mCallSoundsManager.isRinging()) {
                 releaseCall(call);
             } else {
@@ -660,6 +661,8 @@ public class CallsManager {
             if (EventStreamService.getInstance() != null) {
                 EventStreamService.getInstance().hideCallNotifications();
             }
+            DB.addCall(call, startTime);
+            startTime = -1;
         }
     }
 }

@@ -1099,7 +1099,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
                 ContextCompat.getDrawable(this, R.drawable.ic_person_white),
-                ContextCompat.getColor(this, R.color.grey600)
+                ContextCompat.getColor(this,  android.R.color.white)
         ));
 
         mFloatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {

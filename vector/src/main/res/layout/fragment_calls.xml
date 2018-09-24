@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <im.vector.view.HomeSectionView
+        <im.vector.view.CallSectionView
             android:id="@+id/direct_chats_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
