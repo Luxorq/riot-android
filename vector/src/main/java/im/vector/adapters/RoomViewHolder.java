@@ -90,6 +90,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
     @Nullable
     View vRoomMoreActionAnchor;
 
+    @Nullable
     @BindView(R.id.img)
     AppCompatImageView vImg;
 

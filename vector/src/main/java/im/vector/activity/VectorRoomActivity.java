@@ -3964,14 +3964,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             iconsList.add(R.drawable.ic_attach_black);
 
             // Send voice
-            if (PreferencesManager.isSendVoiceFeatureEnabled(VectorRoomActivity.this)) {
+            //if (PreferencesManager.isSendVoiceFeatureEnabled(VectorRoomActivity.this)) {
                 messagesList.add(R.string.option_send_voice);
                 iconsList.add(R.drawable.vector_micro_green);
-            }
+            //}
 
             // Send sticker
-            messagesList.add(R.string.option_send_sticker);
-            iconsList.add(R.drawable.ic_send_sticker);
+            //messagesList.add(R.string.option_send_sticker);
+            //iconsList.add(R.drawable.ic_send_sticker);
 
             // Camera
             if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {

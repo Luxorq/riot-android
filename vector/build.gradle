@@ -9,7 +9,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
 
     packagingOptions {
         exclude 'META-INF/LICENSE'
@@ -172,7 +172,8 @@ dependencies {
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.binaryfork:spanny:1.0.4'
     implementation 'com.github.apl-devs:appintro:v4.2.3'
-
+    implementation 'com.github.piasy:rxandroidaudio:1.5.3'
+    implementation 'com.github.piasy:AudioProcessor:1.5.3'
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'

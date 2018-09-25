@@ -478,11 +478,11 @@ object NotificationUtils {
 
             // the action must be unique else the parameters are ignored
             quickReplyIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
-            val pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
+            /*val pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
             builder.addAction(
                     R.drawable.vector_notification_quick_reply,
                     context.getString(R.string.action_quick_reply),
-                    pIntent)
+                    pIntent)*/
         }
 
         // Build the pending intent for when the notification is clicked
@@ -508,7 +508,7 @@ object NotificationUtils {
 
         if (!roomsNotifications.mIsInvitationEvent) {
             builder.addAction(
-                    R.drawable.vector_notification_open,
+                    R.drawable.ic_material_message_grey,
                     context.getString(R.string.action_open),
                     stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
         }
@@ -517,7 +517,7 @@ object NotificationUtils {
         if (!roomsNotifications.mIsInvitationEvent) {
             try {
                 val wearableExtender = NotificationCompat.WearableExtender()
-                val action = NotificationCompat.Action.Builder(R.drawable.logo_transparent,
+                val action = NotificationCompat.Action.Builder(R.drawable.kedr_logo,
                         roomsNotifications.mWearableMessage,
                         stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
                         .build()
@@ -674,7 +674,7 @@ object NotificationUtils {
                     .setWhen(roomsNotifications.mContentTs)
                     .setContentTitle(ensureTitleNotEmpty(context, roomsNotifications.mContentTitle))
                     .setContentText(roomsNotifications.mContentText)
-                    .setSmallIcon(R.drawable.logo_transparent)
+                    .setSmallIcon(R.drawable.kedr_logo)
                     .setGroup(context.getString(R.string.riot_app_name))
                     .setGroupSummary(true)
                     .setDeleteIntent(PendingIntent.getBroadcast(context.applicationContext,

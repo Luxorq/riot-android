@@ -1086,6 +1086,7 @@
     <string name="invite_wait">waiting for acceptance and encryption keys exchange</string>
     <string name="outgoing_call">Outgoing call</string>
     <string name="room_empty">Room is empty. Leaving…</string>
+    <string name="no_participants">No participants</string>
     <string name="slide_one_title">Safety</string>
     <string name="slide_one_content">Chat, call other people, send voice messages and files with the highest encryption and security standards</string>
     <string name="slide_two_title">Anonymity</string>

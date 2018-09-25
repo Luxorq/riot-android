@@ -184,7 +184,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         mRoomsSection.setTitle(R.string.bottom_action_rooms);
         mRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
         mRoomsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false),
-                R.layout.adapter_item_circular_room_view, true, this, null, null, getTab());
+                R.layout.adapter_item_room_view, true, this, null, null, getTab());
 
         // Low priority
         mLowPrioritySection.setTitle(R.string.low_priority_header);

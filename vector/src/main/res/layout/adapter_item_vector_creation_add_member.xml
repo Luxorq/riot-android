@@ -7,11 +7,12 @@
 
     <ImageView
         android:id="@+id/filtered_list_avatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/ic_material_add_circle" />
+        android:layout_marginLeft="21dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_person_add_black" />
 
     <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView
