@@ -182,6 +182,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         Intent intent = new Intent(VectorRoomCreationActivity.this, VectorRoomInviteMembersActivity.class);
         intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
         intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS, (ArrayList) mParticipants);
+        intent.putExtra("type", getIntent().getIntExtra("type", 0));
         startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
     }
 
@@ -227,7 +228,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 List<ParticipantAdapterItem> items =
                         (List<ParticipantAdapterItem>) data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS);
                 mParticipants.addAll(items);
-                mAdapter.clear();
                 mAdapter.addAll(items);
                 mAdapter.sort(mAlphaComparator);
             } else if (1 == mParticipants.size()) {

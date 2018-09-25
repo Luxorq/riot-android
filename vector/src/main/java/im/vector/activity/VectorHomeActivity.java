@@ -1394,15 +1394,23 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Open the room creation with inviting people.
      */
     private void invitePeopleToNewRoom() {
-        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
-        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        startActivity(settingsIntent);
+        final Intent intent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+        intent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        intent.putExtra("type", 0);
+        startActivity(intent);
+    }
+
+    private void createRoom() {
+        final Intent intent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+        intent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        intent.putExtra("type", 1);
+        startActivity(intent);
     }
 
     /**
      * Create a room and open the dedicated activity
      */
-    private void createRoom() {
+    private void createRoom(boolean dedicated) {
         showWaitingView();
         mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
             @Override

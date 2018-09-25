@@ -169,6 +169,7 @@
         <activity
             android:name=".activity.VectorRoomCreationActivity"
             android:configChanges="orientation|screenSize"
+            android:theme="@style/SearchesAppTheme"
             android:label="@string/room_creation_title"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorHomeActivity"
