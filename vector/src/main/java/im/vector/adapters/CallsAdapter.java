@@ -54,6 +54,7 @@ public class CallsAdapter extends AbsFilterableAdapter<RoomViewHolder> {
             viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    v.setTag(call.getCallId());
                     mListener.onLongClickRoom(v, room, viewHolder.getAdapterPosition());
                     return true;
                 }

@@ -140,9 +140,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private View mDevicesListHeaderView;
 
     private SwitchCompat mSwitch;
-    private ImageView mAudio;
-    private ImageView mChat;
-    private ImageView mVideo;
 
     // direct message
     /**
@@ -1267,29 +1264,24 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                             });
                 }
             });
-            mAudio = findViewById(R.id.audio);
-            mVideo = findViewById(R.id.video);
-            mChat = findViewById(R.id.chat);
-            mAudio.setOnClickListener(new View.OnClickListener() {
+            findViewById(R.id.audio).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     performItemAction(ITEM_ACTION_START_VOICE_CALL);
                 }
             });
-            mChat.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    performItemAction(ITEM_ACTION_START_CHAT);
-                    //openRoom(mRoom);
-                }
-            });
-            mVideo.setOnClickListener(new View.OnClickListener() {
+            findViewById(R.id.video).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     performItemAction(ITEM_ACTION_START_VIDEO_CALL);
                 }
             });
-
+            findViewById(R.id.chat).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    performItemAction(ITEM_ACTION_START_CHAT);
+                }
+            });
             findViewById(R.id.media_files).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -12,6 +12,10 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 public class DB {
+    public static KedrCallHistory getCallByRoom(String roomId){
+        return Realm.getDefaultInstance().where(KedrCallHistory.class).equalTo("roomId", roomId).findFirst();
+    }
+
     static void addCall(final IMXCall call, final long startTime) {
         Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -21,13 +25,15 @@ public class DB {
         });
     }
 
-    public static void removeCall(final long callId) {
+    public static void removeCall(final String callId, final CallsCallback callback) {
         Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
                 RealmResults<KedrCallHistory> rows = realm.where(KedrCallHistory.class).equalTo("callId", callId).findAll();
-                ;
                 rows.deleteAllFromRealm();
+                if (callback != null){
+                    callback.onResult(null);
+                }
             }
         });
     }
