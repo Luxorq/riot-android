@@ -163,6 +163,8 @@
             android:label="@string/title_activity_room"
             android:theme="@style/RoomActivityTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".activity.VoiceActivity" />
+
         <activity
             android:name=".activity.DeactivateAccountActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -498,7 +500,6 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
-
         <service android:name=".services.EventStreamService" />
 
     </application>

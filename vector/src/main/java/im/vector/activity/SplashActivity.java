@@ -20,6 +20,7 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
 
@@ -113,8 +114,9 @@ public class SplashActivity extends MXCActionBarActivity {
             }
 
             // launch from a shared files menu
+            Parcelable parcelable = getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS);
             if (getIntent().hasExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS)) {
-                intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS));
+                intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, parcelable);
                 getIntent().removeExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS);
             }
 
