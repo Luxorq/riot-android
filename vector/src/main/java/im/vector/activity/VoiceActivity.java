@@ -2,8 +2,10 @@ package im.vector.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.WorkerThread;
@@ -147,11 +149,14 @@ public class VoiceActivity extends RxAppCompatActivity implements AudioRecorder.
         mRecordDisposable = Observable
                 .fromCallable(() -> {
                     mAudioFile = new File(
-                            Environment.getExternalStorageDirectory().getAbsolutePath()
-                                    + File.separator + System.nanoTime() + ".file.m4a");
+                            getFilesDir().getAbsolutePath()
+                                    + File.separator + "ptt.aac");
+                    if (mAudioFile.exists()) {
+                        mAudioFile.delete();
+                    }
                     Log.d(TAG, "to prepare record");
                     return mAudioRecorder.prepareRecord(MediaRecorder.AudioSource.MIC,
-                            MediaRecorder.OutputFormat.MPEG_4, MediaRecorder.AudioEncoder.AAC,
+                            MediaRecorder.OutputFormat.AAC_ADTS, MediaRecorder.AudioEncoder.AAC,
                             192000, 192000, mAudioFile);
                 })
                 .flatMap(b -> {
@@ -196,7 +201,9 @@ public class VoiceActivity extends RxAppCompatActivity implements AudioRecorder.
             mRecordDisposable.dispose();
             mRecordDisposable = null;
         }
-        setResult(RESULT_OK);
+        Intent intent = getIntent();
+        intent.setData(Uri.fromFile(mAudioFile));
+        setResult(RESULT_OK, intent);
         finish();
         Observable
                 .fromCallable(() -> {
