@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -248,6 +249,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @BindView(R.id.room_send_image_view)
     ImageView mSendImageView;
+
+    @BindView(R.id.room_send_text_view)
+    ImageView mSendTextView;
 
     @BindView(R.id.room_send_voice_view)
     ImageView mSendVoiceView;
@@ -641,6 +645,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         public void onPreviewSizeChanged(int width, int height) {
         }
     };
+    private int seconds;
 
     //================================================================================
     // Activity classes
@@ -2440,7 +2445,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void manageSendMoreButtons() {
         boolean hasText = (mEditText.getText().length() > 0);
-        mSendImageView.setImageResource(hasText ? R.drawable.chat_toolbar_send_icon : R.drawable.chat_toolbar_attach_icon);
+        mSendTextView.setVisibility(hasText ? View.VISIBLE : View.GONE);
+        mSendVoiceView.setVisibility(hasText ? View.GONE : View.VISIBLE);
+        //mSendImageView.setImageResource(hasText ? R.drawable.chat_toolbar_send_icon : R.drawable.chat_toolbar_attach_icon);
     }
 
     /**
@@ -3973,86 +3980,93 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
     }
 
-    @OnClick(R.id.room_send_image_view)
-    void onSendClick() {
+    @OnClick(R.id.room_send_text_view)
+    void onTextSendClick() {
         if (!TextUtils.isEmpty(mEditText.getText())) {
             sendTextMessage();
+        }
+    }
+
+    @OnClick(R.id.room_send_image_view)
+    void onSendClick() {
+//        if (!TextUtils.isEmpty(mEditText.getText())) {
+//            sendTextMessage();
+//        } else {
+        // hide the header room
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        FragmentManager fm = getSupportFragmentManager();
+        IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+
+        if (fragment != null) {
+            fragment.dismissAllowingStateLoss();
+        }
+
+        List<Integer> messagesList = new ArrayList<>();
+        List<Integer> iconsList = new ArrayList<>();
+
+        // Send file
+        messagesList.add(R.string.option_send_files);
+        iconsList.add(R.drawable.ic_attach_black);
+
+        // Send voice
+        //if (PreferencesManager.isSendVoiceFeatureEnabled(VectorRoomActivity.this)) {
+        //    messagesList.add(R.string.option_send_voice);
+        //    iconsList.add(R.drawable.vector_micro_green);
+        //}
+
+        // Send sticker
+        //messagesList.add(R.string.option_send_sticker);
+        //iconsList.add(R.drawable.ic_send_sticker);
+
+        // Camera
+        if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
+            messagesList.add(R.string.option_take_photo);
+            iconsList.add(R.drawable.ic_material_camera);
+            messagesList.add(R.string.option_take_video);
+            iconsList.add(R.drawable.ic_material_videocam);
         } else {
-            // hide the header room
-            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+            messagesList.add(R.string.option_take_photo_video);
+            iconsList.add(R.drawable.ic_material_camera);
+        }
 
-            FragmentManager fm = getSupportFragmentManager();
-            IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+        final Integer[] messages = messagesList.toArray(new Integer[0]);
+        final Integer[] icons = iconsList.toArray(new Integer[0]);
 
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
+        fragment = IconAndTextDialogFragment.newInstance(icons, messages,
+                ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
+                ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
+        fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+            @Override
+            public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                Integer selectedVal = messages[position];
 
-            List<Integer> messagesList = new ArrayList<>();
-            List<Integer> iconsList = new ArrayList<>();
-
-            // Send file
-            messagesList.add(R.string.option_send_files);
-            iconsList.add(R.drawable.ic_attach_black);
-
-            // Send voice
-            //if (PreferencesManager.isSendVoiceFeatureEnabled(VectorRoomActivity.this)) {
-            //    messagesList.add(R.string.option_send_voice);
-            //    iconsList.add(R.drawable.vector_micro_green);
-            //}
-
-            // Send sticker
-            //messagesList.add(R.string.option_send_sticker);
-            //iconsList.add(R.drawable.ic_send_sticker);
-
-            // Camera
-            if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
-                messagesList.add(R.string.option_take_photo);
-                iconsList.add(R.drawable.ic_material_camera);
-                messagesList.add(R.string.option_take_video);
-                iconsList.add(R.drawable.ic_material_videocam);
-            } else {
-                messagesList.add(R.string.option_take_photo_video);
-                iconsList.add(R.drawable.ic_material_camera);
-            }
-
-            final Integer[] messages = messagesList.toArray(new Integer[0]);
-            final Integer[] icons = iconsList.toArray(new Integer[0]);
-
-            fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
-                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
-            fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                @Override
-                public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                    Integer selectedVal = messages[position];
-
-                    if (selectedVal == R.string.option_send_files) {
-                        launchFileSelectionIntent();
-                    } else if (selectedVal == R.string.option_send_voice) {
-                        launchAudioRecorderIntent();
-                    } else if (selectedVal == R.string.option_send_sticker) {
-                        startStickerPickerActivity();
-                    } else if (selectedVal == R.string.option_take_photo_video) {
-                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
-                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                            launchCamera();
-                        }
-                    } else if (selectedVal == R.string.option_take_photo) {
-                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
-                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
-                            launchNativeCamera();
-                        }
-                    } else if (selectedVal == R.string.option_take_video) {
-                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
-                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
-                            launchNativeVideoRecorder();
-                        }
+                if (selectedVal == R.string.option_send_files) {
+                    launchFileSelectionIntent();
+                } else if (selectedVal == R.string.option_send_voice) {
+                    launchAudioRecorderIntent();
+                } else if (selectedVal == R.string.option_send_sticker) {
+                    startStickerPickerActivity();
+                } else if (selectedVal == R.string.option_take_photo_video) {
+                    if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                            VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                        launchCamera();
+                    }
+                } else if (selectedVal == R.string.option_take_photo) {
+                    if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                            VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
+                        launchNativeCamera();
+                    }
+                } else if (selectedVal == R.string.option_take_video) {
+                    if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                            VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
+                        launchNativeVideoRecorder();
                     }
                 }
-            });
-            fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
-        }
+            }
+        });
+        fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+        //}
     }
 
     @OnClick(R.id.room_pending_call_view)
@@ -4185,6 +4199,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         .show());
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+    }
+
     public static final int MIN_AUDIO_LENGTH_SECONDS = 2;
     private static final String TAG = "RoomActivity";
     private static final ButterKnife.Action<View> INVISIBLE
@@ -4229,19 +4248,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mSendVoiceView.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
                     pttParent.setVisibility(View.VISIBLE);
-                    mFlIndicator.setVisibility(View.VISIBLE);
                     press2Record();
                     break;
                 case MotionEvent.ACTION_UP:
-                    pttParent.setVisibility(View.GONE);
-                    mFlIndicator.setVisibility(View.GONE);
                     release2Send(true);
                     break;
                 case MotionEvent.ACTION_CANCEL:
-                    pttParent.setVisibility(View.GONE);
-                    mFlIndicator.setVisibility(View.GONE);
                     release2Send(false);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (!rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+                        release2Send(false);
+                    }
                     break;
                 default:
                     break;
@@ -4281,10 +4301,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 .fromCallable(() -> {
                     mAudioFile = new File(
                             getFilesDir().getAbsolutePath()
-                                    + File.separator + "ptt.aac");
-                    if (mAudioFile.exists()) {
-                        mAudioFile.delete();
-                    }
+                                    + File.separator + System.nanoTime() + ".aac");
                     android.util.Log.d(TAG, "to prepare record");
                     return mAudioRecorder.prepareRecord(MediaRecorder.AudioSource.MIC,
                             MediaRecorder.OutputFormat.AAC_ADTS, MediaRecorder.AudioEncoder.AAC,
@@ -4313,7 +4330,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                     refreshAudioAmplitudeView(level);
 
-                    if (progress >= 12) {
+                    if (progress >= 50) {
                         mTvRecordingHint.setText(String.format(
                                 getString(R.string.voice_msg_input_hint_time_limited_formatter),
                                 60 - progress));
@@ -4330,20 +4347,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     private void release2Send(boolean send) {
+        pttParent.setVisibility(View.GONE);
         mFlIndicator.setVisibility(View.GONE);
 
         if (mRecordDisposable != null && !mRecordDisposable.isDisposed()) {
             mRecordDisposable.dispose();
             mRecordDisposable = null;
         }
-        if (mAudioFile != null && send) {
-            Intent intent = getIntent();
-            intent.setData(Uri.fromFile(mAudioFile));
-            sendMediasIntent(intent);
+        if (mAudioFile != null) {
+            if (send && seconds >= 1) {
+                Intent intent = getIntent();
+                intent.setData(Uri.fromFile(mAudioFile));
+                sendMediasIntent(intent);
+            } else {
+                mAudioFile.delete();
+                mAudioFile = null;
+            }
         }
         Observable
                 .fromCallable(() -> {
-                    int seconds = mAudioRecorder.stopRecord();
+                    seconds = mAudioRecorder.stopRecord();
                     android.util.Log.d(TAG, "stopRecord: " + seconds);
                     if (seconds >= MIN_AUDIO_LENGTH_SECONDS) {
                         mAudioFiles.offer(mAudioFile);
@@ -4363,4 +4386,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         ButterKnife.apply(mIvVoiceIndicators.subList(0, end), VISIBLE);
         ButterKnife.apply(mIvVoiceIndicators.subList(end, mIvVoiceIndicators.size()), INVISIBLE);
     }
+
+    private Rect rect;    // Variable rect to hold the bounds of the view
 }

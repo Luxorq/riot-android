@@ -126,6 +126,7 @@ import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.SettingsFragment;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.notifications.NotificationUtils;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
@@ -139,6 +140,8 @@ import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 import kotlin.Pair;
+
+import static java.lang.Math.toIntExact;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -1099,7 +1102,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
                 ContextCompat.getDrawable(this, R.drawable.ic_person_white),
-                ContextCompat.getColor(this,  android.R.color.white)
+                ContextCompat.getColor(this, android.R.color.white)
         ));
 
         mFloatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
@@ -1621,15 +1624,20 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     public void onPreviewRoom(MXSession session, String roomId) {
-        String roomAlias = null;
+        Intent intent = JoinRoomActivity.Companion.getJoinRoomIntent(this, roomId, session.getMyUserId());
 
-        Room room = session.getDataHandler().getRoom(roomId);
-        if ((null != room) && (null != room.getState())) {
-            roomAlias = room.getState().getAlias();
-        }
-
-        final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, roomAlias, null);
-        CommonActivityUtils.previewRoom(this, roomPreviewData);
+        // the action must be unique else the parameters are ignored
+        intent.setAction(NotificationUtils.JOIN_ACTION + System.currentTimeMillis());
+        startActivity(intent);
+//        String roomAlias = null;
+//
+//        Room room = session.getDataHandler().getRoom(roomId);
+//        if ((null != room) && (null != room.getState())) {
+//            roomAlias = room.getState().getAlias();
+//        }
+//
+//        final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, roomAlias, null);
+//        CommonActivityUtils.previewRoom(this, roomPreviewData);
     }
 
     /**

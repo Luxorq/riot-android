@@ -77,7 +77,7 @@ object NotificationUtils {
      * IDs for actions
      * ========================================================================================== */
 
-    private const val JOIN_ACTION = "NotificationUtils.JOIN_ACTION"
+    public const val JOIN_ACTION = "NotificationUtils.JOIN_ACTION"
     private const val REJECT_ACTION = "NotificationUtils.REJECT_ACTION"
     private const val QUICK_LAUNCH_ACTION = "NotificationUtils.QUICK_LAUNCH_ACTION"
     const val TAP_TO_VIEW_ACTION = "NotificationUtils.TAP_TO_VIEW_ACTION"

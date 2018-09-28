@@ -1817,7 +1817,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
 
             if (null != imageTypeView) {
-                imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
+                imageTypeView.setImageResource(fileMessage.getMimeType().contains("aac") ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
             }
             imageTypeView.setBackgroundColor(Color.TRANSPARENT);
 

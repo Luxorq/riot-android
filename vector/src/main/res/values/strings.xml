@@ -1102,7 +1102,7 @@
     <string name="call_incoming">Incoming call (%s)</string>
     <string name="key_intro">intro_key</string>
 
-    <string name="voice_msg_input_hint_speaking">Saying ...</string>
+    <string name="voice_msg_input_hint_speaking">Saying …</string>
     <string name="voice_msg_input_hint_time_limited_formatter" formatted="false">%d s left</string>
-    <string name="voice_msg_input">0:%d</string>
+    <string name="voice_msg_input">%d s</string>
 </resources>
