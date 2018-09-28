@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/room_action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -24,19 +24,15 @@
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:elevation="2dp"
+            android:background="?attr/primary_color"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
 
             <include layout="@layout/vector_message_action_bar_custo_layout" />
 
         </android.support.v7.widget.Toolbar>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/toolbar"
-            android:visibility="invisible"/>
-    </RelativeLayout>
+
+    </FrameLayout>
 
     <ProgressBar
         android:id="@+id/room_sync_in_progress"
@@ -134,9 +130,9 @@
         android:id="@+id/jump_to_first_unread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/room_pending_widgets_view"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:background="?attr/riot_primary_background_color"
         android:visibility="gone"
         tools:visibility="visible">
@@ -150,17 +146,17 @@
             android:drawableLeft="@drawable/jump_to_unread"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:paddingBottom="12dp"
             android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:text="@string/room_jump_to_first_unread" />
 
         <ImageView
             android:id="@+id/close_jump_to_first_unread"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignTop="@+id/jump_to_first_unread_label"
             android:layout_alignBottom="@+id/jump_to_first_unread_label"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/jump_to_first_unread_label"
             android:contentDescription="@string/action_close"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -172,9 +168,9 @@
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignTop="@+id/jump_to_first_unread_label"
             android:layout_alignBottom="@+id/jump_to_first_unread_label"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/jump_to_first_unread_label"
             android:layout_margin="2dp"
             android:contentDescription="@string/loading"
             android:indeterminate="true"
@@ -184,22 +180,22 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/jump_to_first_unread_label"
-            android:background="?attr/room_activity_divider_color" />
+            android:background="@color/grey200" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/jump_to_first_unread">
+        android:layout_below="@+id/jump_to_first_unread"
+        android:layout_alignParentBottom="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/grey50"
-            android:paddingBottom="0dp"
-            android:paddingTop="0dp">
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp">
 
             <ImageView
                 android:id="@+id/search_background_imageview"
@@ -228,17 +224,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@color/white">
+                android:layout_marginLeft="8dp">
 
-            <ImageView
-                    android:id="@+id/room_send_image_view"
-                    android:layout_width="56dp"
+                <ImageView
+                    android:id="@+id/room_send_voice_view"
+                    android:layout_width="38dp"
                     android:layout_height="56dp"
                     android:layout_gravity="bottom"
                     android:contentDescription="@string/send"
-                    android:padding="8dp"
+                    android:padding="5dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/chat_toolbar_send_icon" />
+                    android:src="@drawable/ic_mic" />
 
                 <LinearLayout
                     android:id="@+id/room_sending_message_layout"
@@ -246,7 +242,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
-                    android:layout_toRightOf="@id/room_send_image_view"
+                    android:layout_toRightOf="@id/room_send_voice_view"
                     android:minHeight="56dp">
 
                     <ImageView
@@ -257,15 +253,15 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/e2e_verified"
                         android:tint="?attr/default_icon_tint_color"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <im.vector.view.VectorAutoCompleteTextView
                         android:id="@+id/editText_messageBox"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="6dp"
                         android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:dropDownAnchor="@+id/room_sending_message_layout"
@@ -279,12 +275,12 @@
                         tools:text="line 1" />
 
                     <ImageView
-                        android:id="@+id/room_send_view"
-                        android:layout_width="56dp"
+                        android:id="@+id/room_send_image_view"
+                        android:layout_width="38dp"
                         android:layout_height="56dp"
                         android:layout_gravity="bottom"
                         android:contentDescription="@string/send"
-                        android:padding="8dp"
+                        android:padding="5dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/chat_toolbar_attach_icon" />
 
@@ -294,7 +290,7 @@
                         android:layout_height="56dp"
                         android:layout_gravity="bottom"
                         android:contentDescription="@string/call_connecting"
-                        android:padding="8dp"
+                        android:padding="5dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/voice_call_start_green"
                         android:visibility="gone"
@@ -306,7 +302,7 @@
                         android:layout_height="56dp"
                         android:layout_gravity="bottom"
                         android:contentDescription="@string/call_ended"
-                        android:padding="8dp"
+                        android:padding="5dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/voice_call_end_fushia"
                         android:visibility="gone"
@@ -326,7 +322,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_toRightOf="@id/room_send_image_view"
+                    android:layout_toRightOf="@id/room_send_voice_view"
                     android:text="@string/room_do_not_have_permission_to_post"
                     android:textColor="?attr/riot_primary_text_color"
                     android:textSize="14sp"
@@ -349,10 +345,9 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/bottom_separator"
                 android:minHeight="42dp"
-                android:paddingBottom="8dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:visibility="invisible"
-                android:background="@color/grey50"
                 tools:background="@color/vector_fuchsia_color"
                 tools:visibility="visible" />
 
@@ -401,9 +396,9 @@
         android:layout_below="@id/room_action_bar"
         android:background="@color/grey50"
         android:gravity="center"
+        android:orientation="vertical"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:orientation="vertical"
         android:visibility="gone">
 
         <TextView
@@ -417,10 +412,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
             android:text="@string/invite_wait"
             android:textColor="@color/grey500"
-            android:layout_marginTop="5dp"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -428,8 +423,8 @@
         android:id="@+id/main_progress_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/room_preview_info_layout"
+        android:layout_alignParentLeft="true"
         android:background="?attr/waiting_background_color"
         android:visibility="gone">
 
@@ -443,4 +438,96 @@
             android:indeterminate="true" />
 
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/ptt_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey400transparent"
+        android:layout_marginBottom="50dp"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:id="@+id/mFlIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/iv_voice_input_logo"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/mTvRecordingHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="39dp"
+                android:textColor="#504B2D"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="35dp"
+                android:layout_marginRight="40dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/mIvVoiceIndicator7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/voice_indicator_7"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/mIvVoiceIndicator6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/voice_indicator_6"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/mIvVoiceIndicator5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/voice_indicator_5"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/mIvVoiceIndicator4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/voice_indicator_4"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/mIvVoiceIndicator3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/voice_indicator_3"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/mIvVoiceIndicator2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/voice_indicator_2"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/mIvVoiceIndicator1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/voice_indicator_1"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+            </LinearLayout>
+        </FrameLayout>
+    </FrameLayout>
 </RelativeLayout>

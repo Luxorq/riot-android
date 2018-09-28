@@ -28,12 +28,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.annotation.CallSuper;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -54,11 +59,22 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.piasy.rxandroidaudio.AudioRecorder;
+import com.github.piasy.rxandroidaudio.PlayConfig;
+import com.github.piasy.rxandroidaudio.RxAmplitude;
+import com.github.piasy.rxandroidaudio.RxAudioPlayer;
 import com.google.gson.JsonParser;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.trello.rxlifecycle2.LifecycleProvider;
+import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle2.RxLifecycle;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
@@ -96,15 +112,19 @@ import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.PermalinkUtils;
 import org.matrix.androidsdk.util.ResourceUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import im.vector.Matrix;
@@ -137,6 +157,12 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.functions.Functions;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 import kotlin.Pair;
 
 /**
@@ -146,7 +172,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         MatrixMessageListFragment.IRoomPreviewDataListener,
         MatrixMessageListFragment.IEventSendingListener,
         MatrixMessageListFragment.IOnScrollListener,
-        VectorMessageListFragment.VectorMessageListFragmentListener {
+        VectorMessageListFragment.VectorMessageListFragmentListener,
+        LifecycleProvider<ActivityEvent>,
+        AudioRecorder.OnErrorListener {
 
     // the session
     public static final String EXTRA_MATRIX_ID = MXCActionBarActivity.EXTRA_MATRIX_ID;
@@ -221,8 +249,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.room_send_image_view)
     ImageView mSendImageView;
 
-    @BindView(R.id.room_send_view)
-    ImageView mSendView;
+    @BindView(R.id.room_send_voice_view)
+    ImageView mSendVoiceView;
 
     @BindView(R.id.editText_messageBox)
     VectorAutoCompleteTextView mEditText;
@@ -1093,14 +1121,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != mActiveWidgetsBanner) {
             mActiveWidgetsBanner.setOnUpdateListener(null);
         }
-
+        lifecycleSubject.onNext(ActivityEvent.DESTROY);
+        if (mRxAudioPlayer != null) {
+            mRxAudioPlayer.stopPlay();
+        }
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
+        lifecycleSubject.onNext(ActivityEvent.PAUSE);
         if (mReadMarkerManager != null) {
             mReadMarkerManager.onPause();
         }
@@ -1134,6 +1165,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     protected void onResume() {
         Log.d(LOG_TAG, "++ Resume the activity");
         super.onResume();
+        lifecycleSubject.onNext(ActivityEvent.RESUME);
         processOnResume();
         Log.d(LOG_TAG, "-- Resume the activity");
     }
@@ -3941,7 +3973,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
     }
 
-    @OnClick(R.id.room_send_view)
+    @OnClick(R.id.room_send_image_view)
     void onSendClick() {
         if (!TextUtils.isEmpty(mEditText.getText())) {
             sendTextMessage();
@@ -3965,8 +3997,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             // Send voice
             //if (PreferencesManager.isSendVoiceFeatureEnabled(VectorRoomActivity.this)) {
-                messagesList.add(R.string.option_send_voice);
-                iconsList.add(R.drawable.vector_micro_green);
+            //    messagesList.add(R.string.option_send_voice);
+            //    iconsList.add(R.drawable.vector_micro_green);
             //}
 
             // Send sticker
@@ -4105,5 +4137,230 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         } else if (mSendImageView.getVisibility() == View.VISIBLE) {
             mSendImageView.performClick();
         }
+    }
+
+    //RX stuff
+    private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final Observable<ActivityEvent> lifecycle() {
+        return lifecycleSubject.hide();
+    }
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    }
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindToLifecycle() {
+        return RxLifecycleAndroid.bindActivity(lifecycleSubject);
+    }
+
+    @Override
+    @CallSuper
+    protected void onStart() {
+        super.onStart();
+        lifecycleSubject.onNext(ActivityEvent.START);
+    }
+
+    @Override
+    @CallSuper
+    protected void onStop() {
+        lifecycleSubject.onNext(ActivityEvent.STOP);
+        super.onStop();
+    }
+
+    @WorkerThread
+    @Override
+    public void onError(int error) {
+        runOnUiThread(
+                () -> Toast.makeText(VectorRoomActivity.this, "Error code: " + error, Toast.LENGTH_SHORT)
+                        .show());
+    }
+
+    public static final int MIN_AUDIO_LENGTH_SECONDS = 2;
+    private static final String TAG = "RoomActivity";
+    private static final ButterKnife.Action<View> INVISIBLE
+            = (view, index) -> view.setVisibility(View.INVISIBLE);
+    private static final ButterKnife.Action<View> VISIBLE
+            = (view, index) -> view.setVisibility(View.VISIBLE);
+
+    @BindView(R.id.mFlIndicator)
+    FrameLayout mFlIndicator;
+    @BindView(R.id.mTvRecordingHint)
+    TextView mTvRecordingHint;
+    @BindView(R.id.ptt_parent)
+    FrameLayout pttParent;
+
+    private List<ImageView> mIvVoiceIndicators;
+
+    private AudioRecorder mAudioRecorder;
+    private RxAudioPlayer mRxAudioPlayer;
+    private File mAudioFile;
+    private Disposable mRecordDisposable;
+    private RxPermissions mPermissions;
+    private Queue<File> mAudioFiles = new LinkedList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        lifecycleSubject.onNext(ActivityEvent.CREATE);
+        mPermissions = new RxPermissions(this);
+        mIvVoiceIndicators = new ArrayList<>();
+        mIvVoiceIndicators.add(ButterKnife.findById(this, R.id.mIvVoiceIndicator1));
+        mIvVoiceIndicators.add(ButterKnife.findById(this, R.id.mIvVoiceIndicator2));
+        mIvVoiceIndicators.add(ButterKnife.findById(this, R.id.mIvVoiceIndicator3));
+        mIvVoiceIndicators.add(ButterKnife.findById(this, R.id.mIvVoiceIndicator4));
+        mIvVoiceIndicators.add(ButterKnife.findById(this, R.id.mIvVoiceIndicator5));
+        mIvVoiceIndicators.add(ButterKnife.findById(this, R.id.mIvVoiceIndicator6));
+        mIvVoiceIndicators.add(ButterKnife.findById(this, R.id.mIvVoiceIndicator7));
+
+        mAudioRecorder = AudioRecorder.getInstance();
+        mRxAudioPlayer = RxAudioPlayer.getInstance();
+        mAudioRecorder.setOnErrorListener(this);
+
+        mSendVoiceView.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    pttParent.setVisibility(View.VISIBLE);
+                    mFlIndicator.setVisibility(View.VISIBLE);
+                    press2Record();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    pttParent.setVisibility(View.GONE);
+                    mFlIndicator.setVisibility(View.GONE);
+                    release2Send(true);
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    pttParent.setVisibility(View.GONE);
+                    mFlIndicator.setVisibility(View.GONE);
+                    release2Send(false);
+                    break;
+                default:
+                    break;
+            }
+
+            return true;
+        });
+    }
+
+    private void press2Record() {
+        mTvRecordingHint.setText(R.string.voice_msg_input_hint_speaking);
+
+        boolean isPermissionsGranted
+                = mPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                && mPermissions.isGranted(Manifest.permission.RECORD_AUDIO);
+        if (!isPermissionsGranted) {
+            mPermissions
+                    .request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.RECORD_AUDIO)
+                    .subscribe(granted -> {
+                        // not record first time to request permission
+                        if (granted) {
+                            Toast.makeText(getApplicationContext(), "Permission granted",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Permission not granted",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }, Throwable::printStackTrace);
+        } else {
+            recordAfterPermissionGranted();
+        }
+    }
+
+    private void recordAfterPermissionGranted() {
+        mRecordDisposable = Observable
+                .fromCallable(() -> {
+                    mAudioFile = new File(
+                            getFilesDir().getAbsolutePath()
+                                    + File.separator + "ptt.aac");
+                    if (mAudioFile.exists()) {
+                        mAudioFile.delete();
+                    }
+                    android.util.Log.d(TAG, "to prepare record");
+                    return mAudioRecorder.prepareRecord(MediaRecorder.AudioSource.MIC,
+                            MediaRecorder.OutputFormat.AAC_ADTS, MediaRecorder.AudioEncoder.AAC,
+                            192000, 192000, mAudioFile);
+                })
+                .flatMap(b -> {
+                    android.util.Log.d(TAG, "prepareRecord success");
+                    android.util.Log.d(TAG, "to play audio_record_ready: " + R.raw.audio_record_ready);
+                    return mRxAudioPlayer.play(
+                            PlayConfig.res(getApplicationContext(), R.raw.audio_record_ready)
+                                    .build());
+                })
+                .doOnComplete(() -> {
+                    android.util.Log.d(TAG, "audio_record_ready play finished");
+                    mFlIndicator.post(() -> mFlIndicator.setVisibility(View.VISIBLE));
+                    mAudioRecorder.startRecord();
+                })
+                .doOnNext(b -> android.util.Log.d(TAG, "startRecord success"))
+                .flatMap(o -> RxAmplitude.from(mAudioRecorder))
+                .compose(bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(level -> {
+                    int progress = mAudioRecorder.progress();
+                    android.util.Log.d(TAG, "amplitude: " + level + ", progress: " + progress);
+
+                    refreshAudioAmplitudeView(level);
+
+                    if (progress >= 12) {
+                        mTvRecordingHint.setText(String.format(
+                                getString(R.string.voice_msg_input_hint_time_limited_formatter),
+                                60 - progress));
+                        if (progress == 60) {
+                            release2Send(true);
+                        }
+                    } else {
+                        mTvRecordingHint.setText(String.format(
+                                getString(R.string.voice_msg_input),
+                                progress)
+                        );
+                    }
+                }, Throwable::printStackTrace);
+    }
+
+    private void release2Send(boolean send) {
+        mFlIndicator.setVisibility(View.GONE);
+
+        if (mRecordDisposable != null && !mRecordDisposable.isDisposed()) {
+            mRecordDisposable.dispose();
+            mRecordDisposable = null;
+        }
+        if (mAudioFile != null && send) {
+            Intent intent = getIntent();
+            intent.setData(Uri.fromFile(mAudioFile));
+            sendMediasIntent(intent);
+        }
+        Observable
+                .fromCallable(() -> {
+                    int seconds = mAudioRecorder.stopRecord();
+                    android.util.Log.d(TAG, "stopRecord: " + seconds);
+                    if (seconds >= MIN_AUDIO_LENGTH_SECONDS) {
+                        mAudioFiles.offer(mAudioFile);
+                        return true;
+                    }
+                    return false;
+                })
+                .compose(bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(added -> {
+                }, Throwable::printStackTrace);
+    }
+
+    private void refreshAudioAmplitudeView(int level) {
+        int end = level < mIvVoiceIndicators.size() ? level : mIvVoiceIndicators.size();
+        ButterKnife.apply(mIvVoiceIndicators.subList(0, end), VISIBLE);
+        ButterKnife.apply(mIvVoiceIndicators.subList(end, mIvVoiceIndicators.size()), INVISIBLE);
     }
 }
