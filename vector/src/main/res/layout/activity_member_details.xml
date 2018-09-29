@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -51,26 +52,38 @@
                 android:id="@+id/member_avatar_badge"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_alignRight="@id/member_avatar_container"
                 android:layout_alignTop="@id/member_avatar_container"
-                android:layout_marginRight="-7dp"
+                android:layout_alignRight="@id/member_avatar_container"
                 android:layout_marginTop="-0dp"
+                android:layout_marginRight="-7dp"
                 android:src="@drawable/admin_icon"
                 android:visibility="gone" />
 
             <!-- the member name -->
             <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/online_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/member_avatar_container"
+                android:layout_marginTop="20dp"
+                android:layout_toLeftOf="@+id/member_details_name"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_fiber_manual_record_black_24dp" />
+
             <TextView
                 android:id="@+id/member_details_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/member_avatar_container"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
+                android:layout_marginLeft="5dp"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Online 7m " />
 
             <!-- the member presence -->
             <TextView
@@ -159,8 +172,8 @@
         android:layout_below="@id/parentPanel"
         android:layout_marginTop="15dp"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:elevation="2dp">
+        android:elevation="2dp"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -171,8 +184,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:background="?attr/selectableItemBackground"
-                android:drawablePadding="20dp"
                 android:drawableStart="@drawable/contact_mute"
+                android:drawablePadding="20dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:paddingStart="15dp"
@@ -195,8 +208,8 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="?attr/selectableItemBackground"
-            android:drawablePadding="20dp"
             android:drawableStart="@drawable/contact_media"
+            android:drawablePadding="20dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:paddingStart="15dp"
@@ -252,8 +265,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        android:visibility="gone"
-        android:elevation="2dp">
+        android:elevation="2dp"
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progress_bar_view"

@@ -1557,8 +1557,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 @Override
                 public void onSuccess(Void info) {
                     mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(VectorMemberDetailsActivity.this, mSession, mMemberId, null));
+                    findViewById(R.id.online_status).setVisibility(mPresenceTextView.getText().toString().startsWith("Online") ? View.VISIBLE : View.GONE);
                 }
             }));
+            findViewById(R.id.online_status).setVisibility(mPresenceTextView.getText().toString().startsWith("Online") ? View.VISIBLE : View.GONE);
         }
     }
 

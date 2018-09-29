@@ -495,7 +495,7 @@
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
-    <string name="room_details_title">@string/room_details_files</string>
+    <string name="room_details_title">Room details</string>
     <string name="room_details_people">People</string>
     <string name="room_details_files">Media files</string>
     <string name="room_details_settings">Settings</string>

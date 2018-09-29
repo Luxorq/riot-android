@@ -1038,11 +1038,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
-//        View avatarLayout = findViewById(R.id.room_self_avatar);
-//
-//        if (null != avatarLayout) {
-//            mAvatarImageView = avatarLayout.findViewById(R.id.avatar_img);
-//        }
+        View avatarLayout = findViewById(R.id.room_self_avatar);
+
+        if (null != avatarLayout) {
+            mAvatarImageView = avatarLayout.findViewById(R.id.avatar_img);
+        }
 
         refreshSelfAvatar();
 
@@ -1504,12 +1504,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     //================================================================================
     // Menu management
     //================================================================================
-
-
-    @Override
-    public int getMenuRes() {
-        return R.menu.vector_room;
-    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -2457,7 +2451,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void refreshSelfAvatar() {
         // sanity check
         if (null != mAvatarImageView) {
-//            VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
+            //VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
             Collection<RoomMember> members = mRoom.getMembers();
             if (RoomUtils.isDirectChat(mSession, mRoom.getRoomId())) {
                 for (RoomMember member : members) {

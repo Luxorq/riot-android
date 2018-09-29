@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.RoomActivity">
+
+    <item
+        android:id="@+id/ic_action_room_settings"
+        android:icon="@drawable/ic_info_outline_black_24dp"
+        android:title="@string/room_details_title"
+        app:showAsAction="ifRoom" />
+</menu>
