@@ -159,6 +159,7 @@ import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.functions.Functions;
@@ -4248,7 +4249,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mSendVoiceView.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                    rect = new Rect(v.getLeft() - 100, v.getTop() - 100, v.getRight() + 100, v.getBottom() + 100);
                     pttParent.setVisibility(View.VISIBLE);
                     press2Record();
                     break;
@@ -4301,7 +4302,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 .fromCallable(() -> {
                     mAudioFile = new File(
                             getFilesDir().getAbsolutePath()
-                                    + File.separator + System.nanoTime() + ".aac");
+                                    + File.separator + System.nanoTime() + "_kedr.aac");
                     android.util.Log.d(TAG, "to prepare record");
                     return mAudioRecorder.prepareRecord(MediaRecorder.AudioSource.MIC,
                             MediaRecorder.OutputFormat.AAC_ADTS, MediaRecorder.AudioEncoder.AAC,
@@ -4387,5 +4388,79 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         ButterKnife.apply(mIvVoiceIndicators.subList(end, mIvVoiceIndicators.size()), INVISIBLE);
     }
 
-    private Rect rect;    // Variable rect to hold the bounds of the view
+    public void playAudio(File audioFile, View view) {
+        if (mRxAudioPlayer.getMediaPlayer() != null && mRxAudioPlayer.getMediaPlayer().isPlaying() && view == oldView) {
+            mRxAudioPlayer.stopPlay();
+            View play = view.findViewById(R.id.play_btn);
+            TextView duration = view.findViewById(R.id.audio_duration);
+            play.setEnabled(true);
+            duration.setText("");
+            oldView = view;
+            return;
+        }
+        mRxAudioPlayer.play(
+                PlayConfig.file(audioFile)
+                        .streamType(AudioManager.STREAM_VOICE_CALL)
+                        .build())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(final Disposable disposable) {
+
+                    }
+
+                    @Override
+                    public void onNext(final Boolean aBoolean) {
+                        if (oldView != null) {
+                            oldView.post(() -> {
+                                View play = oldView.findViewById(R.id.play_btn);
+                                TextView duration = oldView.findViewById(R.id.audio_duration);
+                                play.setEnabled(true);
+                                duration.setText("");
+                            });
+                        }
+                        if (view != null) {
+                            view.post(() -> {
+                                View play = view.findViewById(R.id.play_btn);
+                                TextView duration = view.findViewById(R.id.audio_duration);
+                                play.setEnabled(false);
+                                int totalSecs = mRxAudioPlayer.getMediaPlayer().getDuration() / 1000;
+                                int minutes = (totalSecs % 3600) / 60;
+                                int seconds = totalSecs % 60;
+                                duration.setText(String.format("%02d:%02d", minutes, seconds));
+                                oldView = view;
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onError(final Throwable throwable) {
+                        if (view != null) {
+                            View play = view.findViewById(R.id.play_btn);
+                            view.post(() -> {
+                                play.setEnabled(true);
+                                TextView duration = view.findViewById(R.id.audio_duration);
+                                duration.setText("");
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (view != null) {
+                            View play = view.findViewById(R.id.play_btn);
+                            view.post(() -> {
+                                play.setEnabled(true);
+                                TextView duration = view.findViewById(R.id.audio_duration);
+                                duration.setText("");
+                            });
+                        }
+                    }
+                });
+
+    }
+
+    private Rect rect;
+    private View oldView;
 }

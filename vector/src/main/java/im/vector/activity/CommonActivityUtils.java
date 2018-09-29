@@ -1034,7 +1034,7 @@ public class CommonActivityUtils {
      * @param outputFilename optional the output filename
      * @param callback       the asynchronous callback
      */
-    private static void saveFileInto(final File sourceFile, final String dstDirPath, final String outputFilename, final ApiCallback<String> callback) {
+    private static void saveFileInto(final File sourceFile, final String dstDirPath, final String outputFilename, final ApiDownloadCallback<String> callback) {
         // sanity check
         if ((null == sourceFile) || (null == dstDirPath)) {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -1080,6 +1080,9 @@ public class CommonActivityUtils {
 
                 // if the file already exists, append a marker
                 if (dstFile.exists()) {
+                    if (outputFilename.endsWith(".aac")) {
+                        return new Pair<>(dstFile.getAbsolutePath(), new Exception());
+                    }
                     String baseFileName = dstFileName;
                     String fileExt = "";
 
@@ -1135,7 +1138,7 @@ public class CommonActivityUtils {
                     if (null == result) {
                         callback.onUnexpectedError(new Exception("Null parameters"));
                     } else if (null != result.first) {
-                        callback.onSuccess(result.first);
+                        callback.onSuccess(result.first, result.second != null);
                     } else {
                         callback.onUnexpectedError(result.second);
                     }
@@ -1175,10 +1178,10 @@ public class CommonActivityUtils {
                                               final String filename,
                                               final String mimeType,
                                               final ApiCallback<String> callback) {
-        saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiCallback<String>() {
+        saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiDownloadCallback<String>() {
             @Override
-            public void onSuccess(String fullFilePath) {
-                if (null != fullFilePath) {
+            public void onSuccess(String fullFilePath, boolean exists) {
+                if (null != fullFilePath && !exists) {
                     DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 
                     try {

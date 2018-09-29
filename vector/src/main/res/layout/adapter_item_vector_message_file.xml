@@ -15,9 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="5dp"
+        android:paddingTop="8dp"
         android:paddingRight="6dp"
-        android:paddingTop="8dp">
+        android:paddingBottom="5dp">
 
         <include
             android:id="@+id/messagesAdapter_roundAvatar"
@@ -55,16 +55,18 @@
                         android:layout_height="wrap_content">
 
                         <LinearLayout
+                            android:id="@+id/file_parent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <ImageView
                                 android:id="@+id/message_adapter_e2e_icon"
                                 android:layout_width="14dp"
                                 android:layout_height="14dp"
                                 android:src="@drawable/e2e_verified"
-                                android:visibility="gone"/>
+                                android:visibility="gone" />
 
                             <!-- the media type -->
                             <ImageView
@@ -78,15 +80,46 @@
                                 android:id="@+id/messagesAdapter_filename"
                                 android:layout_width="0dp"
                                 android:layout_height="40dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
                                 android:layout_weight="1"
-                                android:maxLines="1"
-                                android:lines="1"
-                                android:singleLine="true"
-                                android:gravity="center_vertical"
                                 android:autoLink="none"
+                                android:gravity="center_vertical"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:singleLine="true"
                                 tools:text="A filename here" />
-
                         </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/audio_parent"
+                            android:layout_width="220dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/audio_equalizer_black"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <ImageView
+                                android:id="@+id/play_btn"
+                                android:layout_width="20dp"
+                                android:layout_height="34dp"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="10dp"
+                                android:src="@drawable/audio_play_white" />
+
+                            <TextView
+                                android:id="@+id/audio_duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:autoLink="none"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                tools:text="0:17" />
+                        </RelativeLayout>
 
                         <!-- the thumbnail has been uploaded : sending the message -->
                         <ProgressBar

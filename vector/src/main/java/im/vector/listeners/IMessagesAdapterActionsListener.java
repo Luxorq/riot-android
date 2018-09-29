@@ -18,6 +18,7 @@ package im.vector.listeners;
 
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.rest.model.Event;
@@ -48,7 +49,7 @@ public interface IMessagesAdapterActionsListener {
      *
      * @param position the cell position
      */
-    void onContentClick(int position);
+    void onContentClick(View view, int position);
 
     /**
      * Called when a long click is performed on the message content

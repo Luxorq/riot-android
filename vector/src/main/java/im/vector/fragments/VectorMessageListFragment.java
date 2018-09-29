@@ -827,6 +827,16 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                        final String mediaMimeType,
                        final String filename,
                        final EncryptedFileInfo encryptedFileInfo) {
+        onMediaAction(menuAction, mediaUrl, mediaMimeType, filename, encryptedFileInfo, null);
+    }
+
+
+    void onMediaAction(final int menuAction,
+                       final String mediaUrl,
+                       final String mediaMimeType,
+                       final String filename,
+                       final EncryptedFileInfo encryptedFileInfo,
+                       final View view) {
         // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
@@ -851,7 +861,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                         if (menuAction == ACTION_VECTOR_SAVE) {
                                             Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                                         } else {
-                                            ExternalApplicationsUtilKt.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                                            if (mediaMimeType.contains("aac")){
+                                                VectorRoomActivity activity = (VectorRoomActivity) getActivity();
+                                                activity.playAudio(new File(savedMediaPath), view);
+                                            } else {
+                                                ExternalApplicationsUtilKt.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                                            }
                                         }
                                     }
                                 }
@@ -1064,7 +1079,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     @Override
-    public void onContentClick(int position) {
+    public void onContentClick(View view, int position) {
         try {
             MessageRow row = mAdapter.getItem(position);
             Event event = row.getEvent();
@@ -1099,7 +1114,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
                 if (null != fileMessage.getUrl()) {
-                    onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
+                    onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file, view);
                 }
             } else {
                 // toggle selection mode

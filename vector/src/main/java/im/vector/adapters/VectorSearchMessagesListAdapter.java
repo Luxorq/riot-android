@@ -188,7 +188,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
                 @Override
                 public void onClick(View v) {
                     if (null != mVectorMessagesAdapterEventsListener) {
-                        mVectorMessagesAdapterEventsListener.onContentClick(fPosition);
+                        mVectorMessagesAdapterEventsListener.onContentClick(null, fPosition);
                     }
                 }
             });

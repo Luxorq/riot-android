@@ -314,12 +314,12 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
     @Override
     public boolean onRowLongClick(int position) {
-        onContentClick(position);
+        onContentClick(null, position);
         return true;
     }
 
     @Override
-    public void onContentClick(int position) {
+    public void onContentClick(View view, int position) {
         Event event = mAdapter.getItem(position).getEvent();
 
         Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
