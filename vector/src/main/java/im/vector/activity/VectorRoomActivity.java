@@ -4205,7 +4205,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         return super.dispatchTouchEvent(ev);
     }
 
-    public static final int MIN_AUDIO_LENGTH_SECONDS = 2;
+    public static final int MIN_AUDIO_LENGTH_SECONDS = 1;
     private static final String TAG = "RoomActivity";
     private static final ButterKnife.Action<View> INVISIBLE
             = (view, index) -> view.setVisibility(View.INVISIBLE);
@@ -4355,20 +4355,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             mRecordDisposable.dispose();
             mRecordDisposable = null;
         }
-        if (mAudioFile != null) {
-            if (send && seconds >= 1) {
-                Intent intent = getIntent();
-                intent.setData(Uri.fromFile(mAudioFile));
-                sendMediasIntent(intent);
-            } else {
-                mAudioFile.delete();
-                mAudioFile = null;
-            }
-        }
         Observable
                 .fromCallable(() -> {
                     seconds = mAudioRecorder.stopRecord();
                     android.util.Log.d(TAG, "stopRecord: " + seconds);
+                    if (mAudioFile != null) {
+                        if (send && seconds >= 1) {
+                            pttParent.post(() -> {
+                                Intent intent = getIntent();
+                                intent.setData(Uri.fromFile(mAudioFile));
+                                sendMediasIntent(intent);
+                            });
+                        } else {
+                            mAudioFile.delete();
+                            mAudioFile = null;
+                        }
+                    }
                     if (seconds >= MIN_AUDIO_LENGTH_SECONDS) {
                         mAudioFiles.offer(mAudioFile);
                         return true;
