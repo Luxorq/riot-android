@@ -17,15 +17,20 @@
  */
 package im.vector.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -45,7 +50,9 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
@@ -55,6 +62,7 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,12 +73,14 @@ import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.CallsManager;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PermissionsToolsKt;
+import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
 import kotlin.Pair;
 
@@ -81,7 +91,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         VectorMemberDetailsAdapter.IEnablingActions,
         VectorMemberDetailsDevicesAdapter.IDevicesAdapterListener {
     private static final String LOG_TAG = VectorMemberDetailsActivity.class.getSimpleName();
-
+    private static final int REQ_CODE_UPDATE_ROOM_AVATAR = 0x10;
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_MEMBER_ID = "EXTRA_MEMBER_ID";
     public static final String EXTRA_MEMBER_DISPLAY_NAME = "EXTRA_MEMBER_DISPLAY_NAME";
@@ -128,6 +138,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private ImageView mMemberAvatarImageView;
     private ImageView mMemberAvatarBadgeImageView;
     private TextView mMemberNameTextView;
+    private TextView mMemberTopicTextView;
+    private TextView mMemberChangedTextView;
     private TextView mPresenceTextView;
 
     // full screen avatar
@@ -139,7 +151,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private ListView mDevicesListView;
     private View mDevicesListHeaderView;
 
-    private SwitchCompat mSwitch;
+    private SwitchCompat mMuteSwitch;
+    private SwitchCompat mHideAvatarSwitch;
+    private SwitchCompat mHidePreviewSwitch;
 
     // direct message
     /**
@@ -266,6 +280,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             updateUi();
         }
     };
+    private MenuItem item;
 
     /**
      * Start a call in a dedicated room
@@ -632,6 +647,15 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     }
 
+    @Override
+    public int getMenuRes() {
+        return R.menu.vector_details;
+    }
+
+    @Override
+    public int getMenuTint() {
+        return R.attr.colorAccent;
+    }
 
     /**
      * Refresh the user devices list.
@@ -685,12 +709,39 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(@NotNull Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
+        item = menu.findItem(R.id.edit_room);
+        if (mRoom != null) {
+            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
+            if (null != powerLevels) {
+                boolean canUpdateAvatar = false;
+                boolean canUpdateName = false;
+                boolean canUpdateTopic = false;
+                boolean isAdmin = false;
+                boolean isConnected = Matrix.getInstance(this).isConnected();
+                int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
+                canUpdateName = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+                canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
+                isAdmin = (powerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN);
+                item.setVisible(canUpdateName && canUpdateTopic);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (android.R.id.home == item.getItemId()) {
             if (View.VISIBLE == mDevicesListView.getVisibility()) {
                 setScreenDevicesListVisibility(View.GONE);
                 return true;
             }
+        } else if (item.getItemId() == R.id.edit_room) {
+            Intent sendIntent = new Intent(this, EditRoomActivity.class);
+            sendIntent.putExtra(EXTRA_ROOM_ID, mRoom.getRoomId());
+            startActivity(sendIntent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -1100,6 +1151,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     }
 
+    //PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
     @NotNull
     @Override
     public Pair getOtherThemes() {
@@ -1141,6 +1193,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             if (null != getSupportActionBar()) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle(R.string.room_details);
             }
 
             mMemberAvatarImageView = findViewById(R.id.avatar_img);
@@ -1150,6 +1203,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mFullMemberAvatarLayout = findViewById(R.id.member_details_fullscreen_avatar_layout);
 
             mMemberNameTextView = findViewById(R.id.member_details_name);
+            mMemberChangedTextView = findViewById(R.id.member_details_changed_name);
+            mMemberTopicTextView = findViewById(R.id.member_details_topic);
             mPresenceTextView = findViewById(R.id.member_details_presence);
             setWaitingView(findViewById(R.id.member_details_list_view_progress_bar));
 
@@ -1213,7 +1268,15 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mMemberAvatarImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    displayFullScreenAvatar();
+                    PowerLevels powerLevels = mRoom.getState().getPowerLevels();
+                    if (null != powerLevels) {
+                        boolean canUpdateAvatar ;
+                        int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                        canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
+                        if (mRoom != null && mRoom.getMembers().size() > 2 && canUpdateAvatar) {
+                            onRoomAvatarPreferenceChanged();
+                        }
+                    }
                 }
             });
 
@@ -1238,10 +1301,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 displayFullScreenAvatar();
             }
 
-            mSwitch = findViewById(R.id.mute_swtich);
+            mMuteSwitch = findViewById(R.id.mute_swtich);
             BingRulesManager.RoomNotificationState state = mSession.getDataHandler().getBingRulesManager().getRoomNotificationState(mRoom.getRoomId());
-            mSwitch.setChecked(BingRulesManager.RoomNotificationState.MUTE == state);
-            mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            mMuteSwitch.setChecked(BingRulesManager.RoomNotificationState.MUTE == state);
+            mMuteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                     final CompoundButton.OnCheckedChangeListener listener = this;
@@ -1257,13 +1320,38 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                                 @Override
                                 public void onBingRuleUpdateFailure(final String errorMessage) {
                                     onRequestDone(errorMessage);
-                                    mSwitch.setOnCheckedChangeListener(null);
-                                    mSwitch.setChecked(!isChecked);
-                                    mSwitch.setOnCheckedChangeListener(listener);
+                                    mMuteSwitch.setOnCheckedChangeListener(null);
+                                    mMuteSwitch.setChecked(!isChecked);
+                                    mMuteSwitch.setOnCheckedChangeListener(listener);
                                 }
                             });
                 }
             });
+
+            mHideAvatarSwitch = findViewById(R.id.hide_avatar_swtich);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
+            mHideAvatarSwitch.setChecked(prefs.getBoolean("avatar_" + mMemberId, false));
+            mHideAvatarSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("avatar_" + mMemberId, isChecked);
+                    editor.putBoolean("avatar_" + mRoom.getRoomId(), isChecked);
+                    editor.apply();
+                    updateMemberAvatarUi();
+                }
+            });
+            mHidePreviewSwitch = findViewById(R.id.hide_history_swtich);
+            mHidePreviewSwitch.setChecked(prefs.getBoolean("message_" + mRoom.getRoomId(), false));
+            mHidePreviewSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("message_" + mRoom.getRoomId(), isChecked);
+                    editor.apply();
+                }
+            });
+
             findViewById(R.id.audio).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1285,10 +1373,91 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             findViewById(R.id.media_files).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    launchRoomDetails(1);
+                }
+            });
+            findViewById(R.id.people).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     launchRoomDetails(0);
                 }
             });
+            findViewById(R.id.leave_group).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    leaveGroup();
+                }
+            });
+            boolean canUpdateAvatar = false;
+            boolean canUpdateName = false;
+            boolean canUpdateTopic = false;
+            boolean isAdmin = false;
+            boolean isConnected = Matrix.getInstance(this).isConnected();
+            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
+
+            if (null != powerLevels) {
+                int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
+                canUpdateName = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+                canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
+                isAdmin = (powerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN);
+            }
+            if (item != null) {
+                item.setVisible(canUpdateName && canUpdateTopic);
+            }
         }
+    }
+
+    private void leaveGroup() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.room_participants_leave_prompt_title)
+                .setMessage(R.string.room_participants_leave_prompt_msg)
+                .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mRoom.leave(new ApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finish();
+                                    }
+                                });
+
+                            }
+
+                            private void onError(final String errorMessage) {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(VectorMemberDetailsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+                        });
+
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     private void launchRoomDetails(int selectedTab) {
@@ -1521,19 +1690,42 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             Log.e(LOG_TAG, "updateUi : the session is not anymore valid");
             return;
         }
+        boolean isGroup = mRoom.getMembers().size() > 2;
+        findViewById(R.id.parentPanel).setVisibility(isGroup ? View.GONE : View.VISIBLE);
+        String changedName = mRoom.getState().name;
+        String topic = mRoom.getTopic();
+        String prefix = "";
+        if (null != mMemberChangedTextView && mRoom != null) {
+            if (TextUtils.isEmpty(changedName)) {
+                mMemberChangedTextView.setVisibility(View.GONE);
+            } else {
+                mMemberChangedTextView.setVisibility(isGroup ? View.GONE : View.VISIBLE);
+                mMemberChangedTextView.setText(changedName);
+                prefix = isGroup ? "" : "@";
+            }
+        }
+
+        if (null != mMemberTopicTextView && mRoom != null) {
+            if (TextUtils.isEmpty(topic)) {
+                mMemberTopicTextView.setVisibility(View.GONE);
+            } else {
+                mMemberTopicTextView.setVisibility(isGroup ? View.GONE : View.VISIBLE);
+                mMemberTopicTextView.setText(topic);
+            }
+        }
 
         if (null != mMemberNameTextView) {
             if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
-                mMemberNameTextView.setText(mRoomMember.displayname);
+                mMemberNameTextView.setText(prefix + mRoomMember.displayname);
             } else {
                 refreshUser();
-                mMemberNameTextView.setText(mUser.displayname);
+                mMemberNameTextView.setText(prefix + mUser.displayname);
             }
-
             // do not display the activity name in the action bar
-            setTitle("");
         }
-
+        if (isGroup) {
+            mMemberNameTextView.setText(VectorUtils.getRoomDisplayName(this, mSession, mRoom));
+        }
         // disable the progress bar
         enableProgressBarView(CommonActivityUtils.UTILS_HIDE_PROGRESS_BAR);
 
@@ -1553,6 +1745,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private void updatePresenceInfoUi() {
         // sanity check
         if (null != mPresenceTextView) {
+            if (mRoom == null || mRoom.getMembers().size() > 2) {
+                mPresenceTextView.setVisibility(View.GONE);
+                findViewById(R.id.online_status).setVisibility(View.GONE);
+                return;
+            }
             mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(this, mSession, mMemberId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
@@ -1571,34 +1768,41 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (null != mMemberAvatarImageView) {
             // use the room member if it exists
             if (null != mRoomMember) {
-                String displayname = mRoomMember.displayname;
-                String avatarUrl = mRoomMember.getAvatarUrl();
-
-                // if there is no avatar or displayname , try to find one from the known user
-                // it is always better than the vector avatar or the matrid id.
-                if (TextUtils.isEmpty(avatarUrl) || TextUtils.isEmpty(displayname)) {
-                    if (null != mUser) {
-                        if (TextUtils.isEmpty(avatarUrl)) {
-                            avatarUrl = mUser.avatar_url;
-                        }
-
-                        if (TextUtils.isEmpty(displayname)) {
-                            displayname = mUser.displayname;
-                        }
-                    }
-                }
-
-                VectorUtils.loadUserAvatar(this, mSession, mMemberAvatarImageView, avatarUrl, mRoomMember.getUserId(), displayname);
-            } else {
-                // use the user if it is defined
-                if (null != mUser) {
-                    VectorUtils.loadUserAvatar(this, mSession, mMemberAvatarImageView, mUser);
+                if (RoomUtils.isDirectChat(mSession, mRoom.getRoomId())) {
+                    VectorUtils.loadRoomMemberAvatar(this, mSession, mMemberAvatarImageView, mRoomMember);
                 } else {
-                    // default avatar
-                    VectorUtils.loadUserAvatar(this, mSession, mMemberAvatarImageView, null, mMemberId, mMemberId);
+                    VectorUtils.loadRoomAvatar(this, mSession, mMemberAvatarImageView, mRoom);
                 }
+//                String displayname = mRoomMember.displayname;
+//                String avatarUrl = mRoomMember.getAvatarUrl();
+//
+//                // if there is no avatar or displayname , try to find one from the known user
+//                // it is always better than the vector avatar or the matrid id.
+//                if (TextUtils.isEmpty(avatarUrl) || TextUtils.isEmpty(displayname)) {
+//                    if (null != mUser) {
+//                        if (TextUtils.isEmpty(avatarUrl)) {
+//                            avatarUrl = mUser.avatar_url;
+//                        }
+//
+//                        if (TextUtils.isEmpty(displayname)) {
+//                            displayname = mUser.displayname;
+//                        }
+//                    }
+//                }
+//
+//                VectorUtils.loadUserAvatar(this, mSession, mMemberAvatarImageView, avatarUrl, mRoomMember.getUserId(), displayname);
+//            } else {
+//                // use the user if it is defined
+//                if (null != mUser) {
+//                    VectorUtils.loadUserAvatar(this, mSession, mMemberAvatarImageView, mUser);
+//                } else {
+//                    // default avatar
+//                    VectorUtils.loadUserAvatar(this, mSession, mMemberAvatarImageView, null, mMemberId, mMemberId);
+//                }
             }
+
         }
+
     }
 
     /**
@@ -1640,6 +1844,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             updateAdapterListViewItems();
         }
+        updateUi();
     }
 
     @Override
@@ -1707,4 +1912,69 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         mDevicesListViewAdapter.notifyDataSetChanged();
     }
     // ***********************************************************
+
+    private void onRoomAvatarPreferenceChanged() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorMediasPickerActivity.class);
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                startActivityForResult(intent, REQ_CODE_UPDATE_ROOM_AVATAR);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int aRequestCode, int aResultCode, final Intent aData) {
+        super.onActivityResult(aRequestCode, aResultCode, aData);
+
+        if (REQ_CODE_UPDATE_ROOM_AVATAR == aRequestCode) {
+            onActivityResultRoomAvatarUpdate(aResultCode, aData);
+        }
+    }
+
+    private void onActivityResultRoomAvatarUpdate(int aResultCode, final Intent aData) {
+        // sanity check
+        if (null == mSession) {
+            return;
+        }
+
+        if (aResultCode == Activity.RESULT_OK) {
+            Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(this, aData, mSession.getMediasCache());
+
+            if (null != thumbnailUri) {
+                showWaitingView();
+
+                // save the bitmap URL on the server
+                ResourceUtils.Resource resource = ResourceUtils.openResource(this, thumbnailUri, null);
+                if (null != resource) {
+                    mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
+
+                        @Override
+                        public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.e(LOG_TAG, "Fail to upload the avatar");
+                                    hideWaitingView();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onUploadComplete(final String uploadId, final String contentUri) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
+                                    mRoom.updateAvatarUrl(contentUri, null);
+                                    VectorUtils.loadRoomAvatar(VectorMemberDetailsActivity.this, mSession, mMemberAvatarImageView, mRoom);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        }
+    }
 }

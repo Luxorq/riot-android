@@ -492,7 +492,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getActivity().getMenuInflater().inflate(R.menu.vector_room_details_add_people, menu);
-        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(getContext(), R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(getContext(), R.attr.colorAccent));
 
         mRemoveMembersMenuItem = menu.findItem(R.id.ic_action_room_details_delete);
         mSwitchDeletionMenuItem = menu.findItem(R.id.ic_action_room_details_edition_mode);
@@ -854,11 +854,11 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         mAdapter.setOnParticipantsListener(new VectorRoomDetailsMembersAdapter.OnParticipantsListener() {
             @Override
             public void onClick(final ParticipantAdapterItem participantItem) {
-                Intent memberDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, participantItem.mUserId);
-                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                getActivity().startActivityForResult(memberDetailsIntent, GET_MENTION_REQUEST_CODE);
+//                Intent memberDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+//                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+//                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, participantItem.mUserId);
+//                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+//                getActivity().startActivityForResult(memberDetailsIntent, GET_MENTION_REQUEST_CODE);
             }
 
             @Override

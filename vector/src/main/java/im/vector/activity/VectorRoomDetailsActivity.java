@@ -36,7 +36,6 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.contacts.ContactsManager;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
@@ -184,17 +183,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (0 == permissions.length) {
             Log.d(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
-        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
-            if (Manifest.permission.READ_CONTACTS.equals(permissions[0])) {
-                if (PackageManager.PERMISSION_GRANTED == grantResults[0]) {
-                    Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-                } else {
-                    Log.w(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                    Toast.makeText(this, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
-                }
-
-                ContactsManager.getInstance().refreshLocalContactsSnapshot();
-            }
         }
     }
 
@@ -298,14 +286,14 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
 
         // Settings tab creation: the room settings (room photo, name, topic..)
-        tabToBeAdded = mActionBar.newTab();
+        /*tabToBeAdded = mActionBar.newTab();
         tabTitle = getString(R.string.room_details_settings);
         tabToBeAdded.setText(tabTitle);
         tabToBeAdded.setTabListener(this);
         tabBundle = new Bundle();
         tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL);
         tabToBeAdded.setTag(tabBundle);
-        mActionBar.addTab(tabToBeAdded);
+        mActionBar.addTab(tabToBeAdded);*/
 
         // set the default tab to be displayed
         tabIndexToRestore = isFirstCreation()? -1 : getSavedInstanceState().getInt(KEY_STATE_CURRENT_TAB_INDEX, -1);
@@ -322,6 +310,11 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         // set the tab to display & set current tab index
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);
         mCurrentTabIndex = tabIndexToRestore;
+    }
+
+    @Override
+    public int getMenuTint() {
+        return R.attr.colorAccent;
     }
 
     /**
@@ -352,10 +345,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             }
             mCurrentTabIndex = PEOPLE_TAB_INDEX;
 
-            if (!mIsContactsPermissionChecked) {
-                mIsContactsPermissionChecked = true;
-                PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_MEMBER_DETAILS, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
-            }
         } else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             int permissionToBeGranted = PermissionsToolsKt.PERMISSIONS_FOR_ROOM_DETAILS;
             onTabSelectSettingsFragment();
@@ -364,7 +353,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             if (!MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                 permissionToBeGranted &= ~PermissionsToolsKt.PERMISSION_CAMERA;
             }
-            PermissionsToolsKt.checkPermissions(permissionToBeGranted, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
+            //PermissionsToolsKt.checkPermissions(permissionToBeGranted, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
             mCurrentTabIndex = SETTINGS_TAB_INDEX;
         } else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
             mSearchFilesFragment = (VectorSearchRoomFilesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);

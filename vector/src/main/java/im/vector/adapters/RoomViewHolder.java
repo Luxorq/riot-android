@@ -20,27 +20,35 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.util.KedrCallHistory;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
@@ -162,9 +170,9 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         if (isInvitation || (0 != highlightCount)) {
             bingUnreadColor = mFuchsiaColor;
         } else if (0 != notificationCount) {
-            bingUnreadColor = mGreenColor;
+            bingUnreadColor = mFuchsiaColor;
         } else if (0 != unreadMsgCount) {
-            bingUnreadColor = mSilverColor;
+            bingUnreadColor = mFuchsiaColor;
         } else {
             bingUnreadColor = Color.TRANSPARENT;
         }
@@ -210,8 +218,13 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
 
         // get last message to be displayed
         if (vRoomLastMessage != null) {
+            boolean hideMessage = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance()).getBoolean("message_" + room.getRoomId(), false);
             CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(context, session, roomSummary);
-            vRoomLastMessage.setText(lastMsgToDisplay);
+            if (!hideMessage || TextUtils.isEmpty(lastMsgToDisplay)) {
+                vRoomLastMessage.setText(lastMsgToDisplay);
+            } else {
+                vRoomLastMessage.setText(context.getString(R.string.message));
+            }
         }
 
         if (mDirectChatIndicator != null) {
@@ -222,7 +235,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         if (vRoomUnreadIndicator != null) {
             // set bing view background colour
             vRoomUnreadIndicator.setBackgroundColor(bingUnreadColor);
-            vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.VISIBLE);
+            vRoomUnreadIndicator.setVisibility(roomSummary.isInvited() ? View.INVISIBLE : View.INVISIBLE);
         }
 
         if (vRoomTimestamp != null) {
@@ -239,6 +252,26 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
                 }
             });
         }
+    }
+
+    private boolean isRead(MXSession session, Room room, RoomSummary summary, String userId) {
+        if (TextUtils.isEmpty(userId)) {
+            return false;
+        }
+
+        if (!session.isAlive()) {
+            return false;
+        }
+
+        final String eventId = summary.getLatestReceivedEvent().eventId;
+
+        IMXStore store = session.getDataHandler().getStore();
+        List<ReceiptData> receipts = store.getEventReceipts(room.getRoomId(), eventId, true, true);
+
+        if ((null == receipts) || receipts.isEmpty()) {
+            return false;
+        }
+        return userId.equals(receipts.get(0).userId);
     }
 
     public void populateViews(final Context context, final MXSession session, final Room room,

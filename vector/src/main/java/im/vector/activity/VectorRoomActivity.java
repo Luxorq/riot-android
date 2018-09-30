@@ -2453,22 +2453,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != mAvatarImageView) {
             //VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
             Collection<RoomMember> members = mRoom.getMembers();
-            if (RoomUtils.isDirectChat(mSession, mRoom.getRoomId())) {
-                for (RoomMember member : members) {
-                    if (!member.getUserId().equals(mSession.getMyUserId())) {
-                        participantId = member.getUserId();
-                        VectorUtils.loadRoomMemberAvatar(this, mSession, mAvatarImageView, member);
-                        break;
-                    }
+            RoomMember roomMember = null;
+            for (RoomMember member : members) {
+                if (!member.getUserId().equals(mSession.getMyUserId())) {
+                    participantId = member.getUserId();
+                    roomMember = member;
+                    break;
                 }
             }
+
+            if (RoomUtils.isDirectChat(mSession, mRoom.getRoomId())) {
+                VectorUtils.loadRoomMemberAvatar(this, mSession, mAvatarImageView, roomMember);
+            } else {
+                VectorUtils.loadRoomAvatar(this, mSession, mAvatarImageView, mRoom);
+            }
+
             mAvatarImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openDetails(mRoom, participantId);
                 }
             });
-            //VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
         }
     }
 
@@ -2878,20 +2883,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @OnClick(R.id.open_chat_header_arrow)
     void OnOpenHeaderClick() {
         // display/hide the header view
-        if (null != mRoomHeaderView) {
+        /*if (null != mRoomHeaderView) {
             if (View.GONE == mRoomHeaderView.getVisibility()) {
                 enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
             } else {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
             }
-        }
+        }*/
     }
 
     @OnClick(R.id.header_texts_container)
     void onTextsContainerClick() {
-        if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
+        /*if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
             enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
-        }
+        }*/
     }
 
     // last position

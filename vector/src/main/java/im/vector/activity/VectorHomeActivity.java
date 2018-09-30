@@ -2019,7 +2019,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         Set<Integer> menuIndexes = new HashSet<>(mBadgeViewByIndex.keySet());
 
         // the badges are not anymore displayed on the home tab
-        menuIndexes.remove(R.id.bottom_action_home);
+        //menuIndexes.remove(R.id.bottom_action_home);
 
         for (Integer id : menuIndexes) {
             // use a map because contains is faster
@@ -2032,7 +2032,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     filteredRoomIdsSet.add(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_home) {
-                filteredRoomIdsSet.addAll(mSession.getDataHandler().getDirectChatRoomIdsList());
+                Set<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
+                filteredRoomIdsSet.addAll(directChatRoomIds);
                 // Add direct chat invitations
                 for (Room room : roomSummaryByRoom.keySet()) {
                     if (room.isDirectChatInvitation() && !room.isConferenceUserRoom()) {
@@ -2044,6 +2045,17 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 List<Room> lowPriorRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
                 for (Room room : lowPriorRooms) {
                     filteredRoomIdsSet.remove(room.getRoomId());
+                }
+
+                Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
+                directChatRoomIds.addAll(directChatInvitations);
+
+                for (Room room : roomSummaryByRoom.keySet()) {
+                    if (!room.isConferenceUserRoom() && // not a VOIP conference room
+                            !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
+                            !lowPriorityRoomIds.contains(room.getRoomId())) {
+                        filteredRoomIdsSet.add(room.getRoomId());
+                    }
                 }
             } else if (id == R.id.bottom_action_rooms) {
                 Set<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());

@@ -199,7 +199,7 @@ object NotificationUtils {
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(context.getString(R.string.riot_app_name))
                 .setContentText(context.getString(subTitleResId))
-                .setSmallIcon(R.drawable.logo_transparent)
+                .setSmallIcon(R.drawable.kedr_logo)
                 .setContentIntent(pi)
 
         // hide the notification from the status bar
@@ -720,7 +720,7 @@ object NotificationUtils {
                     .setWhen(System.currentTimeMillis())
                     .setContentTitle(context.getString(R.string.riot_app_name))
                     .setContentText(messagesStrings[0])
-                    .setSmallIcon(R.drawable.logo_transparent)
+                    .setSmallIcon(R.drawable.kedr_logo)
                     .setGroup(context.getString(R.string.riot_app_name))
                     .setGroupSummary(true)
 

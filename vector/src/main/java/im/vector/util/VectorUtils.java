@@ -35,6 +35,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.util.LruCache;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -594,7 +595,11 @@ public class VectorUtils {
 
         // reset the imageView tag
         imageView.setTag(null);
-
+        boolean hideAvatar = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance()).getBoolean("avatar_" + userId, false);
+        if (hideAvatar) {
+            setDefaultMemberAvatar(imageView, userId, displayName);
+            return;
+        }
         if (session.getMediasCache().isAvatarThumbnailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
             session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(),
                     imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));

@@ -1105,4 +1105,12 @@
     <string name="voice_msg_input_hint_speaking">Saying …</string>
     <string name="voice_msg_input_hint_time_limited_formatter" formatted="false">%d s left</string>
     <string name="voice_msg_input">%d s</string>
+    <string name="room_settings_hide_avatar">Hide avatar</string>
+    <string name="hide_message_preview">Hide message preview</string>
+    <string name="room_details">Room details</string>
+    <string name="message">Message…</string>
+    <string name="edit_room">Edit room</string>
+    <string name="edit_contact">Edit contact</string>
+    <string name="enter_note">Enter note</string>
+    <string name="enter_name">Enter name</string>
 </resources>

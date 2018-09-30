@@ -1026,7 +1026,8 @@ class VectorMessagesAdapterHelper {
         } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
                 || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
-            return display.getTextualDisplay() != null;
+            //return display.getTextualDisplay() != null;
+            return false;
         } else if (event.isCallEvent()) {
             return Event.EVENT_TYPE_CALL_INVITE.equals(eventType);// ||
                     //Event.EVENT_TYPE_CALL_ANSWER.equals(eventType) ||

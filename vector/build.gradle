@@ -122,6 +122,8 @@ android {
         disable 'MissingTranslation'
         disable 'RestrictedApi'
         disable 'ImpliedQuantity'
+        checkReleaseBuilds false
+        abortOnError false
     }
 
     repositories {

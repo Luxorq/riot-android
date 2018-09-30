@@ -1,285 +1,418 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_grey"
-    android:orientation="vertical">
+    android:background="@color/bg_grey">
 
     <RelativeLayout
-        android:id="@+id/member_details_action_bar"
+        android:id="@+id/member_details_activity_main_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/member_details_toolbar"
-            style="@style/VectorToolbarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
-            android:background="@color/bg_grey"
-            android:elevation="2dp">
-
-        </android.support.v7.widget.Toolbar>
+        android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/action_bar_header"
+            android:id="@+id/member_details_action_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/member_details_toolbar"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:visibility="visible">
+            android:background="@color/white">
 
-            <!-- the member avatar-->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/member_details_toolbar"
+                style="@style/VectorToolbarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentTop="true"
+                android:background="@color/bg_grey"
+                android:elevation="2dp">
+
+            </android.support.v7.widget.Toolbar>
+
             <RelativeLayout
-                android:id="@+id/member_avatar_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
-
-                <include
-                    android:id="@+id/memberDetails_roundAvatar"
-                    layout="@layout/vector_large_round_avatar"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp" />
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/member_avatar_badge"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignTop="@id/member_avatar_container"
-                android:layout_alignRight="@id/member_avatar_container"
-                android:layout_marginTop="-0dp"
-                android:layout_marginRight="-7dp"
-                android:src="@drawable/admin_icon"
-                android:visibility="gone" />
-
-            <!-- the member name -->
-            <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/online_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/member_avatar_container"
-                android:layout_marginTop="20dp"
-                android:layout_toLeftOf="@+id/member_details_name"
-                android:visibility="visible"
-                app:srcCompat="@drawable/ic_fiber_manual_record_black_24dp" />
-
-            <TextView
-                android:id="@+id/member_details_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/member_avatar_container"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                tools:text="Online 7m " />
-
-            <!-- the member presence -->
-            <TextView
-                android:id="@+id/member_details_presence"
+                android:id="@+id/action_bar_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/member_details_name"
-                android:layout_marginBottom="16dp"
-                android:ellipsize="end"
-                android:gravity="center_horizontal"
-                android:maxLines="1"
-                android:textColor="@color/grey500"
-                android:textSize="14sp" />
+                android:layout_below="@id/member_details_toolbar"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:paddingBottom="5dp"
+                android:visibility="visible">
+
+                <!-- the member avatar-->
+                <RelativeLayout
+                    android:id="@+id/member_avatar_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true">
+
+                    <include
+                        android:id="@+id/memberDetails_roundAvatar"
+                        layout="@layout/vector_large_round_avatar"
+                        android:layout_width="97dp"
+                        android:layout_height="97dp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/member_avatar_badge"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignTop="@id/member_avatar_container"
+                    android:layout_alignRight="@id/member_avatar_container"
+                    android:layout_marginTop="-0dp"
+                    android:layout_marginRight="-7dp"
+                    android:src="@drawable/admin_icon"
+                    android:visibility="gone" />
+
+                <!-- the member name -->
+                <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
+                <TextView
+                    android:id="@+id/member_details_changed_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/member_avatar_container"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="top"
+                    android:includeFontPadding="false"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:text="loli " />
+
+                <TextView
+                    android:id="@+id/member_details_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/member_details_changed_name"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="top"
+                    android:includeFontPadding="false"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="yurabuloichik" />
+
+                <TextView
+                    android:id="@+id/member_details_topic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/member_details_name"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/grey500"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:text="Topic" />
+
+                <!-- the member presence -->
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/online_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/member_details_topic"
+                    android:layout_marginTop="10dp"
+                    android:layout_toLeftOf="@+id/member_details_presence"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_fiber_manual_record_black_24dp" />
+
+                <TextView
+                    android:id="@+id/member_details_presence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/member_details_topic"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/grey500"
+                    android:textSize="14sp" />
+            </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/parentPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/member_details_action_bar"
-        android:background="@color/white"
-        android:gravity="center_horizontal"
-        android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/audio"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/contact_audio" />
-
-        <TextView
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/audio"
-            android:gravity="center_horizontal"
-            android:text="@string/audio"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/chat"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_toRightOf="@id/audio"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/contact_chat" />
-
-        <TextView
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/chat"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_toRightOf="@id/audio"
-            android:gravity="center_horizontal"
-            android:text="@string/chat"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/video"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_toRightOf="@id/chat"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/contact_video" />
-
-        <TextView
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/video"
-            android:layout_toRightOf="@id/chat"
-            android:gravity="center_horizontal"
-            android:text="@string/video"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/parentPanel"
-        android:layout_marginTop="15dp"
-        android:background="@color/white"
-        android:elevation="2dp"
-        android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/parentPanel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/member_details_action_bar"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/audio"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/contact_audio" />
 
             <TextView
-                android:id="@+id/push_notifications"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/audio"
+                android:gravity="center_horizontal"
+                android:text="@string/audio"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/chat"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@id/audio"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/contact_chat" />
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chat"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@id/audio"
+                android:gravity="center_horizontal"
+                android:text="@string/chat"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/video"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_toRightOf="@id/chat"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/contact_video" />
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/video"
+                android:layout_toRightOf="@id/chat"
+                android:gravity="center_horizontal"
+                android:text="@string/video"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/parentPanel"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:elevation="2dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/push_notifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/contact_mute"
+                    android:drawablePadding="20dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:text="@string/room_settings_mute"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/mute_swtich"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/hide_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/contact_hide_avatar"
+                    android:drawablePadding="20dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:text="@string/room_settings_hide_avatar"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/hide_avatar_swtich"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/hide_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/contact_hide_message"
+                    android:drawablePadding="20dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:text="@string/hide_message_preview"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/hide_history_swtich"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/people"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/contact_mute"
+                android:drawableStart="@drawable/ic_list"
                 android:drawablePadding="20dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:paddingStart="15dp"
                 android:singleLine="true"
-                android:text="@string/room_settings_mute"
+                android:text="@string/room_details"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/mute_swtich"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp" />
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/media_files"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="?attr/selectableItemBackground"
+                android:drawableStart="@drawable/contact_media"
+                android:drawablePadding="20dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:paddingStart="15dp"
+                android:singleLine="true"
+                android:text="@string/room_details_files"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/media_files"
+            android:id="@+id/leave_group"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="?attr/selectableItemBackground"
-            android:drawableStart="@drawable/contact_media"
+            android:layout_below="@id/settings"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/white"
+            android:drawableStart="@drawable/contact_leave"
             android:drawablePadding="20dp"
             android:ellipsize="end"
+            android:foreground="?attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:paddingStart="15dp"
             android:singleLine="true"
-            android:text="@string/room_details_files"
+            android:text="@string/leave"
             android:textColor="@color/black"
             android:textSize="18sp" />
-    </LinearLayout>
 
-    <!-- the member actions list: start new room, Make admin, block.. -->
-    <ExpandableListView
-        android:id="@+id/member_details_actions_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/member_details_action_bar"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="#00000000"
-        android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent"
-        android:visibility="gone" />
+        <!-- the member actions list: start new room, Make admin, block.. -->
+        <ExpandableListView
+            android:id="@+id/member_details_actions_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/member_details_action_bar"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="#00000000"
+            android:dividerHeight="0dp"
+            android:listSelector="@android:color/transparent"
+            android:visibility="gone" />
 
-    <include
-        android:id="@+id/devices_header_view"
-        layout="@layout/adapter_item_vector_recent_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/member_details_action_bar"
-        android:visibility="gone" />
+        <include
+            android:id="@+id/devices_header_view"
+            layout="@layout/adapter_item_vector_recent_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/member_details_action_bar"
+            android:visibility="gone" />
 
-    <!-- devices list view: displayed when ExpandableListView is hidden -->
-    <ListView
-        android:id="@+id/member_details_devices_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/devices_header_view"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="#00000000"
-        android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent"
-        android:visibility="gone" />
+        <!-- devices list view: displayed when ExpandableListView is hidden -->
+        <ListView
+            android:id="@+id/member_details_devices_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/devices_header_view"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="#00000000"
+            android:dividerHeight="0dp"
+            android:listSelector="@android:color/transparent"
+            android:visibility="gone" />
 
-    <!-- progress bar view, displayed when an action in the list view is pressed -->
-    <include
-        android:id="@+id/member_details_list_view_progress_bar"
-        layout="@layout/progress_bar_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <!-- display the avatar in fullscreen -->
-    <RelativeLayout
-        android:id="@+id/member_details_fullscreen_avatar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:elevation="2dp"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/progress_bar_view"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true" />
-
-        <ImageView
-            android:id="@+id/member_details_fullscreen_avatar_image_view"
+        <!-- progress bar view, displayed when an action in the list view is pressed -->
+        <include
+            android:id="@+id/member_details_list_view_progress_bar"
+            layout="@layout/progress_bar_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
-    </RelativeLayout>
+            android:visibility="gone" />
 
-</RelativeLayout>
+        <!-- display the avatar in fullscreen -->
+        <RelativeLayout
+            android:id="@+id/member_details_fullscreen_avatar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:elevation="2dp"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progress_bar_view"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true" />
+
+            <ImageView
+                android:id="@+id/member_details_fullscreen_avatar_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</ScrollView>

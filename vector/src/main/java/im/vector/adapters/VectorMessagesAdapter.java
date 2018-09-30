@@ -1208,7 +1208,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             tsTextView.setVisibility((((position + 1) == getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
         }
-
+        if ((ROW_TYPE_IMAGE == msgType)
+                || (ROW_TYPE_FILE == msgType)
+                || (ROW_TYPE_VIDEO == msgType)
+                || (ROW_TYPE_STICKER == msgType)
+                || (ROW_TYPE_TEXT == msgType)) {
+            TextView senderText = convertView.findViewById(R.id.sender);
+            if (row.getRoomState().getMembers().size() > 2 && !event.sender.equals(mSession.getMyUserId())) {
+                senderText.setText(row.getRoomState().getMember(event.sender).displayname);
+                senderText.setVisibility(View.VISIBLE);
+            } else {
+                senderText.setText("");
+                senderText.setVisibility(View.GONE);
+            }
+        }
         // Sender avatar
         View avatarLayoutView = mHelper.setSenderAvatar(convertView, row, isMergedView);
 

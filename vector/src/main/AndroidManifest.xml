@@ -184,6 +184,7 @@
             android:name=".activity.VectorRoomDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
+            android:theme="@style/MemberActivityTheme"
             android:parentActivityName=".activity.VectorRoomActivity"
             android:windowSoftInputMode="adjustResize">
             <meta-data
@@ -210,6 +211,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorHomeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.EditRoomActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/edit_contact"
+            android:parentActivityName=".activity.VectorHomeActivity"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".activity.VectorMemberDetailsActivity"

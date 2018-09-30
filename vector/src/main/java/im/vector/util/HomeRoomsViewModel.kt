@@ -52,6 +52,10 @@ class HomeRoomsViewModel(private val session: MXSession) {
         fun getOtherRoomsWithFavorites(): List<Room> {
             return otherRooms + favourites.filter { !it.isDirect }
         }
+
+        fun getDirectChatsWithRooms(): List<Room> {
+            return directChats + otherRooms.filter { !it.isDirect }
+        }
     }
 
     /**

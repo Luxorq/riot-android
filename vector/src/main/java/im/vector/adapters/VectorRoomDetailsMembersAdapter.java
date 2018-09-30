@@ -156,6 +156,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         final ImageView mMemberAvatarBadgeImageView;
         final TextView mMemberNameTextView;
         final TextView mMemberStatusTextView;
+        final View mOnline;
         final View mHiddenListActionsView;
         final View mDeleteActionsView;
         final RelativeLayout mSwipeCellLayout;
@@ -166,6 +167,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             mMemberAvatarBadgeImageView = aParentView.findViewById(R.id.filtered_list_avatar_badge);
             mMemberNameTextView = aParentView.findViewById(R.id.filtered_list_name);
             mMemberStatusTextView = aParentView.findViewById(R.id.filtered_list_status);
+            mOnline = aParentView.findViewById(R.id.online_status);
             mHiddenListActionsView = aParentView.findViewById(R.id.filtered_list_actions);
             mSwipeCellLayout = aParentView.findViewById(R.id.filtered_list_cell);
             mMultipleSelectionCheckBox = aParentView.findViewById(R.id.filtered_list_checkbox);
@@ -757,7 +759,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             if (null != (powerLevels = mRoom.getState().getPowerLevels())) {
                 if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
                     viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                    viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
+                    viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.contact_admin);
                 } else if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
                     viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
                     viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
@@ -766,6 +768,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
         // 3 - display member status
         viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId, null));
+        if (viewHolder.mMemberStatusTextView.getText().toString().contains("Online")){
+            viewHolder.mOnline.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.mOnline.setVisibility(View.GONE);
+        }
 
         // add "remove member from room" action
         viewHolder.mDeleteActionsView.setOnClickListener(new View.OnClickListener() {
