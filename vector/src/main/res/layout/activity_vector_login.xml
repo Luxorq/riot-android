@@ -166,7 +166,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="@color/primary"
-                        android:nextFocusDown="@+id/login_password"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                         <android.support.v7.widget.AppCompatEditText
@@ -176,6 +175,30 @@
                             android:hint="@string/auth_user_name_placeholder"
                             android:maxLines="1"
                             android:nextFocusDown="@+id/login_password"
+                            android:singleLine="true"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"/>
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="15dp"
+                        android:textColorHint="@color/primary"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="@color/black"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/login_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/auth_password_placeholder"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
                             android:singleLine="true"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
@@ -212,29 +235,6 @@
                             tools:text="0600000000" />
                     </LinearLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="15dp"
-                        android:textColorHint="@color/primary"
-                        app:passwordToggleEnabled="true"
-                        app:passwordToggleTint="@color/black"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/login_password"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/auth_password_placeholder"
-                            android:inputType="textPassword"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:imeOptions="actionDone"
-                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"/>
-                    </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout

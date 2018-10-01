@@ -1942,9 +1942,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 int itemId = mBottomNavigationView.getMenu().getItem(menuIndex).getItemId();
                 BottomNavigationItemView navigationItemView = mBottomNavigationView.findViewById(itemId);
 
-
-                navigationItemView.setShiftingMode(false);
-
                 Field marginField = navigationItemView.getClass().getDeclaredField("mDefaultMargin");
                 marginField.setAccessible(true);
                 marginField.setInt(navigationItemView, marginField.getInt(navigationItemView) + (largeTextHeight / 2));
