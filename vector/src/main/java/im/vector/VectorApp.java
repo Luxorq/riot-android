@@ -803,28 +803,28 @@ public class VectorApp extends MultiDexApplication {
      * @return the application locale
      */
     public static Locale getApplicationLocale() {
-        Context context = VectorApp.getInstance();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Locale locale;
+//        Context context = VectorApp.getInstance();
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+//        Locale locale;
+//
+//        if (!preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
+//            locale = Locale.getDefault();
+//
+//            // detect if the default language is used
+//            String defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resources_country_code);
+//            if (TextUtils.equals(defaultStringValue, getString(context, locale, R.string.resources_country_code))) {
+//                locale = mApplicationDefaultLanguage;
+//            }
+//
+//            saveApplicationLocale(locale);
+//        } else {
+//            locale = new Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
+//                    preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
+//                    preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
+//            );
+//        }
 
-        if (!preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
-            locale = Locale.getDefault();
-
-            // detect if the default language is used
-            String defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resources_country_code);
-            if (TextUtils.equals(defaultStringValue, getString(context, locale, R.string.resources_country_code))) {
-                locale = mApplicationDefaultLanguage;
-            }
-
-            saveApplicationLocale(locale);
-        } else {
-            locale = new Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
-                    preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
-                    preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
-            );
-        }
-
-        return locale;
+        return Locale.getDefault();
     }
 
     /**
