@@ -115,6 +115,7 @@ import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -166,6 +167,8 @@ import io.reactivex.internal.functions.Functions;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import kotlin.Pair;
+
+import static im.vector.activity.VectorHomeActivity.checkUnknownDevices;
 
 /**
  * Displays a single room with messages.
@@ -783,6 +786,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
             });
         }
+
+        checkUnknownDevices(Arrays.asList(mRoom), mSession, this);
 
         mEditText.setAddColonOnFirstItem(true);
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -4272,8 +4277,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     private void press2Record() {
-        mTvRecordingHint.setText(R.string.voice_msg_input_hint_speaking);
-
         boolean isPermissionsGranted
                 = mPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 && mPermissions.isGranted(Manifest.permission.RECORD_AUDIO);

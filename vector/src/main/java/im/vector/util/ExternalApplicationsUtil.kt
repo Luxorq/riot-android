@@ -28,7 +28,6 @@ import android.provider.Browser
 import android.provider.MediaStore
 import androidx.core.widget.toast
 import im.vector.R
-import im.vector.activity.VoiceActivity
 import org.matrix.androidsdk.util.Log
 import java.io.File
 import java.text.SimpleDateFormat
@@ -66,11 +65,10 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
  * Open sound recorder external application
  */
 fun openSoundRecorder(activity: Activity, requestCode: Int) {
-    val recordSoundIntent = Intent(activity, VoiceActivity::class.java)
-//    val recordSoundIntent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
-//
-//    // Create chooser
-//    val chooserIntent = Intent.createChooser(recordSoundIntent, activity.getString(R.string.go_on_with))
+    val recordSoundIntent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
+
+    // Create chooser
+    val chooserIntent = Intent.createChooser(recordSoundIntent, activity.getString(R.string.go_on_with))
 
     try {
         activity.startActivityForResult(recordSoundIntent, requestCode)

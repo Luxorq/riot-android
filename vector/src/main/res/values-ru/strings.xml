@@ -43,7 +43,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
     <string name="send_anyway">Отправить все равно</string>
     <string name="or">или</string>
-    <string name="invite">Приглашение</string>
+    <string name="invite">Пригласить</string>
 
     <!-- actions -->
     <string name="action_sign_out">Выйти из учётной записи</string>
@@ -65,13 +65,17 @@
     <string name="dialog_title_warning">Предупреждение</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Начало</string>
+    <string name="bottom_action_home">Комнаты</string>
     <string name="bottom_action_favourites">Избранные</string>
     <string name="bottom_action_people">Люди</string>
     <string name="bottom_action_rooms">Комнаты</string>
+    <string name="bottom_action_contacts">Мои контакты</string>
+    <string name="bottom_action_calls">Звонки</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Поиск комнат</string>
+    <string name="home_filter_placeholder_calls">Поиск звонков</string>
+    <string name="home_filter_placeholder_contacts">Поиск контактов</string>
     <string name="home_filter_placeholder_favorites">Поиск избранных</string>
     <string name="home_filter_placeholder_people">Поиск людей</string>
     <string name="home_filter_placeholder_rooms">Поиск комнат</string>
@@ -85,7 +89,7 @@
     <string name="local_address_book_header">Локальные контакты</string>
     <string name="matrix_only_filter">Только Matrix контакты</string>
     <string name="no_conversation_placeholder">Нет диалогов</string>
-    <string name="no_contact_access_placeholder">Вы не дали доступ Riot к внутренним контактам</string>
+    <string name="no_contact_access_placeholder">Вы не дали доступ KEDR к внутренним контактам</string>
     <string name="no_result_placeholder">Нет результатов</string>
 
     <!-- Rooms fragment -->
@@ -142,7 +146,7 @@
     <string name="auth_user_id_placeholder">Email или логин</string>
     <string name="auth_password_placeholder">Пароль</string>
     <string name="auth_new_password_placeholder">Новый пароль</string>
-    <string name="auth_user_name_placeholder">Логин</string>
+    <string name="auth_user_name_placeholder">Имя пользователя</string>
     <string name="auth_add_email_message">Добавьте email к вашему аккаунту, чтобы другие пользователи могли найти вас, а также, чтобы иметь возможность сбросить пароль.</string>
     <string name="auth_add_phone_message">"Добавьте телефон к вашему аккаунту, чтобы другие пользователи могли найти вас."</string>
     <string name="auth_add_email_phone_message">"Добавьте email и/или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.\n\nEmail также позволит вам при необходимости восстановить пароль."</string>
@@ -173,7 +177,7 @@ Email также позволит вам при необходимости во�
     <string name="auth_threepid_warning_message">Регистрация одновременно по email и номеру телефона пока не поддерживается. Только номер телефона будет связан с аккаунтом.
 
 Вы можете добавить свой email в настройках профиля.</string>
-    <string name="auth_recaptcha_message">Проверка не являетесь ли вы роботом</string>
+    <string name="auth_recaptcha_message">Проверка, не являетесь ли вы роботом</string>
     <string name="auth_username_in_use">Логин уже используется</string>
     <string name="auth_home_server">Сервер:</string>
     <string name="auth_identity_server">Сервер идентификации:</string>
@@ -254,21 +258,21 @@ Email также позволит вам при необходимости во�
     <string name="media_picker_cannot_record_video">Не удалось записать видео"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">Riot Информация</string>
-    <string name="permissions_rationale_msg_storage">Riot необходимы разрешения на доступ к вашим фото и видео для сохранения и отправки сложений.\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность отправлять файлы.</string>
-    <string name="permissions_rationale_msg_camera">Riot необходимы разрешения на доступ к вашей камере, чтобы делать фото и совершать видеозвонки.</string>
+    <string name="permissions_rationale_popup_title">KEDR Информация</string>
+    <string name="permissions_rationale_msg_storage">KEDR необходимы разрешения на доступ к вашим фото и видео для сохранения и отправки сложений.\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность отправлять файлы.</string>
+    <string name="permissions_rationale_msg_camera">KEDR необходимы разрешения на доступ к вашей камере, чтобы делать фото и совершать видеозвонки.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
+    <string name="permissions_rationale_msg_record_audio">KEDR необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot необходимы разрешения на доступ к камере и микрофону для видеовызовов.
+    <string name="permissions_rationale_msg_camera_and_audio">KEDR необходимы разрешения на доступ к камере и микрофону для видеовызовов.
 
 Пожалуйста дайте разрешение в следующем окне для звонка.</string>
-    <string name="permissions_rationale_msg_contacts">Riot необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
+    <string name="permissions_rationale_msg_contacts">KEDR необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
 
 Пожалуйста разрешите доступ в следующем окне, чтобы Ваши контакты были доступны в приложении.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
+    <string name="permissions_msg_contacts_warning_other_androids">KEDR необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
 
-Разрешить Riot доступ к контактам?</string>
+Разрешить KEDR доступ к контактам?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Извините.. Действие не выполнено из-зо недостаточных разрешений</string>
 
@@ -382,7 +386,7 @@ Email также позволит вам при необходимости во�
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
-    <string name="room_details_title">Подробности комнаты</string>
+    <string name="room_details_title">Комната</string>
     <string name="room_details_people">Люди</string>
     <string name="room_details_files">Файлы</string>
     <string name="room_details_settings">Настройки</string>
@@ -523,10 +527,10 @@ Email также позволит вам при необходимости во�
     <string name="account_email_not_found_error">Не удалось отправить сообщение электронной почты: этот адрес email не был найден</string>
     <string name="account_phone_number_already_used_error">Этот номер телефона уже используется</string>
 
-    <string name="settings_change_password">Смена пароля</string>
-    <string name="settings_old_password">старый пароль</string>
-    <string name="settings_new_password">новый пароль</string>
-    <string name="settings_confirm_password">подтверждение пароля</string>
+    <string name="settings_change_password">Изменить пароль</string>
+    <string name="settings_old_password">Старый пароль</string>
+    <string name="settings_new_password">Новый пароль</string>
+    <string name="settings_confirm_password">Повторить пароль</string>
     <string name="settings_fail_to_update_password">Ошибка смены пароля</string>
     <string name="settings_password_updated">Пароль был обновлен</string>
     <string name="settings_unignore_user">Отображать сообщения пользователя %s?
@@ -692,7 +696,7 @@ Email также позволит вам при необходимости во�
 В будущем данный процесс будет улучшен."</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
 
-    <string name="e2e_enabling_on_app_update">Riot теперь поддерживает сквозное шифрование, но вам нужно снова войти в систему, чтобы включить его.
+    <string name="e2e_enabling_on_app_update">KEDR теперь поддерживает сквозное шифрование, но вам нужно снова войти в систему, чтобы включить его.
 
 Вы можете сделать это сейчас или позже из настроек приложения.</string>
 
@@ -797,7 +801,7 @@ Email также позволит вам при необходимости во�
 
     <string name="settings_analytics">Аналитика</string>
     <string name="settings_opt_out_of_analytics">Отказ от аналитики</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot собирает анонимную аналитику, чтобы сделать приложение еще лучше.</string>
+    <string name="settings_opt_out_of_analytics_summary">KEDR собирает анонимную аналитику, чтобы сделать приложение еще лучше.</string>
 
 
     <string name="settings_labs_native_camera">Использовать встроенную камеру</string>
@@ -962,7 +966,7 @@ Email также позволит вам при необходимости во�
 
     <string name="room_settings_no_flair">Эта комната не показывает настроение для сообществ</string>
     <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
-    <string name="settings_notification_privacy_warning">Riot.im работает в фоновом режиме для сохранения приватности ваших уведомлений. Вы можете изменить этот параметр, чтобы уменьшить потребление заряда батареи.</string>
+    <string name="settings_notification_privacy_warning">KEDR.im работает в фоновом режиме для сохранения приватности ваших уведомлений. Вы можете изменить этот параметр, чтобы уменьшить потребление заряда батареи.</string>
     <string name="settings_notification_privacy_normal">Нормальный</string>
     <string name="settings_notification_privacy_power_saving">Варианты энергосбережения</string>
     <string name="settings_notification_privacy_need_permission">Приложение нуждается в разрешении на работу в фоновом режиме</string>
@@ -973,7 +977,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_notification_privacy_message_content_not_shown">• Уведомления <b>не будут показывать содержимое сообщения</b></string>
 
     <string name="startup_notification_privacy_title">Конфиденциальность уведомлений</string>
-    <string name="startup_notification_privacy_message">Riot может работать в фоновом режиме для управления конфиденциальностью и безопасностью ваших уведомлений (это может повлиять на время работы от батареи).</string>
+    <string name="startup_notification_privacy_message">KEDR может работать в фоновом режиме для управления конфиденциальностью и безопасностью ваших уведомлений (это может повлиять на время работы от батареи).</string>
     <string name="startup_notification_privacy_button_grant">Предоставить разрешение</string>
     <string name="startup_notification_privacy_button_other">Выбрать другой вариант</string>
 
@@ -991,8 +995,8 @@ Email также позволит вам при необходимости во�
     <string name="settings_deactivate_my_account">Деактивировать мой аккаунт</string>
 
     <string name="settings_opt_in_of_analytics">Отправка аналитических данных</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot собирает анонимную аналитику для улучшения приложения.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Пожалуйста, включите аналитику, чтобы помочь нам улучшить Riot.</string>
+    <string name="settings_opt_in_of_analytics_summary">KEDR собирает анонимную аналитику для улучшения приложения.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Пожалуйста, включите аналитику, чтобы помочь нам улучшить KEDR.</string>
     <string name="settings_opt_in_of_analytics_ok">Да, я хочу помочь!</string>
 
     <string name="widget_integration_missing_parameter">Обязательный параметр отсутствует.</string>
@@ -1020,7 +1024,7 @@ Email также позволит вам при необходимости во�
     <string name="e2e_re_request_encryption_key_sent">Отправлен запрос ключа.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Запрос отправлен</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Запустите Riot на другом устройстве, которое может расшифровать сообщение, для отправки ключа на это устройство.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Запустите KEDR на другом устройстве, которое может расшифровать сообщение, для отправки ключа на это устройство.</string>
 
     <string name="lock_screen_hint">Введите здесь…</string>
 
@@ -1065,27 +1069,27 @@ Email также позволит вам при необходимости во�
 
     <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
-        <item quantity="few">%ds</item>
-        <item quantity="many">%ds</item>
+        <item quantity="one">1сек.</item>
+        <item quantity="few">%dсек.</item>
+        <item quantity="many">%dсек.</item>
         <item quantity="other"/>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
-        <item quantity="few">%dm</item>
-        <item quantity="many">%dm</item>
+        <item quantity="one">1мин.</item>
+        <item quantity="few">%dмин.</item>
+        <item quantity="many">%dмин.</item>
         <item quantity="other"/>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1h</item>
-        <item quantity="few">%dh</item>
-        <item quantity="many">%dh</item>
+        <item quantity="one">1ч.</item>
+        <item quantity="few">%dч.</item>
+        <item quantity="many">%dч.</item>
         <item quantity="other"/>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
-        <item quantity="few">%dd</item>
-        <item quantity="many">%dd</item>
+        <item quantity="one">1д.</item>
+        <item quantity="few">%dд.</item>
+        <item quantity="many">%dд.</item>
         <item quantity="other"/>
     </plurals>
 
@@ -1135,25 +1139,25 @@ Email также позволит вам при необходимости во�
     <string name="resource_limit_hard_contact">"Please %s to continue using this service."</string>
 
     <string name="invite_contacts">Пригласить друзей</string>
-    <string name="auth_registration">Регисnрация</string>
+    <string name="auth_registration">Регистрация</string>
     <string name="encrypted_messenger">Безопасный чат</string>
     <string name="register_label">Полностью безопасный чат на базе шифрованных сообщений</string>
     <string name="already_registered">Уже зарегистрированы?&#160;</string>
     <string name="login_here">Вход тут</string>
     <string name="no_account">Не зарегистрированы?&#160;</string>
     <string name="register_here">Регистрация тут</string>
-    <string name="push_notifications">Push notifications</string>
-    <string name="invite_text">I use strong security chat KEDR for Android. You can download it with https://kedr.io\nMy username in KEDR is: %s</string>
-    <string name="invite_direct">Invite friend sending him download link to KEDR and my Username to start chat.</string>
-    <string name="audio">Audio</string>
-    <string name="video">Video</string>
-    <string name="chat">Chat</string>
+    <string name="push_notifications">Уведомления</string>
+    <string name="invite_text">Я использую безопасный и защищенный чат KEDR для Android. Ты можешь скачать его по ссылке https://kedr.io\nМое имя пользователя в KEDR: %s</string>
+    <string name="invite_direct">Отправьте ссылку на KEDR c Вашим именем пользователя знакомому, чтобы Вы могли пообщаться с ним</string>
+    <string name="audio">Аудио</string>
+    <string name="video">Видео</string>
+    <string name="chat">Чат</string>
     <string name="contact">Contact</string>
-    <string name="invite_sent">Invite sent</string>
-    <string name="invite_wait">waiting for acceptance and encryption keys exchange</string>
-    <string name="outgoing_call">Outgoing call</string>
-    <string name="room_empty">Room is empty. Leaving…</string>
-    <string name="no_participants">No participants</string>
+    <string name="invite_sent">Приглашение отправлено</string>
+    <string name="invite_wait">ожидаем подтверждения приглашения</string>
+    <string name="outgoing_call">Исходящий звонок</string>
+    <string name="room_empty">Комната пуста. Покидаем…</string>
+    <string name="no_participants">Необходим минимум 1 участник</string>
     <string name="slide_one_title">Безопасность</string>
     <string name="slide_one_content">Чат, звонки, голосовые сообщения и отправка файлов по самым защищщенным протоколам шифрования и безопасности</string>
     <string name="slide_two_title">Анонимность</string>
@@ -1163,21 +1167,23 @@ Email также позволит вам при необходимости во�
     <string name="slide_four_title">Защита</string>
     <string name="slide_four_content">Будьте спокойны за безопасность, общаясь с коллегами и друзьями посредством чата или звонком</string>
 
-    <string name="call_invite">Cancelled call</string>
-    <string name="call_missed">Missed call</string>
-    <string name="call_outbound">Outbound call (%s)</string>
-    <string name="call_incoming">Incoming call (%s)</string>
+    <string name="call_invite">Отмененный вызов</string>
+    <string name="call_missed">Пропущенный вызов</string>
+    <string name="call_outbound">Исходяший вызов (%s)</string>
+    <string name="call_incoming">Входящий вызов (%s)</string>
     <string name="key_intro">intro_key</string>
 
-    <string name="voice_msg_input_hint_speaking">Saying …</string>
-    <string name="voice_msg_input_hint_time_limited_formatter" formatted="false">%d s left</string>
-    <string name="voice_msg_input">%d s</string>
-    <string name="room_settings_hide_avatar">Hide avatar</string>
-    <string name="hide_message_preview">Hide message preview</string>
-    <string name="room_details">Room details</string>
-    <string name="message">Message…</string>
-    <string name="edit_room">Edit room</string>
-    <string name="edit_contact">Edit contact</string>
-    <string name="enter_note">Enter note</string>
-    <string name="enter_name">Enter name</string>
+    <string name="voice_msg_input_hint_time_limited_formatter" formatted="false">%d сек. осталось</string>
+    <string name="voice_msg_input">%d сек.</string>
+    <string name="room_settings_hide_avatar">Скрыть фото контакта</string>
+    <string name="hide_message_preview">Скрыть предпросмотр сообщения</string>
+    <string name="room_details">Комната</string>
+    <string name="message">Сообщение…</string>
+    <string name="edit_room">Редактировать комнату</string>
+    <string name="edit_contact">Редактировать контакт</string>
+    <string name="enter_note">Комментарий</string>
+    <string name="enter_name">Название</string>
+    <string name="collapse">свернуть</string>
+    <string name="expand">развернуть</string>
+    <string name="encrypted_key">Ключ шифрования</string>
 </resources>

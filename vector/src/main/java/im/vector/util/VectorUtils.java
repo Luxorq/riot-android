@@ -914,6 +914,14 @@ public class VectorUtils {
                                              final MXSession session,
                                              final String userId,
                                              final ApiCallback<Void> refreshCallback) {
+        return getUserOnlineStatus(context, session, userId, refreshCallback, null);
+    }
+
+    public static String getUserOnlineStatus(final Context context,
+                                             final MXSession session,
+                                             final String userId,
+                                             final ApiCallback<Void> refreshCallback,
+                                             final View onlineView) {
         // sanity checks
         if ((null == session) || (null == userId)) {
             return null;
@@ -980,8 +988,10 @@ public class VectorUtils {
         }
 
         String presenceText = null;
+        if (onlineView != null) onlineView.setVisibility(View.GONE);
         if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
             presenceText = context.getString(R.string.room_participants_online);
+            if (onlineView != null) onlineView.setVisibility(View.VISIBLE);
         } else if (TextUtils.equals(user.presence, User.PRESENCE_UNAVAILABLE)) {
             presenceText = context.getString(R.string.room_participants_idle);
         } else if (TextUtils.equals(user.presence, User.PRESENCE_OFFLINE) || (null == user.presence)) {

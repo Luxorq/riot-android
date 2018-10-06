@@ -258,7 +258,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         final boolean pinMissedNotifications = PreferencesManager.pinMissedNotifications(getActivity());
         final boolean pinUnreadMessages = PreferencesManager.pinUnreadMessages(getActivity());
         final Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
-        sortAndDisplay(result.getFavourites(), notificationComparator, mFavouritesSection);
+        //sortAndDisplay(result.getFavourites(), notificationComparator, mFavouritesSection);
         sortAndDisplay(result.getDirectChatsWithRooms(), notificationComparator, mDirectChatsSection);
         sortAndDisplay(result.getLowPriorities(), notificationComparator, mLowPrioritySection);
         //sortAndDisplay(result.getOtherRooms(), notificationComparator, mRoomsSection);

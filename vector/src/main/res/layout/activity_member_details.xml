@@ -232,6 +232,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="15dp"
                     android:singleLine="true"
+                    android:layout_toLeftOf="@+id/mute_swtich"
                     android:text="@string/room_settings_mute"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -261,6 +262,7 @@
                     android:paddingStart="15dp"
                     android:singleLine="true"
                     android:text="@string/room_settings_hide_avatar"
+                    android:layout_toLeftOf="@+id/hide_avatar_swtich"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -289,6 +291,7 @@
                     android:paddingStart="15dp"
                     android:singleLine="true"
                     android:text="@string/hide_message_preview"
+                    android:layout_toLeftOf="@+id/hide_history_swtich"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -330,6 +333,38 @@
                 android:text="@string/room_details_files"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/encryption"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/ic_key"
+                    android:drawablePadding="20dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:singleLine="true"
+                    android:text="@string/encrypted_key"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/encryption_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="20dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="60dp"
+                    android:textColor="@color/grey700"
+                    android:layout_below="@id/encryption"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
         </LinearLayout>
 
         <TextView
@@ -348,7 +383,7 @@
             android:paddingStart="15dp"
             android:singleLine="true"
             android:text="@string/leave"
-            android:textColor="@color/black"
+            android:textColor="@color/grey800"
             android:textSize="18sp" />
 
         <!-- the member actions list: start new room, Make admin, block.. -->

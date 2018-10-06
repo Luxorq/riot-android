@@ -21,6 +21,7 @@ package im.vector.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -78,6 +79,8 @@ import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.crypto.MXCrypto;
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.MyUser;
@@ -92,6 +95,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
@@ -125,6 +129,7 @@ import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.SettingsFragment;
+import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.receiver.VectorUniversalLinkReceiver;
@@ -661,8 +666,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             } else {
                 // by default, use GCM and low detail notifications
                 gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL, null);
-
-                new AlertDialog.Builder(this)
+                SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
+                        RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
+                /*new AlertDialog.Builder(this)
                         .setCancelable(false)
                         .setTitle(R.string.startup_notification_privacy_title)
                         .setMessage(R.string.startup_notification_privacy_message)
@@ -685,7 +691,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                 startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
                             }
                         })
-                        .show();
+                        .show();*/
             }
         }
     }
@@ -2174,6 +2180,42 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if ((null != fragment) && (fragment instanceof AbsHomeFragment)) {
             ((AbsHomeFragment) fragment).onRoomResultUpdated(result);
         }
+        checkUnknownDevices(result.getDirectChatsWithRooms(), mSession, this);
+    }
+
+    public static void checkUnknownDevices(final List<Room> rooms,
+                                           final MXSession session,
+                                           final VectorAppCompatActivity activity) {
+        ArrayList<String> userIds = new ArrayList<>();
+        for (Room room : rooms) {
+            for (RoomMember roomMember : room.getMembers()) {
+                userIds.add(roomMember.getUserId());
+            }
+        }
+        session.getCrypto().checkUnknownDevices(userIds, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+
+            }
+
+            @Override
+            public void onMatrixError(MatrixError matrixError) {
+                MXCryptoError error = (MXCryptoError) matrixError;
+                CommonActivityUtils.displayUnknownDevicesDialog(session,
+                        activity,
+                        (MXUsersDevicesMap<MXDeviceInfo>) error.mExceptionData, null);
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+
+            }
+        });
     }
 
     /**

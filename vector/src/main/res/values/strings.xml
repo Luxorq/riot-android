@@ -1113,4 +1113,7 @@
     <string name="edit_contact">Edit contact</string>
     <string name="enter_note">Enter note</string>
     <string name="enter_name">Enter name</string>
+    <string name="collapse">collapse</string>
+    <string name="expand">expand</string>
+    <string name="encrypted_key">Encryption key</string>
 </resources>

@@ -215,7 +215,6 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         vRoomName.setTypeface(null, (0 != unreadMsgCount) ? Typeface.NORMAL : Typeface.NORMAL);
 
         VectorUtils.loadRoomAvatar(context, session, vRoomAvatar, room);
-
         // get last message to be displayed
         if (vRoomLastMessage != null) {
             boolean hideMessage = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance()).getBoolean("message_" + room.getRoomId(), false);
@@ -388,11 +387,9 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             vRoomLastMessage.setText(VectorUtils.getUserOnlineStatus(context, session, userId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    vRoomLastMessage.setText(VectorUtils.getUserOnlineStatus(context, session, finalUserId, null));
-                    vImg.setVisibility(vRoomLastMessage.getText().toString().startsWith("Online") ? View.VISIBLE : View.GONE);
+                    vRoomLastMessage.setText(VectorUtils.getUserOnlineStatus(context, session, finalUserId, null, vImg));
                 }
-            }));
-            vImg.setVisibility(vRoomLastMessage.getText().toString().startsWith("Online") ? View.VISIBLE : View.GONE);
+            }, vImg));
         }
 
         if (mDirectChatIndicator != null) {

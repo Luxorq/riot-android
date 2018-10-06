@@ -1270,7 +1270,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 public void onClick(View v) {
                     PowerLevels powerLevels = mRoom.getState().getPowerLevels();
                     if (null != powerLevels) {
-                        boolean canUpdateAvatar ;
+                        boolean canUpdateAvatar;
                         int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
                         canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
                         if (mRoom != null && mRoom.getMembers().size() > 2 && canUpdateAvatar) {
@@ -1382,6 +1382,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     launchRoomDetails(0);
                 }
             });
+            TextView key = findViewById(R.id.encryption_key);
+            key.setText(createKey(getRoom()));
             findViewById(R.id.leave_group).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1406,6 +1408,22 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 item.setVisible(canUpdateName && canUpdateTopic);
             }
         }
+    }
+
+    private String createKey(Room room) {
+//        String key = mSession..getCrypto().exportRoomKeys();
+//
+//        NSInteger parts = hexString.length / 4 + 1;
+//        for (NSInteger i = parts - 1; i > 0; i--) {
+//            NSInteger position = i * 4;
+//            if (position >= hexString.length || position <= 0) {
+//                continue;
+//            }
+//                        [hexString insertString:@ " " atIndex:
+//            position];
+//        }
+//        mutableString = hexString;
+        return "key";
     }
 
     private void leaveGroup() {
@@ -1753,11 +1771,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(this, mSession, mMemberId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(VectorMemberDetailsActivity.this, mSession, mMemberId, null));
-                    findViewById(R.id.online_status).setVisibility(mPresenceTextView.getText().toString().startsWith("Online") ? View.VISIBLE : View.GONE);
+                    mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(VectorMemberDetailsActivity.this, mSession, mMemberId, null, findViewById(R.id.online_status)));
                 }
-            }));
-            findViewById(R.id.online_status).setVisibility(mPresenceTextView.getText().toString().startsWith("Online") ? View.VISIBLE : View.GONE);
+            }, findViewById(R.id.online_status)));
         }
     }
 

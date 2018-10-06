@@ -767,13 +767,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             }
         }
         // 3 - display member status
-        viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId, null));
-        if (viewHolder.mMemberStatusTextView.getText().toString().contains("Online")){
-            viewHolder.mOnline.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.mOnline.setVisibility(View.GONE);
-        }
-
+        viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId, null, viewHolder.mOnline));
         // add "remove member from room" action
         viewHolder.mDeleteActionsView.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")

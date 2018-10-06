@@ -1102,7 +1102,7 @@
     <string name="call_incoming">Ankommender Anruf (%s)</string>
     <string name="key_intro">intro_key</string>
 
-    <string name="voice_msg_input_hint_speaking">Sagt …</string>
+    <string name="voice_msg_input_hint_speaking">Sagt…</string>
     <string name="voice_msg_input_hint_time_limited_formatter" formatted="false">%d s hat verlassen</string>
     <string name="voice_msg_input">%d s</string>
     <string name="room_settings_hide_avatar">Bild ausblenden</string>
@@ -1113,4 +1113,8 @@
     <string name="edit_contact">Kontakt bearbeiten</string>
     <string name="enter_note">Notiz eingeben</string>
     <string name="enter_name">Name eingeben</string>
+    <string name="collapse">zusammenbrechen</string>
+    <string name="expand">erweitern</string>
+
+    <string name="encrypted_key">Verschlüsselung</string>
 </resources>

@@ -304,7 +304,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_file,
                 R.layout.adapter_item_vector_message_merge,
                 R.layout.adapter_item_vector_message_image_video,
-                R.layout.adapter_item_vector_message_emoji,
+                R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_code,
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_hidden_message,
@@ -1969,7 +1969,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             summaryTextView.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
             avatarsLayout.setVisibility(event.isExpanded() ? View.GONE : View.VISIBLE);
 
-            headerTextView.setText(event.isExpanded() ? "collapse" : "expand");
+            headerTextView.setText(event.isExpanded() ? R.string.collapse : R.string.expand);
 
             if (!event.isExpanded()) {
                 avatarsLayout.setVisibility(View.VISIBLE);
