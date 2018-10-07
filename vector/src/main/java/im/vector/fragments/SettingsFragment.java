@@ -68,7 +68,8 @@ public class SettingsFragment extends AbsHomeFragment {
         return new SettingsFragment();
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -129,7 +130,7 @@ public class SettingsFragment extends AbsHomeFragment {
         mAvatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSION_CAMERA, getActivity(), PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
+                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO, getActivity(), PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
                     Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
                     intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
                     startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
@@ -202,9 +203,8 @@ public class SettingsFragment extends AbsHomeFragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case VectorUtils.TAKE_IMAGE:
@@ -325,7 +325,7 @@ public class SettingsFragment extends AbsHomeFragment {
         }
     }
 
-    public static void inviteContacts(Fragment fragment, MyUser myUser){
+    public static void inviteContacts(Fragment fragment, MyUser myUser) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, fragment.getString(R.string.invite_text, myUser.displayname));
@@ -333,7 +333,7 @@ public class SettingsFragment extends AbsHomeFragment {
         fragment.startActivity(sendIntent);
     }
 
-    public static void inviteContacts(Activity activity, MyUser myUser){
+    public static void inviteContacts(Activity activity, MyUser myUser) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.invite_text, myUser.displayname));

@@ -926,7 +926,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         final TextView nameTextView = convertView.findViewById(R.id.filtered_list_name);
         final TextView statusTextView = convertView.findViewById(R.id.filtered_list_status);
         final ImageView matrixUserBadge = convertView.findViewById(R.id.filtered_list_matrix_user);
-
+        final View onlineView = convertView.findViewById(R.id.online_status);
         // reported by GA
         // it should never happen but it happened...
         if ((null == thumbView) || (null == nameTextView) || (null == statusTextView) || (null == matrixUserBadge)) {
@@ -963,7 +963,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                     public void onSuccess(Void info) {
                         refresh(mFirstEntry, null);
                     }
-                });
+                }, onlineView);
             }
         }
 

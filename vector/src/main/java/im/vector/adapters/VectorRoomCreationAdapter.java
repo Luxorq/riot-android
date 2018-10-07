@@ -149,6 +149,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         final TextView nameTextView = convertView.findViewById(R.id.filtered_list_name);
         final TextView statusTextView = convertView.findViewById(R.id.filtered_list_status);
         final ImageView matrixUserBadge = convertView.findViewById(R.id.filtered_list_matrix_user);
+        final View online = convertView.findViewById(R.id.online_status);
 
         // display the avatar
         participant.displayAvatar(mSession, thumbView);
@@ -177,7 +178,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
                 public void onSuccess(Void info) {
                     notifyDataSetChanged();
                 }
-            });
+            }, online);
         }
 
         // the contact defines a matrix user but there is no way to get more information (presence, avatar)

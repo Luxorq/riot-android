@@ -1367,7 +1367,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             findViewById(R.id.chat).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    performItemAction(ITEM_ACTION_START_CHAT);
+                    selectRoom(mRoom);
                 }
             });
             findViewById(R.id.media_files).setOnClickListener(new View.OnClickListener() {
@@ -1383,7 +1383,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
             TextView key = findViewById(R.id.encryption_key);
-            key.setText(createKey(getRoom()));
+            //key.setText(createKey(getRoom()));
             findViewById(R.id.leave_group).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

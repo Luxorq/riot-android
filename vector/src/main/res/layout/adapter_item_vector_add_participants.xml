@@ -91,7 +91,7 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/contact_admin"
             android:layout_margin="6dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
         <TextView
