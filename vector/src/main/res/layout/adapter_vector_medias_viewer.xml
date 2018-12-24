@@ -1,51 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-    <WebView android:id="@+id/media_slider_image_webview"
+    <WebView
+        android:id="@+id/media_slider_image_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000"/>
+        android:background="#000" />
 
     <RelativeLayout
         android:id="@+id/media_slider_videolayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <VideoView android:id="@+id/media_slider_videoview"
-            android:layout_gravity="center"
-            android:layout_centerInParent="true"
+        <VideoView
+            android:id="@+id/media_slider_videoview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center" />
 
-        <ImageView android:id="@+id/media_slider_video_thumbnail"
+        <RelativeLayout
+            android:id="@+id/parent"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:padding="10dp"
+            android:background="#44000000"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/progress"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:progressTint="@android:color/white" />
+
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/media_slider_video_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#000" />
 
-        <ImageView android:id="@+id/media_slider_video_playView"
+        <ImageView
+            android:id="@+id/media_slider_video_playView"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_material_play_circle"/>
+            android:src="@drawable/ic_material_play_circle" />
     </RelativeLayout>
 
 
     <im.vector.view.PieFractionView
         android:id="@+id/media_slider_piechart"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:alpha="0.4"
-        android:layout_width="160dp"
-        android:layout_height="160dp"/>
+        android:alpha="0.4" />
 
     <ImageView
         android:id="@+id/media_download_failed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@android:drawable/ic_menu_gallery"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

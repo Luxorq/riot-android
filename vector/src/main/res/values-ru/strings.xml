@@ -1186,4 +1186,16 @@ Email также позволит вам при необходимости во�
     <string name="collapse">свернуть</string>
     <string name="expand">развернуть</string>
     <string name="encrypted_key">Ключ шифрования</string>
+    <string name="ask_pin_code">Запрашивать PIN-код</string>
+    <string name="change_pin_code">Изменить PIN-код</string>
+    <string name="touch_id">Использовать Touch ID</string>
+    <string name="wrong_password">Неверный пароль</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="enter_new_secret">Задайте PIN-код для основного списка</string>
+    <string name="enter_change_secret">Повторите PIN-код</string>
+    <string name="enter_ask_secret">Введите PIN-код</string>
+    <string name="available">доступен</string>
+    <string name="not_available">не доступен</string>
+    <string name="scanner_is">Сканер %s</string>
+    <string name="wrong_3_times">Вы ввели неверный код 3 раза. Попытайтесь снова через минуту</string>
 </resources>

@@ -23,7 +23,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.CallSuper
 import android.webkit.*
-import androidx.core.widget.toast
+import android.widget.Toast
 import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
@@ -90,7 +90,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
             }
 
             private fun onError(errorMessage: String) {
-                toast(errorMessage)
+                Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT).show()
                 finish()
             }
 

@@ -1101,6 +1101,11 @@
     <string name="call_outbound">Outbound call (%s)</string>
     <string name="call_incoming">Incoming call (%s)</string>
     <string name="key_intro">intro_key</string>
+    <string name="key_guard">guard_key</string>
+    <string name="key_guard_pass">guard_pass_key</string>
+    <string name="key_guard_time">guard_time_key</string>
+    <string name="key_touch">touch_key</string>
+    <string name="key_global_hide_preview">global_hide_preview_key</string>
 
     <string name="voice_msg_input_hint_speaking">Saying …</string>
     <string name="voice_msg_input_hint_time_limited_formatter" formatted="false">%d s left</string>
@@ -1116,4 +1121,16 @@
     <string name="collapse">collapse</string>
     <string name="expand">expand</string>
     <string name="encrypted_key">Encryption key</string>
+    <string name="ask_pin_code">Ask PIN-code on start</string>
+    <string name="change_pin_code">Change PIN-code</string>
+    <string name="touch_id">Use Touch ID</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_new_secret">Set PIN-code for default chat list</string>
+    <string name="enter_change_secret">Repeat PIN-code</string>
+    <string name="enter_ask_secret">Enter PIN-code</string>
+    <string name="available">available</string>
+    <string name="not_available">not available</string>
+    <string name="scanner_is">Scanner is %s</string>
+    <string name="wrong_3_times">You\'ve entered wrong code three times. Please try again after a minute</string>
 </resources>

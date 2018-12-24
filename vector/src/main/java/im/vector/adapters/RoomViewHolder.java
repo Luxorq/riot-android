@@ -31,13 +31,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
@@ -50,6 +47,7 @@ import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.KedrCallHistory;
+import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
 
@@ -217,12 +215,13 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         VectorUtils.loadRoomAvatar(context, session, vRoomAvatar, room);
         // get last message to be displayed
         if (vRoomLastMessage != null) {
+            boolean globalHide = PreferencesManager.isGlobalHidePreview(context);
             boolean hideMessage = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance()).getBoolean("message_" + room.getRoomId(), false);
             CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(context, session, roomSummary);
-            if (!hideMessage || TextUtils.isEmpty(lastMsgToDisplay)) {
-                vRoomLastMessage.setText(lastMsgToDisplay);
-            } else {
+            if (globalHide || hideMessage) {
                 vRoomLastMessage.setText(context.getString(R.string.message));
+            } else {
+                vRoomLastMessage.setText(lastMsgToDisplay);
             }
         }
 

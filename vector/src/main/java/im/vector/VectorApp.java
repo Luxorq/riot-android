@@ -41,6 +41,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 
 import com.facebook.stetho.Stetho;
+import com.github.ajalt.reprint.core.Reprint;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
@@ -60,10 +61,21 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import im.vector.activity.AccountCreationActivity;
+import im.vector.activity.AccountCreationCaptchaActivity;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.FallbackLoginActivity;
+import im.vector.activity.IntroActivity;
 import im.vector.activity.JitsiCallActivity;
+import im.vector.activity.LoginActivity;
+import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorCallViewActivity;
+import im.vector.activity.VectorGuardActivity;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.VectorRoomCreationActivity;
 import im.vector.activity.WidgetActivity;
 import im.vector.analytics.Analytics;
 import im.vector.analytics.AppAnalytics;
@@ -83,12 +95,15 @@ import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
 import io.realm.Realm;
 
+import static im.vector.activity.VectorGuardActivity.checkGuardEnabled;
+
 /**
  * The main application injection point
  */
 public class VectorApp extends MultiDexApplication {
     private static final String LOG_TAG = VectorApp.class.getSimpleName();
 
+    private static final String PREF_LOCKED = "locked";
     // key to save the crash status
     private static final String PREFS_CRASH_KEY = "PREFS_CRASH_KEY";
 
@@ -96,7 +111,7 @@ public class VectorApp extends MultiDexApplication {
      * The current instance.
      */
     private static VectorApp instance = null;
-
+    public static boolean locked = true;
     /**
      * Rage shake detection to send a bug report.
      */
@@ -199,6 +214,7 @@ public class VectorApp extends MultiDexApplication {
         }
         Realm.init(this);
         instance = this;
+        Reprint.initialize(this);
         mCallsManager = new CallsManager(this);
         mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));
         mDecryptionFailureTracker = new DecryptionFailureTracker(mAppAnalytics);
@@ -235,6 +251,7 @@ public class VectorApp extends MultiDexApplication {
         MXSession.initUserAgent(getApplicationContext());
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            private int numStarted = 0;
             final Map<String, String> mLocalesByActivity = new HashMap<>();
 
             @Override
@@ -248,6 +265,10 @@ public class VectorApp extends MultiDexApplication {
             @Override
             public void onActivityStarted(Activity activity) {
                 Log.d(LOG_TAG, "onActivityStarted " + activity);
+                if (numStarted == 0) {
+                    launchGuardScreen(activity);
+                }
+                numStarted++;
             }
 
             /**
@@ -303,6 +324,10 @@ public class VectorApp extends MultiDexApplication {
             @Override
             public void onActivityStopped(Activity activity) {
                 Log.d(LOG_TAG, "onActivityStopped " + activity);
+                numStarted--;
+                if (numStarted == 0) {
+                    locked = true;
+                }
             }
 
             @Override
@@ -571,6 +596,21 @@ public class VectorApp extends MultiDexApplication {
         if (null != mCurrentActivity) {
             KeyRequestHandler.getSharedInstance().processNextRequest();
         }
+    }
+
+    private void launchGuardScreen(Activity activity) {
+        if (activity == null
+                || activity instanceof IntroActivity
+                || activity instanceof SplashActivity
+                || activity instanceof LoginActivity
+                || activity instanceof AccountCreationActivity
+                || activity instanceof AccountCreationCaptchaActivity
+                || activity instanceof FallbackLoginActivity
+                || activity instanceof VectorGuardActivity
+                || !PreferencesManager.isGuard(instance)
+                || !locked)
+            return;
+        VectorGuardActivity.startWithMode(activity, VectorGuardActivity.MODE_ASK);
     }
 
     /**

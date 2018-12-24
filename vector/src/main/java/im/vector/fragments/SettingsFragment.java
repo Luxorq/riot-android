@@ -18,14 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ajalt.reprint.core.Reprint;
+
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.bingrules.BingRule;
-import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
 
@@ -37,12 +37,12 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.PasswordChangeActivity;
 import im.vector.activity.VectorAppCompatActivity;
+import im.vector.activity.VectorGuardActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.util.PermissionsToolsKt;
+import im.vector.util.PreferencesManager;
 import im.vector.util.VectorUtils;
-
-import static org.matrix.androidsdk.rest.model.bingrules.BingRule.RULE_ID_DISABLE_ALL;
 
 public class SettingsFragment extends AbsHomeFragment {
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
@@ -54,10 +54,16 @@ public class SettingsFragment extends AbsHomeFragment {
     View mInvite;
     @BindView(R.id.change_password)
     TextView mChangePassword;
-    @BindView(R.id.push_notifications)
-    TextView mPushNotifications;
-    @BindView(R.id.enable_push)
-    SwitchCompat mSwitch;
+
+    @BindView(R.id.change_pin)
+    TextView mChangePin;
+    @BindView(R.id.ask_pin)
+    SwitchCompat askPinSwitch;
+
+    @BindView(R.id.touch_id)
+    SwitchCompat touchSwitch;
+    @BindView(R.id.preview_id)
+    SwitchCompat previewSwitch;
 
     private final MXEventListener mEventsListener = new MXEventListener() {
 
@@ -150,8 +156,36 @@ public class SettingsFragment extends AbsHomeFragment {
                 startActivity(sendIntent);
             }
         });
-
-        BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(RULE_ID_DISABLE_ALL);
+        mChangePin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VectorGuardActivity.startWithMode(getActivity(), VectorGuardActivity.MODE_CHANGE);
+            }
+        });
+        askPinSwitch.setChecked(PreferencesManager.isGuard(getActivity()));
+        askPinSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PreferencesManager.setGuard(getActivity(), isChecked);
+                touchSwitch.setEnabled(Reprint.isHardwarePresent() && Reprint.hasFingerprintRegistered() && isChecked);
+            }
+        });
+        touchSwitch.setChecked(PreferencesManager.isTouchId(getActivity()));
+        touchSwitch.setEnabled(Reprint.isHardwarePresent() && Reprint.hasFingerprintRegistered() && askPinSwitch.isChecked());
+        touchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PreferencesManager.setTouchId(getActivity(), isChecked);
+            }
+        });
+        previewSwitch.setChecked(PreferencesManager.isGlobalHidePreview(getActivity()));
+        previewSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PreferencesManager.setGlobalHidePreview(getActivity(), isChecked);
+            }
+        });
+        /*BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(RULE_ID_DISABLE_ALL);
         if (null != rule) {
             mSwitch.setChecked(!rule.isEnabled);
         }
@@ -186,7 +220,7 @@ public class SettingsFragment extends AbsHomeFragment {
                     });
                 }
             }
-        });
+        });*/
 
     }
 

@@ -30,8 +30,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isInvisible
-import androidx.core.widget.toast
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.Matrix
@@ -173,7 +173,7 @@ class WidgetActivity : VectorAppCompatActivity() {
 
                         private fun onError(errorMessage: String) {
                             hideWaitingView()
-                            toast(errorMessage)
+                            Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_LONG).show()
                         }
 
                         override fun onNetworkError(e: Exception) {
@@ -287,7 +287,7 @@ class WidgetActivity : VectorAppCompatActivity() {
 
             private fun onError(errorMessage: String) {
                 hideWaitingView()
-                toast(errorMessage)
+                Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_LONG).show()
                 finish()
             }
 

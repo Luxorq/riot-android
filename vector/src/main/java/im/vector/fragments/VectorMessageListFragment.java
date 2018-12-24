@@ -90,7 +90,6 @@ import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 import im.vector.widgets.WidgetsManager;
@@ -1118,7 +1117,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 }
             } else {
                 // toggle selection mode
-                vectorMessagesAdapter.onEventTap(event);
+
+                //vectorMessagesAdapter.onEventTap(event);
+                vectorMessagesAdapter.onLongItemClick(event, view, position);
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onContentClick() failed " + e.getMessage(), e);

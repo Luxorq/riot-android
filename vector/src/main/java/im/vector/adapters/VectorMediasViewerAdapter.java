@@ -26,6 +26,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -36,6 +37,9 @@ import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -94,6 +98,11 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private VideoView mPlayingVideoView = null;
 
     private int mAutoPlayItemAt = -1;
+    private Handler mHandler = new Handler();
+    private SeekBar mSeekbar;
+    private ViewGroup mParent;
+    private TextView mDuration;
+    private TextView mProgress;
 
     public VectorMediasViewerAdapter(Context context,
                                      MXSession session,
@@ -218,6 +227,27 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         final String loadingUri = mediaInfo.mMediaUrl;
         final String thumbnailUrl = mediaInfo.mThumbnailUrl;
+        mParent = view.findViewById(R.id.parent);
+        mProgress = view.findViewById(R.id.progress);
+        mDuration = view.findViewById(R.id.duration);
+        mSeekbar = view.findViewById(R.id.seekbar);
+        mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(updateTimeTask);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(updateTimeTask);
+                mPlayingVideoView.seekTo(mSeekbar.getProgress());
+                updateProgressBar();
+            }
+        });
 
         // check if the media has been downloaded
         if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
@@ -635,7 +665,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 // let's playing
                 mPlayingVideoView = videoView;
                 videoView.start();
-
+                mParent.setVisibility(View.VISIBLE);
+                updateProgressBar();
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## playVideo() : videoView.start(); failed " + e.getMessage(), e);
             }
@@ -726,6 +757,58 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 .show();
     }
 
+    private void updateProgressBar() {
+        mHandler.postDelayed(updateTimeTask, 100);
+    }
+
+    private void cancelProgressBar() {
+        mDuration.setText(milliSecondsToTimer(0));
+        mProgress.setText(milliSecondsToTimer(0));
+        mSeekbar.setProgress(0);
+        mSeekbar.setMax(0);
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
+    private Runnable updateTimeTask = new Runnable() {
+        public void run() {
+            if (mPlayingVideoView != null) {
+                mSeekbar.setProgress(mPlayingVideoView.getCurrentPosition());
+                mSeekbar.setMax(mPlayingVideoView.getDuration());
+                mDuration.setText(milliSecondsToTimer(mPlayingVideoView.getDuration()));
+                mProgress.setText(milliSecondsToTimer(mPlayingVideoView.getCurrentPosition()));
+                mHandler.postDelayed(this, 100);
+            } else {
+                cancelProgressBar();
+            }
+        }
+    };
+
+    public static String milliSecondsToTimer(long milliseconds) {
+        String finalTimerString = "";
+        String secondsString = "";
+
+        // Convert total duration into time
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        // return timer string
+        return finalTimerString;
+    }
+
     /**
      * Load the video items
      *
@@ -749,6 +832,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
+                cancelProgressBar();
                 mPlayingVideoView = null;
                 displayVideoThumbnail(view, true);
             }
@@ -767,6 +851,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
+                cancelProgressBar();
                 mPlayingVideoView = null;
                 displayVideoThumbnail(view, true);
                 return false;

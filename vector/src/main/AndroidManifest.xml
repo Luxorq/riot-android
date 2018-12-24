@@ -3,12 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="im.vector"
     android:installLocation="auto">
+    <!-- Marshmallow fingerprint permission-->
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
+    <!-- Samsung fingerprint permission, only required if you include the Spass module -->
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
@@ -102,10 +107,10 @@
         android:label="@string/riot_app_name"
         android:largeHeap="true"
         android:logo="@drawable/logo"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:resizeableActivity="false"
         android:theme="@style/AppTheme"
-        tools:replace="allowBackup,label,appComponentFactory"
-        android:appComponentFactory="im.vector.VectorApp">
+        tools:replace="allowBackup,label">
 
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
@@ -151,6 +156,13 @@
             android:label="@string/title_activity_home"
             android:theme="@style/HomeActivityTheme"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.VectorGuardActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_home"
+            android:launchMode="singleInstance"
+            android:theme="@style/HomeActivityTheme"/>
         <activity
             android:name=".activity.HistoricalRoomsActivity"
             android:configChanges="orientation|screenSize"
@@ -164,7 +176,6 @@
             android:label="@string/title_activity_room"
             android:theme="@style/RoomActivityTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".activity.VoiceActivity" />
 
         <activity
             android:name=".activity.DeactivateAccountActivity"
@@ -172,10 +183,10 @@
         <activity
             android:name=".activity.VectorRoomCreationActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/SearchesAppTheme"
             android:label="@string/room_creation_title"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorHomeActivity"
+            android:theme="@style/SearchesAppTheme"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -185,8 +196,8 @@
             android:name=".activity.VectorRoomDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
-            android:theme="@style/MemberActivityTheme"
             android:parentActivityName=".activity.VectorRoomActivity"
+            android:theme="@style/MemberActivityTheme"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -219,8 +230,7 @@
             android:label="@string/edit_contact"
             android:parentActivityName=".activity.VectorHomeActivity"
             android:theme="@style/LoginAppTheme"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.VectorMemberDetailsActivity"
             android:configChanges="orientation|screenSize"

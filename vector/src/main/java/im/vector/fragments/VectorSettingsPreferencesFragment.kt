@@ -45,7 +45,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.edit
-import androidx.core.widget.toast
 import com.bumptech.glide.Glide
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
@@ -314,8 +313,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
 
                         private fun onError(errorMessage: String) {
-                            activity?.toast(errorMessage)
-
+                            Toast.makeText(appContext, errorMessage, Toast.LENGTH_LONG).show()
                             onSuccess(null)
                         }
 
@@ -414,7 +412,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                                             }
 
                                                             override fun onBingRuleUpdateFailure(errorMessage: String) {
-                                                                activity?.toast(errorMessage)
+                                                                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
 
                                                                 onDone()
                                                             }
@@ -1004,7 +1002,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                     // and the code is called in the right thread
                                     activity.runOnUiThread {
                                         hideLoadingView()
-                                        activity?.toast(textId, Toast.LENGTH_LONG)
+                                        Toast.makeText(activity, activity.getString(textId), Toast.LENGTH_LONG).show()
                                     }
                                 }
                             }
@@ -1163,8 +1161,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
 
                 override fun onBingRuleUpdateFailure(errorMessage: String) {
-                    activity?.toast(errorMessage)
-
+                    Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
                     onDone()
                 }
             })
@@ -1646,7 +1643,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         if (null != activity) {
             activity.runOnUiThread {
                 if (!TextUtils.isEmpty(errorMessage)) {
-                    VectorApp.getInstance().toast(errorMessage!!)
+                    Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
                 }
                 hideLoadingView()
             }
@@ -1661,13 +1658,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private fun addEmail(email: String?) {
         // check first if the email syntax is valid
         if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email!!).matches()) {
-            activity?.toast(R.string.auth_invalid_email)
+            Toast.makeText(activity, activity.getString(R.string.auth_invalid_email), Toast.LENGTH_LONG).show()
             return
         }
 
         // check first if the email syntax is valid
         if (mDisplayedEmails.indexOf(email) >= 0) {
-            activity?.toast(R.string.auth_email_already_defined)
+            Toast.makeText(activity, activity.getString(R.string.auth_email_already_defined), Toast.LENGTH_LONG).show()
             return
         }
 
@@ -1729,7 +1726,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 if (null != activity) {
                                     activity.runOnUiThread {
                                         hideLoadingView()
-                                        activity?.toast(R.string.account_email_validation_error)
+                                        Toast.makeText(activity, activity.getString(R.string.account_email_validation_error), Toast.LENGTH_LONG).show()
                                     }
                                 }
                             } else {
@@ -2398,7 +2395,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                         .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { dialog, which ->
                             if (TextUtils.isEmpty(passwordEditText.toString())) {
-                                activity.applicationContext.toast(R.string.error_empty_field_your_password)
+                                Toast.makeText(activity, activity.getString(R.string.error_empty_field_your_password), Toast.LENGTH_LONG).show()
                                 return@OnClickListener
                             }
                             mAccountPassword = passwordEditText.text.toString()
@@ -2555,8 +2552,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     } catch (e2: Exception) {
                         Log.e(LOG_TAG, "## importKeys() : " + e2.message, e2)
                     }
-
-                    appContext.toast(e.localizedMessage)
+                    Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_LONG).show()
 
                     return@OnClickListener
                 }
@@ -2569,17 +2565,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     }
 
                     override fun onNetworkError(e: Exception) {
-                        appContext.toast(e.localizedMessage)
+                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_LONG).show()
                         hideLoadingView()
                     }
 
                     override fun onMatrixError(e: MatrixError) {
-                        appContext.toast(e.localizedMessage)
+                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_LONG).show()
                         hideLoadingView()
                     }
 
                     override fun onUnexpectedError(e: Exception) {
-                        appContext.toast(e.localizedMessage)
+                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_LONG).show()
                         hideLoadingView()
                     }
                 })

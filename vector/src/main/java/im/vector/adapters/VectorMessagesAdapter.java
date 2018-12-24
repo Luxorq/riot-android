@@ -26,8 +26,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -2294,19 +2292,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
             });
 
-//            contentView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    if (!mIsSearchMode) {
-//                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-//
-//                        onEventTap(event);
-//                        return true;
-//                    }
-//
-//                    return false;
-//                }
-//            });
+            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (!mIsSearchMode) {
+                        onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+
+                        onEventTap(event);
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
         }
     }
 
@@ -2543,7 +2541,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id) &&
                             TextUtils.equals(mSession.getMyUserId(), event.getSender())
-                            ) {
+                    ) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
                                 .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
@@ -2601,6 +2599,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Log.d(LOG_TAG, "updateReadMarker read marker id has changed: " + readMarkerEventId);
             mCanShowReadMarker = true;
             notifyDataSetChanged();
+        }
+    }
+
+    public void onLongItemClick(Event event, View contentView, int pos) {
+        if (!mIsSearchMode) {
+            onMessageClick(event, getEventText(contentView, event, getItemViewType(pos)), contentView.findViewById(R.id.messagesAdapter_action_anchor));
+
+            onEventTap(event);
         }
     }
 
@@ -2799,37 +2805,37 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         popup.getMenuInflater().inflate(R.menu.vector_room_message_settings, popup.getMenu());
 
         // force to display the icons
-        try {
-            Field[] fields = popup.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if ("mPopup".equals(field.getName())) {
-                    field.setAccessible(true);
-                    Object menuPopupHelper = field.get(popup);
-                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
-                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
-                    setForceIcons.invoke(menuPopupHelper, true);
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage(), e);
-        }
+//        try {
+//            Field[] fields = popup.getClass().getDeclaredFields();
+//            for (Field field : fields) {
+//                if ("mPopup".equals(field.getName())) {
+//                    field.setAccessible(true);
+//                    Object menuPopupHelper = field.get(popup);
+//                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+//                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+//                    setForceIcons.invoke(menuPopupHelper, true);
+//                    break;
+//                }
+//            }
+//        } catch (Exception e) {
+//            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage(), e);
+//        }
 
         Menu menu = popup.getMenu();
-        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(mContext, R.attr.settings_icon_tint_color));
+        //ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(mContext, R.attr.settings_icon_tint_color));
 
         // hide entries
         for (int i = 0; i < menu.size(); i++) {
             menu.getItem(i).setVisible(false);
         }
 
-        menu.findItem(R.id.ic_action_view_source).setVisible(true);
-        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
-        menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
+        menu.findItem(R.id.ic_action_view_source).setVisible(false);
+        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(false);//event.isEncrypted() && (null != event.getClearEvent()));
+        menu.findItem(R.id.ic_action_vector_permalink).setVisible(false);
 
         if (!TextUtils.isEmpty(textMsg)) {
             menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
-            menu.findItem(R.id.ic_action_vector_quote).setVisible(true);
+            menu.findItem(R.id.ic_action_vector_quote).setVisible(false);
         }
 
         if (event.isUploadingMedias(mMediasCache)) {
@@ -2872,23 +2878,23 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
                 // share / forward the message
-                menu.findItem(R.id.ic_action_vector_share).setVisible(!mIsRoomEncrypted);
+                menu.findItem(R.id.ic_action_vector_share).setVisible(false);//!mIsRoomEncrypted);
                 menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
 
                 // save the media in the downloads directory
                 if (Message.MSGTYPE_IMAGE.equals(message.msgtype)
                         || Message.MSGTYPE_VIDEO.equals(message.msgtype)
                         || Message.MSGTYPE_FILE.equals(message.msgtype)) {
-                    menu.findItem(R.id.ic_action_vector_save).setVisible(true);
+                    menu.findItem(R.id.ic_action_vector_save).setVisible(false);
                 }
 
                 // offer to report a message content
-                menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
+                menu.findItem(R.id.ic_action_vector_report).setVisible(false);//!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
             }
         }
 
         // e2e
-        menu.findItem(R.id.ic_action_device_verification).setVisible(mE2eIconByEventId.containsKey(event.eventId));
+        menu.findItem(R.id.ic_action_device_verification).setVisible(false);//mE2eIconByEventId.containsKey(event.eventId));
 
         // display the menu
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -2903,6 +2909,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 cancelSelectionMode();
 
                 return true;
+            }
+        });
+        popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                cancelSelectionMode();
             }
         });
 

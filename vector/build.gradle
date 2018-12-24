@@ -26,7 +26,7 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         // custom values
-        resValue "string", "bug_report_url",  "https://riot.im/bugreports/submit"
+        resValue "string", "bug_report_url", "https://riot.im/bugreports/submit"
 
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -100,7 +100,7 @@ android {
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "true"
-            resValue "string", "allow_ga_use", "true"
+            resValue "string", "allow_ga_use", "false"
             resValue "string", "short_flavor_description", "G"
             resValue "string", "flavor_description", "GooglePlay"
         }
@@ -157,21 +157,25 @@ static def gitBranchName() {
 }
 
 dependencies {
+    implementation(name: 'core-debug', ext: 'aar')
+    implementation(name: 'reprint_spass-debug', ext: 'aar')
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Kotlin KTX
     implementation 'androidx.core:core-ktx:0.3'
-
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'me.leolin:ShortcutBadger:1.1.2@aar'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:support-media-compat:28.0.0'
     implementation 'com.android.support:animated-vector-drawable:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation ('com.jakewharton:butterknife:8.8.1')
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'io.realm:android-adapters:2.1.1'
     // UI
@@ -181,7 +185,7 @@ dependencies {
     implementation 'com.github.apl-devs:appintro:v4.2.3'
     implementation 'com.github.piasy:rxandroidaudio:1.5.3'
     implementation 'com.github.piasy:AudioProcessor:1.5.3'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
 
     implementation 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
@@ -190,8 +194,8 @@ dependencies {
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.10.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
@@ -199,8 +203,8 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.14.0'
 
     // Use Glide library to display image (Gif supported)
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'
 
@@ -233,15 +237,14 @@ dependencies {
     implementation(name: 'react-native', ext: 'aar')
     implementation(name: 'react-native-locale-detector', ext: 'aar')
 
-
     // another tracking than GA
     implementation 'org.piwik.sdk:piwik-sdk:2.0.0'
 
     /************* flavors management **************/
 
     // app flavor only
-    appImplementation 'com.google.firebase:firebase-core:16.0.3'
-    appImplementation 'com.google.firebase:firebase-messaging:17.3.2'
+    appImplementation 'com.google.firebase:firebase-core:16.0.6'
+    appImplementation 'com.google.firebase:firebase-messaging:17.3.4'
 
     // fdroid flavor only
 }

@@ -22,7 +22,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.core.view.isVisible
-import androidx.core.widget.toast
 import butterknife.BindView
 import butterknife.OnCheckedChanged
 import butterknife.OnTextChanged
@@ -166,7 +165,7 @@ class BugReportActivity : MXCActionBarActivity() {
 
                     override fun onUploadSucceed() {
                         try {
-                            VectorApp.getInstance()?.toast(R.string.send_bug_report_sent, Toast.LENGTH_LONG)
+                            Toast.makeText(applicationContext, getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show()
                         } catch (e: Exception) {
                             Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the toast " + e.message, e)
                         }

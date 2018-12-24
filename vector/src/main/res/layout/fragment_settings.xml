@@ -66,7 +66,8 @@
                 android:background="@color/white"
                 android:elevation="2dp"
                 android:foreground="?attr/selectableItemBackground"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -82,22 +83,22 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:drawablePadding="20dp"
                     android:drawableStart="@drawable/invite"
+                    android:drawablePadding="20dp"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:paddingStart="15dp"
                     android:singleLine="true"
                     android:text="@string/invite_contacts"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
-                    android:paddingEnd="5dp"
                     android:paddingStart="65dp"
+                    android:paddingEnd="5dp"
                     android:text="@string/invite_direct"
                     android:textColor="@color/grey500"
                     android:textSize="12sp" />
@@ -106,7 +107,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:background="@color/white"
                 android:elevation="2dp"
                 android:orientation="vertical">
@@ -127,37 +128,108 @@
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/settings_changepassword"
                     android:drawablePadding="20dp"
-                    android:drawableStart="@drawable/change_password"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:paddingStart="15dp"
                     android:singleLine="true"
                     android:text="@string/settings_change_password"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/push_notifications"
+                        android:id="@+id/change_pin"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:background="?attr/selectableItemBackground"
+                        android:drawableStart="@drawable/settings_pin_code"
                         android:drawablePadding="20dp"
-                        android:drawableStart="@drawable/notifications"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:paddingStart="15dp"
                         android:singleLine="true"
-                        android:text="@string/push_notifications"
+                        android:text="@string/change_pin_code"
                         android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:drawableStart="@drawable/settings_pin_code"
+                        android:drawablePadding="20dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:paddingStart="15dp"
+                        android:singleLine="true"
+                        android:text="@string/ask_pin_code"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
                     <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/enable_push"
+                        android:id="@+id/ask_pin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="15dp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:drawableStart="@drawable/settings_authpassword"
+                        android:drawablePadding="20dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:paddingStart="15dp"
+                        android:singleLine="true"
+                        android:text="@string/touch_id"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/touch_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="15dp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:drawableStart="@drawable/contact_hide_message"
+                        android:drawablePadding="20dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:paddingStart="15dp"
+                        android:singleLine="true"
+                        android:text="@string/hide_message_preview"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/preview_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center_vertical"
@@ -168,7 +240,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp" />
         </LinearLayout>
     </ScrollView>
 

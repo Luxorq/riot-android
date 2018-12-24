@@ -730,4 +730,60 @@ public class PreferencesManager {
                 .putBoolean(context.getResources().getString(R.string.key_intro), true)
                 .apply();
     }
+
+    public static String getGuardPass(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.key_guard_pass), "");
+    }
+
+    public static void setGuardPass(Context context, String pass) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(context.getResources().getString(R.string.key_guard_pass), pass)
+                .apply();
+    }
+
+    public static long getGuardTime(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getLong(context.getResources().getString(R.string.key_guard_time), 0);
+    }
+
+    public static void setGuardTime(Context context, long time) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putLong(context.getResources().getString(R.string.key_guard_time), time)
+                .apply();
+    }
+
+    public static boolean isGuard(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getResources().getString(R.string.key_guard), false);
+    }
+
+    public static void setGuard(Context context, boolean guard) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(context.getResources().getString(R.string.key_guard), guard)
+                .apply();
+    }
+
+
+    public static boolean isTouchId(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getResources().getString(R.string.key_touch), true);
+    }
+
+    public static void setTouchId(Context context, boolean touch) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(context.getResources().getString(R.string.key_touch), touch)
+                .apply();
+    }
+
+    public static boolean isGlobalHidePreview(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getResources().getString(R.string.key_global_hide_preview), false);
+    }
+
+    public static void setGlobalHidePreview(Context context, boolean preview) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(context.getResources().getString(R.string.key_global_hide_preview), preview)
+                .apply();
+    }
 }

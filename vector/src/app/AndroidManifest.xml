@@ -12,8 +12,7 @@
         android:largeHeap="true"
         android:logo="@drawable/logo"
         android:theme="@style/AppTheme"
-        tools:replace="allowBackup,label,appComponentFactory"
-        android:appComponentFactory="im.vector.VectorApp">
+        tools:replace="allowBackup,label">
 
 
         <!-- Firebase components -->

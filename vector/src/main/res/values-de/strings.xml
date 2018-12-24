@@ -1117,4 +1117,15 @@
     <string name="expand">erweitern</string>
 
     <string name="encrypted_key">Verschlüsselung</string>
+    <string name="ask_pin_code">PIN-Code bei Start anfragen</string>
+    <string name="change_pin_code">Pin Code für aktuelle Liste ändern</string>
+    <string name="touch_id">Touch ID nutzen</string>
+
+    <string name="enter_new_secret">Legen Sie den PIN-Code für die Standard-Chatliste fest</string>
+    <string name="enter_change_secret">Wiederholen Sie den PIN-Code</string>
+    <string name="enter_ask_secret">Geben Sie den PIN-Code ein</string>
+    <string name="available">verfügbar</string>
+    <string name="not_available">nicht verfügbar</string>
+    <string name="scanner_is">Scanner ist %s</string>
+    <string name="wrong_3_times">Sie haben dreimal einen falschen Code eingegeben. Bitte versuchen Sie es nach einer Minute erneut</string>
 </resources>

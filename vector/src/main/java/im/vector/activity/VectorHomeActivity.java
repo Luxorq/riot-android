@@ -21,7 +21,6 @@ package im.vector.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,14 +39,10 @@ import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -68,7 +63,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
@@ -79,13 +73,11 @@ import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.crypto.MXCrypto;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
@@ -126,10 +118,8 @@ import im.vector.fragments.ContactsFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
-import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.SettingsFragment;
-import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.receiver.VectorUniversalLinkReceiver;
@@ -141,12 +131,9 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SystemUtilsKt;
 import im.vector.util.ThemeUtils;
-import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 import kotlin.Pair;
-
-import static java.lang.Math.toIntExact;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -302,6 +289,16 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     public int getLayoutRes() {
         return R.layout.activity_home;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (TextUtils.isEmpty(PreferencesManager.getGuardPass(this))) {
+            VectorGuardActivity.startWithMode(this, VectorGuardActivity.MODE_NEW);
+        } else if (VectorApp.locked) {
+            VectorGuardActivity.startWithMode(this, VectorGuardActivity.MODE_ASK);
+        }
     }
 
     @Override

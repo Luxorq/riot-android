@@ -26,7 +26,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Browser
 import android.provider.MediaStore
-import androidx.core.widget.toast
+import android.widget.Toast
 import im.vector.R
 import org.matrix.androidsdk.util.Log
 import java.io.File
@@ -56,7 +56,7 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
         try {
             context.startActivity(browserIntent)
         } catch (activityNotFoundException: ActivityNotFoundException) {
-            context.toast(R.string.error_no_external_application_found)
+            Toast.makeText(context, context.getString(R.string.error_no_external_application_found), Toast.LENGTH_LONG).show()
         }
     }
 }
@@ -73,7 +73,7 @@ fun openSoundRecorder(activity: Activity, requestCode: Int) {
     try {
         activity.startActivityForResult(recordSoundIntent, requestCode)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
+        Toast.makeText(activity, activity.getString(R.string.error_no_external_application_found), Toast.LENGTH_LONG).show()
     }
 }
 
@@ -105,7 +105,7 @@ fun openFileSelection(activity: Activity,
                     activity.startActivityForResult(fileIntent, requestCode)
                 }
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
+        Toast.makeText(activity, activity.getString(R.string.error_no_external_application_found), Toast.LENGTH_LONG).show()
     }
 }
 
@@ -121,7 +121,7 @@ fun openVideoRecorder(activity: Activity, requestCode: Int) {
     try {
         activity.startActivityForResult(captureIntent, requestCode)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
+        Toast.makeText(activity, activity.getString(R.string.error_no_external_application_found), Toast.LENGTH_LONG).show()
     }
 }
 
@@ -186,7 +186,7 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
 
         return result
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
+        Toast.makeText(activity, activity.getString(R.string.error_no_external_application_found), Toast.LENGTH_LONG).show()
     }
 
     return null
@@ -204,7 +204,7 @@ fun sendMailTo(address: String, subject: String? = null, message: String? = null
     try {
         activity.startActivity(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
+        Toast.makeText(activity, activity.getString(R.string.error_no_external_application_found), Toast.LENGTH_LONG).show()
     }
 }
 
@@ -217,7 +217,7 @@ fun openUri(activity: Activity, uri: String) {
     try {
         activity.startActivity(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
+        Toast.makeText(activity, activity.getString(R.string.error_no_external_application_found), Toast.LENGTH_LONG).show()
     }
 }
 
@@ -237,7 +237,7 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
     try {
         activity.startActivity(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
+        Toast.makeText(activity, activity.getString(R.string.error_no_external_application_found), Toast.LENGTH_LONG).show()
     }
 }
 
