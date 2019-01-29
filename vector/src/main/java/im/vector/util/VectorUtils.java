@@ -305,7 +305,7 @@ public class VectorUtils {
     private static Bitmap createAvatarThumbnail(Context context, int backgroundColor, String text) {
         float densityScale = context.getResources().getDisplayMetrics().density;
         // the avatar size is 42dp, convert it in pixels.
-        return createAvatar(backgroundColor, text, (int) (42 * densityScale));
+        return createAvatar(backgroundColor, text, (int) (84 * densityScale));
     }
 
     /**

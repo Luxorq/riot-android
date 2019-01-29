@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,13 +93,13 @@ public class FingerPrintFragment extends Fragment {
     private void cancel() {
         result.setText("Cancelled");
         running = false;
-        fab.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.settings_authpassword));
+        fab.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.settings_auth_password));
         Reprint.cancelAuthentication();
     }
 
     private void showSuccess() {
         result.setText("Success");
-        fab.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.settings_authpassword));
+        fab.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.settings_auth_password));
         running = false;
     }
 
@@ -109,7 +108,7 @@ public class FingerPrintFragment extends Fragment {
         result.setText(errorMessage);
 
         if (fatal) {
-            fab.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.settings_authpassword));
+            fab.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.settings_auth_password));
             running = false;
         }
     }

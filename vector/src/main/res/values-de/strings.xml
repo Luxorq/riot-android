@@ -19,7 +19,7 @@
 
     <!-- titles -->
     <string name="title_activity_home">Nachrichten</string>
-    <string name="title_activity_room">Raum</string>
+    <string name="title_activity_room">Chat</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="title_activity_member_details">Kontaktdetails</string>
     <string name="title_activity_historical">Historisch</string>
@@ -61,7 +61,7 @@
     <string name="cannot_start_call">Anruf kann nicht gestartet werden, bitte später probieren</string>
     <string name="missing_permissions_warning">"Wegen fehlender Rechte, sind manche Optionen nicht verfügbar...</string>
     <string name="missing_permissions_error">"Wegen fehlender Rechte, ist diese Aktion nicht möglich.</string>
-    <string name="missing_permissions_to_start_conf_call">Sie brauchen Rechte, um einen Gruppenanruf in diesem Raum zu starten</string>
+    <string name="missing_permissions_to_start_conf_call">Sie brauchen Rechte, um einen Gruppenanruf in diesem Chat zu starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Anruf kann nicht begonnen werden</string>
     <string name="device_information">Geräteinformation</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenzanrufe sind in verschlüsselten Räumen nicht möglich</string>
@@ -97,6 +97,7 @@
     <string name="bottom_action_contacts">Meine Kontakte</string>
     <string name="bottom_action_calls">Anrufe</string>
     <string name="bottom_action_rooms">Räume</string>
+    <string name="bottom_action_secret">Versteckte Chats</string>
     <string name="bottom_action_groups">Gemeinschaften</string>
 
     <!-- Home screen -->
@@ -124,7 +125,7 @@
 
     <!-- Rooms fragment -->
     <string name="rooms_header">Räume</string>
-    <string name="rooms_directory_header">Raumverzeichnis</string>
+    <string name="rooms_directory_header">Chatverzeichnis</string>
     <string name="no_room_placeholder">Keine Räume</string>
     <string name="no_public_room_placeholder">Keine öffentliche Räume verfügbar</string>
     <plurals name="public_room_nb_users">
@@ -156,7 +157,7 @@
     <string name="send_files_in">Senden nach</string>
     <string name="read_receipt">Gelesen</string>
 
-    <string name="join_room">Raum beitreten</string>
+    <string name="join_room">Chat beitreten</string>
     <string name="username">Username</string>
     <string name="create_account">Registrieren</string>
     <string name="login">Anmelden</string>
@@ -298,8 +299,8 @@
     <string name="today">Heute</string>
 
     <!-- room info dialog Screen -->
-    <string name="room_info_room_name">Raumname</string>
-    <string name="room_info_room_topic">Raumthema</string>
+    <string name="room_info_room_name">Chatname</string>
+    <string name="room_info_room_topic">Chatthema</string>
 
     <!-- call string -->
     <string name="call">Anruf</string>
@@ -354,11 +355,11 @@
     <string name="room_jump_to_first_unread">Zur ersten ungelesenen Nachricht springen.</string>
 
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">Sie wurden in diesen Raum eingeladen %s</string>
+    <string name="room_preview_invitation_format">Sie wurden in diesen Chat eingeladen %s</string>
     <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s versandt, welche nicht mit diesem Profil verbunden ist.\nSie können Sich unter einem anderen Profil anmelden oder diese E-Mail in diesem Profil speichern.</string>
     <string name="room_preview_try_join_an_unknown_room">Sie versuchen %s zu erreichen. Möchten Sie an der Diskussion teilnehmen?</string>
-    <string name="room_preview_try_join_an_unknown_room_default">Ein Raum</string>
-    <string name="room_preview_room_interactions_disabled">Dies ist eine Vorschau von dem Raum. Interaktionen sind deaktiviert.</string>
+    <string name="room_preview_try_join_an_unknown_room_default">Ein Chat</string>
+    <string name="room_preview_room_interactions_disabled">Dies ist eine Vorschau von dem Chat. Interaktionen sind deaktiviert.</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">Unterhaltung beginnen</string>
@@ -373,7 +374,7 @@
     </plurals>
     <string name="room_title_one_member">1 Kontakt</string>
     <string name="room_e2e_alert_title">Warnung!</string>
-    <string name="room_e2e_alert_message">End-to-end Verschlüsselung ist beta und kann unzuverlässig sein.\n\nSie sollten auf diese Verschlüsselung noch nicht vertrauen.\n\nGeräte werden die Historie noch nicht verschlüsseln können, bevor Sie dem Raum beigetreten sind.\n\nVerschlüsselte Nachrichten werden auf Geräten ohne Implementierung nicht angezeigt.</string>
+    <string name="room_e2e_alert_message">End-to-end Verschlüsselung ist beta und kann unzuverlässig sein.\n\nSie sollten auf diese Verschlüsselung noch nicht vertrauen.\n\nGeräte werden die Historie noch nicht verschlüsseln können, bevor Sie dem Chat beigetreten sind.\n\nVerschlüsselte Nachrichten werden auf Geräten ohne Implementierung nicht angezeigt.</string>
 
     <!--  Time -->
     <plurals name="format_time_s">
@@ -394,8 +395,8 @@
     </plurals>
 
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Raum verlassen</string>
-    <string name="room_participants_leave_prompt_msg">Sind Sie sicher, dass Sie den Raum verlassen möchten?</string>
+    <string name="room_participants_leave_prompt_title">Chat verlassen</string>
+    <string name="room_participants_leave_prompt_msg">Sind Sie sicher, dass Sie den Chat verlassen möchten?</string>
     <string name="room_participants_remove_prompt_msg">Sine Sie sicher, dass Sie %s aus dem Chat entfernen möchten?</string>
     <string name="room_participants_create">Erstellen</string>
 
@@ -416,8 +417,8 @@
     <string name="room_participants_header_devices">GERÄTE</string>
 
     <string name="room_participants_action_invite">Einladen</string>
-    <string name="room_participants_action_leave">Diesen Raum verlassen</string>
-    <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
+    <string name="room_participants_action_leave">Diesen Chat verlassen</string>
+    <string name="room_participants_action_remove">Aus diesem Chat entfernen</string>
     <string name="room_participants_action_ban">Sperren</string>
     <string name="room_participants_action_unban">Entsperren</string>
     <string name="room_participants_action_set_default_power_level">Als normalen Nutzer herstellen</string>
@@ -495,7 +496,7 @@
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
-    <string name="room_details_title">Raumdetails</string>
+    <string name="room_details_title">Chatdetails</string>
     <string name="room_details_people">Kontakte</string>
     <string name="room_details_files">Mediadateien</string>
     <string name="room_details_settings">Einstellungen</string>
@@ -515,7 +516,7 @@
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Einladung von %s</string>
-    <string name="room_displayname_room_invite">Raumeinladung</string>
+    <string name="room_displayname_room_invite">Chateinladung</string>
     <string name="room_displayname_two_members">%1$s und %2$s</string>
 
     <string name="room_displayname_many_members">%1$s und %2$s</string>
@@ -524,11 +525,11 @@
         <item quantity="other">%d andere</item>
     </plurals>
 
-    <string name="room_displayname_no_title">Leerer Raum</string>
+    <string name="room_displayname_no_title">Leerer Chat</string>
 
     <!-- Search -->
     <string name="search_hint">Suchen</string>
-    <string name="search_members_hint">Raummitglieder filtern</string>
+    <string name="search_members_hint">Chatmitglieder filtern</string>
     <string name="search_no_results">Keine Ergebnisse</string>
     <string name="tab_title_search_rooms">RÄUME</string>
     <string name="tab_title_search_messages">NACHRICHTEN</string>
@@ -543,19 +544,19 @@
     <string name="room_recents_low_priority">NIEDRIGE PRIORITÄT</string>
     <string name="room_recents_invites">EINLADUNGEN</string>
     <string name="room_recents_start_chat">Unterhaltung starten</string>
-    <string name="room_recents_create_room">Raum erstellen</string>
-    <string name="room_recents_join_room">Raum beitreten</string>
-    <string name="room_recents_join_room_title">Einem Raum beitreten</string>
-    <string name="room_recents_join_room_prompt">Raumname oder Raum-ID eingeben</string>
+    <string name="room_recents_create_room">Chat erstellen</string>
+    <string name="room_recents_join_room">Chat beitreten</string>
+    <string name="room_recents_join_room_title">Einem Chat beitreten</string>
+    <string name="room_recents_join_room_prompt">Chatname oder Chat-ID eingeben</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 Raum</item>
+        <item quantity="one">1 Chat</item>
         <item quantity="other">%d Räume</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
-        <item quantity="one">%1$s Raum gefunden für %2$s</item>
+        <item quantity="one">%1$s Chat gefunden für %2$s</item>
         <item quantity="other">%1$s Räume gefunden für %2$s</item>
     </plurals>
     <string name="directory_searching_title">Verzeichnis durchsuchen...</string>
@@ -615,7 +616,7 @@
     <string name="settings_containing_my_user_name">Nachrichten mit meinem Nutzernamen</string>
     <string name="settings_messages_in_one_to_one">Nachrichten in one-to-one Chats</string>
     <string name="settings_messages_in_group_chat">Nachrichten in Gruppenchats</string>
-    <string name="settings_invited_to_room">Wenn ich in einen Raum eingeladen werde</string>
+    <string name="settings_invited_to_room">Wenn ich in einen Chat eingeladen werde</string>
     <string name="settings_call_invitations">Anrufeinladung</string>
     <string name="settings_messages_sent_by_bot">Nachrichten vom Bot gesendet</string>
 
@@ -746,10 +747,10 @@
     <!-- Room Settings -->
 
     <!-- room global settings-->
-    <string name="room_settings_room_photo">Raumfoto</string>
-    <string name="room_settings_room_name">Raumname</string>
+    <string name="room_settings_room_photo">Chatfoto</string>
+    <string name="room_settings_room_name">Chatname</string>
     <string name="room_settings_topic">Thema</string>
-    <string name="room_settings_room_tag">Raummarkierung</string>
+    <string name="room_settings_room_tag">Chatmarkierung</string>
     <string name="room_settings_tag_pref_dialog_title">Markiert als:</string>
 
     <!-- Room settings: Room tag -->
@@ -763,12 +764,12 @@
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Zugriff und Sichtbarkeit</string>
-    <string name="room_settings_directory_visibility">Diesen Raum im Verzeichnis listen</string>
+    <string name="room_settings_directory_visibility">Diesen Chat im Verzeichnis listen</string>
     <string name="room_settings_room_notifications_title">Benachrichtigung</string>
-    <string name="room_settings_room_access_rules_pref_title">Raumzugriff</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Raumhistorie Lesbarkeit</string>
+    <string name="room_settings_room_access_rules_pref_title">Chatzugriff</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Chathistorie Lesbarkeit</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Wer kann Historie lesen?</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">Wer kann den Raum betreten?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Wer kann den Chat betreten?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Jeder</string>
@@ -777,17 +778,17 @@
     <string name="room_settings_read_history_entry_members_only_joined">Nur Mitglieder (sitedem siie beitraten)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
-    <string name="room_settings_room_access_warning">Um zum Raum zu verlinken, muss es eine Adresse geben</string>
+    <string name="room_settings_room_access_warning">Um zum Chat zu verlinken, muss es eine Adresse geben</string>
     <string name="room_settings_room_access_entry_only_invited">Nur Nutzer, die eingeladen wurden</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Jeder, der den Raumlink kennt, außer Gästen</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Jeder, der den Raumlink kennt, inkl. Gäste</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Jeder, der den Chatlink kennt, außer Gästen</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Jeder, der den Chatlink kennt, inkl. Gäste</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Gesperrte Nutzer</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Erweitert</string>
-    <string name="room_settings_room_internal_id">Interne Raum-ID</string>
+    <string name="room_settings_room_internal_id">Interne Chat-ID</string>
     <string name="room_settings_addresses_pref_title">Adressen</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">Dies is eine experemintelle Funktion und kann auf unerwartet Weisen kauptt gehen. Mit Vorsicht zu genießen.</string>
@@ -795,13 +796,13 @@
     <string name="room_settings_labs_end_to_end_is_active">End-to-End Verschlüsselung ist aktiv</string>
     <string name="room_settings_labs_end_to_end_warnings">Sie müssen sich ausloggen, um die Verschlüsselung zu aktivieren.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Nur zu verifizierten Geräten verschlüsseln</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Von diesem Gerät nie verschlüsselte Nachrichten zu verifizierten Geräten in diesem Raum senden.</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Von diesem Gerät nie verschlüsselte Nachrichten zu verifizierten Geräten in diesem Chat senden.</string>
 
     <!-- Room settings: advanced addresses -->
-    <string name="room_settings_addresses_no_local_addresses">Dieser Raum hat keine lokalen Adressen</string>
+    <string name="room_settings_addresses_no_local_addresses">Dieser Chat hat keine lokalen Adressen</string>
     <string name="room_settings_addresses_add_new_address">Neue Adresses (z.B. #foo:matrix.org")</string>
 
-    <string name="room_settings_no_flair">Dieser Raum zeigt keinen Flair für Gruppen</string>
+    <string name="room_settings_no_flair">Dieser Chat zeigt keinen Flair für Gruppen</string>
     <string name="room_settings_add_new_group">Neue Gruppen-ID (z.B. +foo:matrix.org")</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ungültige Gruppen-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ist keine gültige Gruppen-ID</string>
@@ -809,26 +810,26 @@
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Ungültiges Aliasformat</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' ist kein gültiges Format für ein Alias</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Sie werden keine spezifizierte Hauptadresse haben. Die Stadarthauptadresse für diesen Raum wird zufällig ausgewählt.</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Sie werden keine spezifizierte Hauptadresse haben. Die Stadarthauptadresse für diesen Chat wird zufällig ausgewählt.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Warnung Hauptadresse</string>
 
     <string name="room_settings_set_main_address">Als Hauptadresse festlegen</string>
     <string name="room_settings_unset_main_address">Hauptadresse festlegen rückgängig</string>
-    <string name="room_settings_copy_room_id">Raum-ID kopieren</string>
-    <string name="room_settings_copy_room_address">Raumadresse kopieren</string>
+    <string name="room_settings_copy_room_id">Chat-ID kopieren</string>
+    <string name="room_settings_copy_room_address">Chatadresse kopieren</string>
 
-    <string name="room_settings_addresses_e2e_enabled">Verschlüsselung für diesen Raum aktiviert.</string>
-    <string name="room_settings_addresses_e2e_disabled">Verschlüsselung für diesen Raum deaktiviert.</string>
+    <string name="room_settings_addresses_e2e_enabled">Verschlüsselung für diesen Chat aktiviert.</string>
+    <string name="room_settings_addresses_e2e_disabled">Verschlüsselung für diesen Chat deaktiviert.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Verschlüsselung aktivieren \n(Warnung: kann nicht wieder deaktiviert werden!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Warnung!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-end Verschlüsselung ist in beta und ist evtl. unzuverlässig.\n\nSie sollten sich nicht darauf verlassen.\n\nGeräte werden nicht fähig sein Historie zu entschlüsseln, bevor sie dem Raum beitreten.\n\nWenn Verschlüsselung aktiviert ist, kein es in dem Raum nicht mehr ausgeschaltet werden (noch).\n\nVerschlüsselte Nachrichten werden auf Geräten ohne Verschlüsselung nicht sichtbar sein.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">End-to-end Verschlüsselung ist in beta und ist evtl. unzuverlässig.\n\nSie sollten sich nicht darauf verlassen.\n\nGeräte werden nicht fähig sein Historie zu entschlüsseln, bevor sie dem Chat beitreten.\n\nWenn Verschlüsselung aktiviert ist, kein es in dem Chat nicht mehr ausgeschaltet werden (noch).\n\nVerschlüsselte Nachrichten werden auf Geräten ohne Verschlüsselung nicht sichtbar sein.</string>
 
     <!-- Directory -->
     <string name="directory_title">Verzeichnis</string>
     <string name="settings_theme">Thema</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s hat versucht einen bestimmten Zeitpunkt in diesem Raum zu laden, hat ihn aber nicht gefunden.</string>
+    <string name="failed_to_load_timeline_position">%s hat versucht einen bestimmten Zeitpunkt in diesem Chat zu laden, hat ihn aber nicht gefunden.</string>
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">End-to-end Verschlüsselungsinformation</string>
@@ -849,16 +850,16 @@
     <string name="encryption_information_verification">Verifizierung</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 Fingerabdruck</string>
 
-    <string name="encryption_export_e2e_room_keys"> E2E Raumschlüssel exportieren</string>
-    <string name="encryption_export_room_keys">Raumschlüssel exportieren</string>
+    <string name="encryption_export_e2e_room_keys"> E2E Chatschlüssel exportieren</string>
+    <string name="encryption_export_room_keys">Chatschlüssel exportieren</string>
     <string name="encryption_export_room_keys_summary">Schlüssel in einer lokale Datei exportieren</string>
     <string name="encryption_export_export">Exportiern</string>
     <string name="encryption_export_enter_passphrase">Passphrase eingeben</string>
     <string name="encryption_export_confirm_passphrase">Passphrase bestätigen</string>
-    <string name="encryption_export_saved_as">Die E2E Raumschlüssel wurden nach \'%s\' gespeichert.\n\nWarnung: diese Datei könnte gelöscht werden, wenn die App deinstalliert wird.</string>
+    <string name="encryption_export_saved_as">Die E2E Chatschlüssel wurden nach \'%s\' gespeichert.\n\nWarnung: diese Datei könnte gelöscht werden, wenn die App deinstalliert wird.</string>
 
-    <string name="encryption_import_e2e_room_keys">E2E Raumschlüssel importieren</string>
-    <string name="encryption_import_room_keys">Raumschlüssel importieren</string>
+    <string name="encryption_import_e2e_room_keys">E2E Chatschlüssel importieren</string>
+    <string name="encryption_import_room_keys">Chatschlüssel importieren</string>
     <string name="encryption_import_room_keys_summary">Schlüssel von einer lokalen Datei importieren</string>
     <string name="encryption_import_import">Importiern</string>
     <string name="encryption_never_send_to_unverified_devices_title">Nur überprüfte Geräte entschlüsseln</string>
@@ -884,11 +885,11 @@
     <string name="e2e_enabling_on_app_update">KEDR unterstützt jetzt end-to-end Verschlüsselung, aber sich müssen sich ab- und anmelden, um es zu aktivieren.\n\nSie können es jetzt oder später in den Einstellungen machen.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Raum enthält unbekannte Geräte.</string>
-    <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte, die nicht bestätigt wurden.\nDies bedeutet, es gibt keine Garantie, dass diese Gerät dem Nutzer gehört, der angegeben wird.\nWir empfehlen für jedes Gerät durch den Verifizierungsprozess durchzugehen, bevor Sie weiter machen. Sie können aber trotzdem ohne Verifizierung Nachrichten senden.\n\nUnbekannte Geräte:</string>
+    <string name="unknown_devices_alert_title">Chat enthält unbekannte Geräte.</string>
+    <string name="unknown_devices_alert_message">Dieser Chat enthält unbekannte Geräte, die nicht bestätigt wurden.\nDies bedeutet, es gibt keine Garantie, dass diese Gerät dem Nutzer gehört, der angegeben wird.\nWir empfehlen für jedes Gerät durch den Verifizierungsprozess durchzugehen, bevor Sie weiter machen. Sie können aber trotzdem ohne Verifizierung Nachrichten senden.\n\nUnbekannte Geräte:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Raumverzeichnis auswählen</string>
+    <string name="select_room_directory">Chatverzeichnis auswählen</string>
     <string name="directory_server_fail_to_retrieve_server">Der Server ist überladen oder nicht erreichbar</string>
     <string name="directory_server_type_homeserver">Heimserver eintippen, um öffentliche Räume zu sehen von</string>
     <string name="directory_server_placeholder">Heimserverlink</string>
@@ -908,7 +909,7 @@
         <item quantity="other">%d ungelesene Nachrichten</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 Raum</item>
+        <item quantity="one">1 Chat</item>
         <item quantity="other">%d Räume</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
@@ -927,7 +928,7 @@
     <string name="huge">Riesig</string>
 
     <!-- Widget-->
-    <string name="widget_no_power_to_manage">Sie brauchen Erlaubnis, um Widgets in diesem Raum zu verwalten</string>
+    <string name="widget_no_power_to_manage">Sie brauchen Erlaubnis, um Widgets in diesem Chat zu verwalten</string>
     <string name="widget_creation_failure">Widgetgestaltung fehlgeschlagen</string>
     <string name="event_formatter_widget_added">%1$s hinzugefügt von %2$s</string>
     <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
@@ -942,11 +943,11 @@
     <string name="widget_integration_unable_to_create">Nicht möglich Widget zu erstellen.</string>
     <string name="widget_integration_failed_to_send_request">Anfrage fehlgeschlagen.</string>
     <string name="widget_integration_positive_power_level">Leistungsstufe muss positiv sein.</string>
-    <string name="widget_integration_must_be_in_room">Sie sind nicht in diesem Raum.</string>
-    <string name="widget_integration_no_permission_in_room">Sie haben nicht die Erlaubnis das in diesem Raum zu machen.</string>
-    <string name="widget_integration_missing_room_id">Fehlende Raum-ID angefragt.</string>
+    <string name="widget_integration_must_be_in_room">Sie sind nicht in diesem Chat.</string>
+    <string name="widget_integration_no_permission_in_room">Sie haben nicht die Erlaubnis das in diesem Chat zu machen.</string>
+    <string name="widget_integration_missing_room_id">Fehlende Chat-ID angefragt.</string>
     <string name="widget_integration_missing_user_id">Fehlende Nutzer-ID angefragt.</string>
-    <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
+    <string name="widget_integration_room_not_visible">Chat %s ist nicht sichtbar.</string>
     <string name="widget_integration_missing_parameter">Ein erforderliches Parameter fehlt.</string>
     <string name="widget_integration_invalid_parameter">Ein Parameter ist ungültig.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
@@ -974,10 +975,10 @@
     <string name="command_description_unban_user">Entsperrt Nutzer mit gegebener ID</string>
     <string name="command_description_op_user">Macht vom Nutzer definieren</string>
     <string name="command_description_deop_user">Deaktiviert Nutzer mit gegebener ID</string>
-    <string name="command_description_invite_user">Lädt Nutzer in den Raum mit gegebener ID ein</string>
-    <string name="command_description_join_room">Tritt einem Raum mit gegebenem Alias bei</string>
-    <string name="command_description_part_room">Verlässt den Raum</string>
-    <string name="command_description_topic">Ändert das Raumthema</string>
+    <string name="command_description_invite_user">Lädt Nutzer in den Chat mit gegebener ID ein</string>
+    <string name="command_description_join_room">Tritt einem Chat mit gegebenem Alias bei</string>
+    <string name="command_description_part_room">Verlässt den Chat</string>
+    <string name="command_description_topic">Ändert das Chatthema</string>
     <string name="command_description_kick_user">Klickt den Nutzer mit gegebener ID</string>
     <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
     <string name="command_description_markdown">Ein/Aus Markierung</string>
@@ -1016,7 +1017,7 @@
     </plurals>
 
     <plurals name="group_rooms">
-        <item quantity="one">1 Raum</item>
+        <item quantity="one">1 Chat</item>
         <item quantity="other">%d Räume</item>
     </plurals>
     <string name="group_no_long_description">Der Gruppenadministrator hat keine lange Beschreibung bereitgestellt.</string>
@@ -1025,7 +1026,7 @@
     <string name="has_been_banned">Sie wurden gesperrt von %1$s by %2$s</string>
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Wieder beitreten</string>
-    <string name="forget_room">Raum vergessen</string>
+    <string name="forget_room">Chat vergessen</string>
 
     <!-- Miscelaneous image descriptions for accessibility -->
     <string name="receipt_avatar">Empfangsbild</string>
@@ -1044,9 +1045,9 @@
     <string name="deactivate_account_submit">Profil deaktivieren</string>
 
     <string name="error_empty_field_your_password">Bitte geben Sie ihr neues Passwort ein.</string>
-    <string name="room_tombstone_versioned_description">Dieser Raum wurde ersetzt und ist nicht mehr aktiv</string>
+    <string name="room_tombstone_versioned_description">Dieser Chat wurde ersetzt und ist nicht mehr aktiv</string>
     <string name="room_tombstone_continuation_link">Die Unterhaltung wird hier fortgeführt</string>
-    <string name="room_tombstone_continuation_description">Dieser Raum ist eine Fortsetzung einer anderen Unterhaltung</string>
+    <string name="room_tombstone_continuation_description">Dieser Chat ist eine Fortsetzung einer anderen Unterhaltung</string>
     <string name="room_tombstone_predecessor_link">Hier klicken, um ältere Nachrichten zu sehen</string>
 
     <!-- Resource limit-->
@@ -1085,7 +1086,7 @@
     <string name="invite_sent">Einladung gesendet</string>
     <string name="invite_wait">Warten bis Schlüssel ausgetauscht wurden</string>
     <string name="outgoing_call">Ausgehender Anruf</string>
-    <string name="room_empty">Raum ist leer. Verlassen…</string>
+    <string name="room_empty">Chat ist leer. Verlassen…</string>
     <string name="no_participants">Keine Beteiligten</string>
     <string name="slide_one_title">Sicherheit</string>
     <string name="slide_one_content">Chatten, anrufen, Sprachnachrichten senden und Dateien austauschen mit den höchsten Sicherheitsstandarts</string>
@@ -1106,10 +1107,12 @@
     <string name="voice_msg_input_hint_time_limited_formatter" formatted="false">%d s hat verlassen</string>
     <string name="voice_msg_input">%d s</string>
     <string name="room_settings_hide_avatar">Bild ausblenden</string>
-    <string name="hide_message_preview">Nachrichtenvorschau ausblenden</string>
-    <string name="room_details">Raumdetails</string>
+    <string name="override_message_preview">Nachrichtenvorschau überschreiben</string>
+    <string name="hide_message_preview">Vorschau der Nachricht ausblenden </string>
+    <string name="show_message_in_notification">Nachricht in der Benachrichtigung anzeigen</string>
+    <string name="room_details">Chatdetails</string>
     <string name="message">Nachricht…</string>
-    <string name="edit_room">Raum bearbeiten</string>
+    <string name="edit_room">Chat bearbeiten</string>
     <string name="edit_contact">Kontakt bearbeiten</string>
     <string name="enter_note">Notiz eingeben</string>
     <string name="enter_name">Name eingeben</string>
@@ -1128,4 +1131,14 @@
     <string name="not_available">nicht verfügbar</string>
     <string name="scanner_is">Scanner ist %s</string>
     <string name="wrong_3_times">Sie haben dreimal einen falschen Code eingegeben. Bitte versuchen Sie es nach einer Minute erneut</string>
+    <string name="message_from">Nachricht von %s</string>
+    <string name="enter_ask_secret_tab">Geben Sie einen neuen PIN-Code ein, um eine geheime Liste zu erstellen. Falls Sie eine geheime Liste schon erstellt haben, geben Sie den jeweiligen PIN Code ein</string>
+    <string name="main_list">Hauptliste</string>
+    <string name="wrong_pin">Pin ist bereits vorhanden</string>
+    <string name="passwords_not_equal">Passwörter sind nicht gleich</string>
+    <string name="disable_notifications_title">Benachrichtigungen ausschalten?</string>
+    <string name="disable_notifications_message">Benachrichtigungen für %s ausschalten?></string>
+    <string name="transfer_contacts">Kontaktübertragung</string>        
+    <string name="transfer_contacts_hint">Sie können Kontakte aus der Standardliste übertragen</string>        
+    <string name="transfer_to_main_list">Übertragen in die Hauptliste</string>
 </resources>

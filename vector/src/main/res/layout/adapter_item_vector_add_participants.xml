@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="74dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:alpha="0.3"
                 android:src="@drawable/ic_add_black"
-                android:visibility="gone" />
+                android:visibility="visible" />
         </RelativeLayout>
 
         <im.vector.view.VectorCircularImageView
@@ -89,8 +89,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/contact_admin"
             android:layout_margin="6dp"
+            android:src="@drawable/contact_admin"
             android:visibility="gone" />
 
         <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
@@ -113,10 +113,10 @@
             android:id="@+id/online_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/filtered_list_status"
             android:layout_alignBottom="@id/filtered_list_status"
-            android:layout_marginBottom="3dp"
             android:layout_marginRight="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toLeftOf="@+id/filtered_list_status"
             android:visibility="visible"
             app:srcCompat="@drawable/ic_fiber_manual_record_black_24dp" />
 
@@ -124,10 +124,10 @@
             android:id="@+id/filtered_list_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/filtered_list_name"
             android:layout_alignBottom="@id/filtered_list_avatar"
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/filtered_list_actions_list"
-            android:layout_alignLeft="@id/filtered_list_name"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="?attr/default_text_light_color"

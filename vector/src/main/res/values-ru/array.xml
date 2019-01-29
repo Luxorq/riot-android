@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="quick_responses">
+        <item>Привет</item>
+        <item>Привет</item>
+        <item>Как делишки?</item>
+        <item>Как дела?</item>
+        <item>Что происходит?</item>
+        <item>Что нового?</item>
+        <item>В чем дело?</item>
+        <item>Как все?</item>
+        <item>Как дела?</item>
+        <item>Как жизнь?</item>
+        <item>Как прошел твой день?</item>
+        <item>Как проходит твой день?</item>
+        <item>Рад тебя слышать</item>
+        <item>Рад слышать</item>
+        <item>Давно не виделись</item>
+        <item>Прошло много времени</item>
+        <item>Прощай</item>
+        <item>Прощальный привет</item>
+        <item>Хорошего дня</item>
+        <item>Береги себя</item>
+        <item>До свидания</item>
+        <item>Пока-пока</item>
+        <item>Потом</item>
+        <item>До скорого</item>
+        <item>Поговорим позже</item>
+        <item>Удачи</item>
+        <item>Пока</item>
+        <item>Тогда все в порядке</item>
+        <item>Увидимся позже</item>
+        <item>Мир</item>
+        <item>Мир</item>
+        <item>Я выхожу</item>
+        <item>Прощай</item>
+        <item>Чао</item>
+        <item>До свидания</item>
+        <item>До свидания</item>
+    </string-array>
+</resources>

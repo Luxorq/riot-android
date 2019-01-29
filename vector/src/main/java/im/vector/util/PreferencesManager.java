@@ -731,16 +731,17 @@ public class PreferencesManager {
                 .apply();
     }
 
-    public static String getGuardPass(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.key_guard_pass), "");
+    public static String getDefaultPin(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.key_default_pin), "");
     }
 
-    public static void setGuardPass(Context context, String pass) {
+    public static void setDefaultPin(Context context, String pin) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putString(context.getResources().getString(R.string.key_guard_pass), pass)
+                .putString(context.getResources().getString(R.string.key_default_pin), pin)
                 .apply();
     }
+
 
     public static long getGuardTime(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getLong(context.getResources().getString(R.string.key_guard_time), 0);
@@ -784,6 +785,18 @@ public class PreferencesManager {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(context.getResources().getString(R.string.key_global_hide_preview), preview)
+                .apply();
+    }
+
+
+    public static boolean showNotificationMessage(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getResources().getString(R.string.key_show_notification_message), false);
+    }
+
+    public static void setShowNotificationMessage(Context context, boolean preview) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(context.getResources().getString(R.string.key_show_notification_message), preview)
                 .apply();
     }
 }

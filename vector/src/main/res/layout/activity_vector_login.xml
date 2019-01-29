@@ -9,8 +9,8 @@
         android:id="@+id/login_actions_bar"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/button_login"
@@ -18,9 +18,9 @@
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="40dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="40dp"
             android:background="@color/primary"
             android:text="@string/auth_login"
             android:textColor="@android:color/white"
@@ -32,9 +32,9 @@
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="40dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="40dp"
             android:background="@color/primary"
             android:text="@string/auth_register"
             android:textColor="@android:color/white"
@@ -97,8 +97,8 @@
             style="@style/TextLabelRegistered"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:gravity="center" />
     </RelativeLayout>
 
     <!-- the main body is defined in a scroll view to avoid split items -->
@@ -131,8 +131,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -172,38 +172,37 @@
                             android:id="@+id/login_user_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"
                             android:hint="@string/auth_user_name_placeholder"
                             android:maxLines="1"
                             android:nextFocusDown="@+id/login_password"
                             android:singleLine="true"
                             android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"/>
+                            android:textSize="16sp" />
                     </android.support.design.widget.TextInputLayout>
-
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginTop="15dp"
                         android:textColorHint="@color/primary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
                         app:passwordToggleEnabled="true"
-                        app:passwordToggleTint="@color/black"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                        app:passwordToggleTint="@color/black">
 
                         <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/login_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"
                             android:hint="@string/auth_password_placeholder"
+                            android:imeOptions="actionDone"
                             android:inputType="textPassword"
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:imeOptions="actionDone"
-                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"/>
+                            android:textSize="16sp" />
                     </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
@@ -298,49 +297,61 @@
                             android:id="@+id/creation_your_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"
                             android:hint="@string/auth_user_name_placeholder"
                             android:maxLines="1"
                             android:nextFocusDown="@+id/creation_password1"
                             android:singleLine="true"
                             android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"/>
+                            android:textSize="16sp" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="10dp"
                         android:textColorHint="@color/primary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
                         app:passwordToggleEnabled="true"
-                        app:passwordToggleTint="@color/black"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                        app:passwordToggleTint="@color/black">
 
                         <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/creation_password1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"
                             android:hint="@string/auth_password_placeholder"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:nextFocusDown="@+id/repeat_password"
+                            android:singleLine="true"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textColorHint="@color/primary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="@color/black">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/repeat_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"
+                            android:hint="@string/auth_repeat_password_placeholder"
+                            android:imeOptions="actionDone"
                             android:inputType="textPassword"
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:imeOptions="actionDone"
-                            android:digits="abcdefghijklmnopqrstuvwxyz0123456789-_.\"/>
+                            android:textSize="16sp" />
                     </android.support.design.widget.TextInputLayout>
-
-                    <EditText
-                        android:id="@+id/creation_password2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/auth_repeat_password_placeholder"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:visibility="gone" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -467,8 +478,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:paddingBottom="10dp"
                     android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
                     android:text="@string/auth_forgot_password"
                     android:textColor="@color/vector_green_color"
                     android:textSize="14sp"

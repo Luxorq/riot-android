@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.data.Room;
 
 import java.util.Collections;
@@ -14,18 +15,26 @@ import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.VectorRoomInviteMembersActivity;
+import im.vector.activity.VectorRoomTransferMembersActivity;
 import im.vector.adapters.HomeRoomAdapter;
+import im.vector.util.DB;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
+import im.vector.util.UtilsKt;
 import im.vector.view.HomeSectionView;
 
+import static im.vector.util.UtilsKt.isHome;
+
 public class ContactsFragment extends HomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
-    @BindView(R.id.invite_contacts)
-    View mInvite;
+    @BindView(R.id.transfer_contacts)
+    View mTransfer;
     protected static final String LOG_TAG = ContactsFragment.class.getSimpleName();
 
     public static ContactsFragment newInstance() {
@@ -44,21 +53,26 @@ public class ContactsFragment extends HomeFragment implements HomeRoomAdapter.On
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NotNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
     @Override
     void initViews() {
         super.initViews();
-        mInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSession != null && mSession.getMyUser() != null) {
-                    SettingsFragment.inviteContacts(ContactsFragment.this, mSession.getMyUser());
-                }
-            }
-        });
+        if (isHome(requireActivity())) {
+            return;
+        }
+        mTransfer.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.transfer_contacts)
+    void transferClick() {
+        if ((null != mSession)) {
+            Intent intent = new Intent(requireActivity(), VectorRoomTransferMembersActivity.class);
+            intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            startActivityForResult(intent, 10001);
+        }
     }
 
     @Override
@@ -66,8 +80,15 @@ public class ContactsFragment extends HomeFragment implements HomeRoomAdapter.On
         final boolean pinMissedNotifications = PreferencesManager.pinMissedNotifications(getActivity());
         final boolean pinUnreadMessages = PreferencesManager.pinUnreadMessages(getActivity());
         final Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
-        sortAndDisplay(result.getDirectChats(), notificationComparator, mDirectChatsSection);
-        mActivity.hideWaitingView();
+        boolean isHome = isHome(requireActivity());
+        DB.getRoomsWithPin(isHome, VectorApp.currentPin, list -> requireActivity().runOnUiThread(() -> {
+            if (isHome) {
+                sortAndDisplay(UtilsKt.filterRoomOut(result.getDirectChats(), list), notificationComparator, mDirectChatsSection);
+            } else {
+                sortAndDisplay(UtilsKt.filterRoomIn(result.getDirectChats(), list), notificationComparator, mDirectChatsSection);
+            }
+            mActivity.hideWaitingView();
+        }));
     }
 
     @Override
@@ -89,7 +110,7 @@ public class ContactsFragment extends HomeFragment implements HomeRoomAdapter.On
         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, room.getRoomId());
         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-        getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
+        requireActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
     }
 
     protected int getSectionRes() {

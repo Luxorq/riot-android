@@ -93,7 +93,9 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
+import im.vector.util.realm.Migration;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 import static im.vector.activity.VectorGuardActivity.checkGuardEnabled;
 
@@ -112,6 +114,7 @@ public class VectorApp extends MultiDexApplication {
      */
     private static VectorApp instance = null;
     public static boolean locked = true;
+    public static String currentPin;
     /**
      * Rage shake detection to send a bug report.
      */
@@ -213,6 +216,13 @@ public class VectorApp extends MultiDexApplication {
             Stetho.initializeWithDefaults(this);
         }
         Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .schemaVersion(Migration.DB_VERSION)
+                .migration(new Migration())
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(config);
+        currentPin = PreferencesManager.getDefaultPin(this);
         instance = this;
         Reprint.initialize(this);
         mCallsManager = new CallsManager(this);

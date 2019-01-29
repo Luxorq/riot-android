@@ -11,10 +11,11 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/invite_contacts"
+            android:id="@+id/transfer_contacts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:foreground="?attr/selectableItemBackground"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/white"
             app:cardElevation="2dp">
 
@@ -26,14 +27,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:drawableStart="@drawable/invite"
+                    android:drawableStart="@drawable/contacts_transfer"
                     android:drawablePadding="20dp"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:paddingStart="15dp"
                     android:paddingTop="10dp"
                     android:singleLine="true"
-                    android:text="@string/invite_contacts"
+                    android:text="@string/transfer_contacts"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -43,7 +44,7 @@
                     android:layout_marginBottom="7dp"
                     android:paddingStart="65dp"
                     android:paddingEnd="5dp"
-                    android:text="@string/invite_direct"
+                    android:text="@string/transfer_contacts_hint"
                     android:textColor="@color/grey500"
                     android:textSize="12sp" />
             </LinearLayout>

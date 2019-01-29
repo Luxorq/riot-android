@@ -49,4 +49,43 @@
         <item>@string/room_settings_mute</item>
     </string-array>
 
+    <string-array name="quick_responses">
+        <item>Hey</item>
+        <item>Hi</item>
+        <item>How’s it going?</item>
+        <item>How are you doing?</item>
+        <item>What’s up?</item>
+        <item>What’s new?</item>
+        <item>What’s going on?</item>
+        <item>How’s everything?</item>
+        <item>How are things?</item>
+        <item>How’s life?</item>
+        <item>How’s your day?</item>
+        <item>How’s your day going?</item>
+        <item>Good to see you</item>
+        <item>Nice to see you</item>
+        <item>Long time no see</item>
+        <item>It’s been a while</item>
+        <item>Goodbye</item>
+        <item>Farewell</item>
+        <item>Have a good day</item>
+        <item>Take care</item>
+        <item>Bye</item>
+        <item>Bye bye</item>
+        <item>Later</item>
+        <item>See you later</item>
+        <item>Talk to you later</item>
+        <item>Have a good one</item>
+        <item>So long</item>
+        <item>All right then</item>
+        <item>Catch you later</item>
+        <item>Peace</item>
+        <item>Peace out</item>
+        <item>I\'m out</item>
+        <item>Adios</item>
+        <item>Ciao</item>
+        <item>Au revoir</item>
+        <item>Sayonara</item>
+    </string-array>
+
 </resources>

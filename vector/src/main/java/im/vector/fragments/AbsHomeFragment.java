@@ -23,6 +23,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -123,12 +124,17 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.ic_action_mark_all_as_read).setVisible(true);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.ic_action_mark_all_as_read:
-                Log.d(LOG_TAG, "onOptionsItemSelected mark all as read");
-                onMarkAllAsRead();
-                return true;
+        if (item.getItemId() == R.id.ic_action_mark_all_as_read) {
+            Log.d(LOG_TAG, "onOptionsItemSelected mark all as read");
+            onMarkAllAsRead();
+            return true;
         }
         return false;
     }

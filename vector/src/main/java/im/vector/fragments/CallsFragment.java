@@ -21,8 +21,8 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import java.util.Collections;
 import java.util.List;
 
-import im.vector.CallsCallback;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.util.DB;
@@ -31,6 +31,8 @@ import im.vector.util.KedrCallHistory;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.view.CallSectionView;
 import im.vector.view.HomeSectionView;
+
+import static im.vector.util.UtilsKt.isHome;
 
 public class CallsFragment extends HomeFragment {
     protected static final String LOG_TAG = CallsFragment.class.getSimpleName();
@@ -60,17 +62,7 @@ public class CallsFragment extends HomeFragment {
     void refreshData(HomeRoomsViewModel.Result result) {
         final CallSectionView sectionView = (CallSectionView) mDirectChatsSection;
         mActivity.hideWaitingView();
-        DB.getCalls(new CallsCallback() {
-            @Override
-            public void onResult(final List<KedrCallHistory> calls) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        sectionView.setCalls(calls);
-                    }
-                });
-            }
-        });
+        DB.getCalls(isHome(requireActivity()), VectorApp.currentPin, calls -> mActivity.runOnUiThread(() -> sectionView.setCalls(calls)));
     }
 
     @Override
@@ -88,18 +80,7 @@ public class CallsFragment extends HomeFragment {
 
     @Override
     public void onLongClickRoom(View v, Room room, final int position) {
-        DB.removeCall((String) v.getTag(), new CallsCallback() {
-            @Override
-            public void onResult(List<KedrCallHistory> calls) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final HomeRoomsViewModel.Result result = mActivity.getRoomsViewModel().getResult();
-                        onRoomResultUpdated(result);
-                    }
-                });
-            }
-        });
+        DB.removeCall((String) v.getTag(), calls -> mActivity.runOnUiThread(() -> onRoomResultUpdated(mActivity.getRoomsViewModel().getResult())));
     }
 
     protected int getSectionRes() {
@@ -140,11 +121,11 @@ public class CallsFragment extends HomeFragment {
         if (0 == permissions.length) {
             org.matrix.androidsdk.util.Log.d(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
         } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL) {
-            if (PermissionsToolsKt.onPermissionResultAudioIpCall(getActivity(), grantResults)) {
+            if (PermissionsToolsKt.onPermissionResultAudioIpCall(mActivity, grantResults)) {
                 startCall();
             }
         } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL) {
-            if (PermissionsToolsKt.onPermissionResultVideoIpCall(getActivity(), grantResults)) {
+            if (PermissionsToolsKt.onPermissionResultVideoIpCall(mActivity, grantResults)) {
                 startCall();
             }
         }
@@ -160,21 +141,13 @@ public class CallsFragment extends HomeFragment {
         mSession.mCallsManager.createCallInRoom(mCall.getRoomId(), mCall.isVideoCall(), new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Intent intent = new Intent(getActivity(), VectorCallViewActivity.class);
+                mActivity.runOnUiThread(() -> {
+                    final Intent intent = new Intent(getActivity(), VectorCallViewActivity.class);
 
-                        intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
+                    intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(intent);
-                            }
-                        });
-                    }
+                    mActivity.runOnUiThread(() -> startActivity(intent));
                 });
             }
 
@@ -191,14 +164,9 @@ public class CallsFragment extends HomeFragment {
 
                     if (MXCryptoError.UNKNOWN_DEVICES_CODE.equals(cryptoError.errcode)) {
                         CommonActivityUtils.displayUnknownDevicesDialog(mSession,
-                                getActivity(),
+                                mActivity,
                                 (MXUsersDevicesMap<MXDeviceInfo>) cryptoError.mExceptionData,
-                                new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
-                                    @Override
-                                    public void onSendAnyway() {
-                                        startCall();
-                                    }
-                                });
+                                () -> startCall());
 
                         return;
                     }

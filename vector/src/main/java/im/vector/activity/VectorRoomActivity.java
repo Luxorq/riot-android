@@ -226,6 +226,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int INVITE_USER_REQUEST_CODE = 4;
     public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
     private static final int RECORD_AUDIO_REQUEST_CODE = 6;
+    public static String FINISH = "finish";
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
     private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
@@ -1350,6 +1351,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     sendSticker(data);
                     break;
                 case GET_MENTION_REQUEST_CODE:
+                    if (data.getBooleanExtra(FINISH, false)) {
+                        finish();
+                        return;
+                    }
                     insertUserDisplayNameInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
                     break;
                 case REQUEST_ROOM_AVATAR_CODE:

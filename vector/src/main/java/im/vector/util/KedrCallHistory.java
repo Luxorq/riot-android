@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -31,8 +32,6 @@ public class KedrCallHistory extends RealmObject {
     private long date;
     private int type;
     private boolean videoCall;
-    @Ignore
-    private boolean isValid;
 
     static KedrCallHistory initWithCall(IMXCall call, long startTime) {
         KedrCallHistory item = new KedrCallHistory();
@@ -87,6 +86,7 @@ public class KedrCallHistory extends RealmObject {
         return videoCall;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "KedrCallHistory{" +
@@ -97,7 +97,6 @@ public class KedrCallHistory extends RealmObject {
                 ", date=" + date +
                 ", type=" + type +
                 ", videoCall=" + videoCall +
-                ", isValid=" + isValid +
                 '}';
     }
 }

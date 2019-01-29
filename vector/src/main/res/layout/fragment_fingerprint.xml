@@ -109,6 +109,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="50dp"
-        android:src="@drawable/settings_authpassword" />
+        android:src="@drawable/settings_auth_password" />
 
 </LinearLayout>

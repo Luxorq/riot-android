@@ -23,6 +23,13 @@
         android:title="" />
 
     <item
+        android:id="@+id/bottom_action_secret"
+        android:contentDescription="@string/bottom_action_secret"
+        android:enabled="true"
+        android:icon="@drawable/tab_chats_hidden"
+        android:title="" />
+
+    <item
         android:id="@+id/bottom_action_settings"
         android:contentDescription="@string/room_sliding_menu_settings"
         android:enabled="true"

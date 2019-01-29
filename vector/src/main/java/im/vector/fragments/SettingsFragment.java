@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +37,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.PasswordChangeActivity;
 import im.vector.activity.VectorAppCompatActivity;
+import im.vector.activity.VectorAvatarViewerActivity;
 import im.vector.activity.VectorGuardActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMediasPickerActivity;
@@ -48,6 +49,8 @@ public class SettingsFragment extends AbsHomeFragment {
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
     @BindView(R.id.avatar_img)
     ImageView mAvatarView;
+    @BindView(R.id.avatar_change)
+    AppCompatImageView mAvatarChange;
     @BindView(R.id.action_bar_header_room_title)
     TextView mTitle;
     @BindView(R.id.invite_contacts)
@@ -62,8 +65,10 @@ public class SettingsFragment extends AbsHomeFragment {
 
     @BindView(R.id.touch_id)
     SwitchCompat touchSwitch;
-    @BindView(R.id.preview_id)
+    @BindView(R.id.hide_message_preview)
     SwitchCompat previewSwitch;
+    @BindView(R.id.show_notification_message)
+    SwitchCompat previewNotificationSwitch;
 
     private final MXEventListener mEventsListener = new MXEventListener() {
 
@@ -133,58 +138,36 @@ public class SettingsFragment extends AbsHomeFragment {
         final MyUser myUser = mSession.getMyUser();
         VectorUtils.loadUserAvatar(getActivity(), mSession, mAvatarView, myUser.getAvatarUrl(), myUser.user_id, myUser.displayname);
         mTitle.setText(myUser.displayname);
-        mAvatarView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO, getActivity(), PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                    Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-                    intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
-                    startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
-                }
+        mAvatarChange.setOnClickListener(v -> {
+            if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
             }
         });
-        mInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inviteContacts(SettingsFragment.this, myUser);
-            }
+        mAvatarView.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(myUser.getAvatarUrl()))
+                return;
+            startActivity(VectorAvatarViewerActivity.Companion.getIntent(requireActivity(), mSession.getMyUserId(), myUser.getAvatarUrl()));
         });
-        mChangePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendIntent = new Intent(getActivity(), PasswordChangeActivity.class);
-                startActivity(sendIntent);
-            }
+        mInvite.setOnClickListener(v -> inviteContacts(SettingsFragment.this, myUser));
+        mChangePassword.setOnClickListener(v -> {
+            Intent sendIntent = new Intent(getActivity(), PasswordChangeActivity.class);
+            startActivity(sendIntent);
         });
-        mChangePin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VectorGuardActivity.startWithMode(getActivity(), VectorGuardActivity.MODE_CHANGE);
-            }
-        });
+        mChangePin.setOnClickListener(v -> VectorGuardActivity.startWithMode(getActivity(), VectorGuardActivity.MODE_CHANGE));
         askPinSwitch.setChecked(PreferencesManager.isGuard(getActivity()));
-        askPinSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PreferencesManager.setGuard(getActivity(), isChecked);
-                touchSwitch.setEnabled(Reprint.isHardwarePresent() && Reprint.hasFingerprintRegistered() && isChecked);
-            }
+        askPinSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            PreferencesManager.setGuard(getActivity(), isChecked);
+            touchSwitch.setEnabled(Reprint.isHardwarePresent() && Reprint.hasFingerprintRegistered() && isChecked);
         });
         touchSwitch.setChecked(PreferencesManager.isTouchId(getActivity()));
         touchSwitch.setEnabled(Reprint.isHardwarePresent() && Reprint.hasFingerprintRegistered() && askPinSwitch.isChecked());
-        touchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PreferencesManager.setTouchId(getActivity(), isChecked);
-            }
-        });
+        touchSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> PreferencesManager.setTouchId(getActivity(), isChecked));
         previewSwitch.setChecked(PreferencesManager.isGlobalHidePreview(getActivity()));
-        previewSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PreferencesManager.setGlobalHidePreview(getActivity(), isChecked);
-            }
-        });
+        previewSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> PreferencesManager.setGlobalHidePreview(getActivity(), isChecked));
+        previewNotificationSwitch.setChecked(PreferencesManager.showNotificationMessage(getActivity()));
+        previewNotificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> PreferencesManager.setShowNotificationMessage(getActivity(), isChecked));
         /*BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(RULE_ID_DISABLE_ALL);
         if (null != rule) {
             mSwitch.setChecked(!rule.isEnabled);
@@ -254,55 +237,42 @@ public class SettingsFragment extends AbsHomeFragment {
 
                                 @Override
                                 public void onUploadError(final String uploadId, final int serverResponseCode, final String serverErrorMessage) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            onCommonDone(serverResponseCode + " : " + serverErrorMessage);
-                                        }
-                                    });
+                                    getActivity().runOnUiThread(() -> onCommonDone(serverResponseCode + " : " + serverErrorMessage));
                                 }
 
                                 @Override
                                 public void onUploadComplete(final String uploadId, final String contentUri) {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    getActivity().runOnUiThread(() -> mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
                                         @Override
-                                        public void run() {
-                                            mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
-                                                @Override
-                                                public void onSuccess(Void info) {
-                                                    onCommonDone(null);
-                                                    refreshDisplay();
-                                                }
-
-                                                @Override
-                                                public void onNetworkError(Exception e) {
-                                                    onCommonDone(e.getLocalizedMessage());
-                                                }
-
-                                                @Override
-                                                public void onMatrixError(final MatrixError e) {
-                                                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                                                        if (null != getActivity()) {
-                                                            getActivity().runOnUiThread(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    hideLoadingView();
-                                                                    ((VectorAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
-                                                                }
-                                                            });
-                                                        }
-                                                    } else {
-                                                        onCommonDone(e.getLocalizedMessage());
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onUnexpectedError(Exception e) {
-                                                    onCommonDone(e.getLocalizedMessage());
-                                                }
-                                            });
+                                        public void onSuccess(Void info) {
+                                            onCommonDone(null);
+                                            refreshDisplay();
                                         }
-                                    });
+
+                                        @Override
+                                        public void onNetworkError(Exception e) {
+                                            onCommonDone(e.getLocalizedMessage());
+                                        }
+
+                                        @Override
+                                        public void onMatrixError(final MatrixError e) {
+                                            if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                                if (null != getActivity()) {
+                                                    getActivity().runOnUiThread(() -> {
+                                                        hideLoadingView();
+                                                        ((VectorAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
+                                                    });
+                                                }
+                                            } else {
+                                                onCommonDone(e.getLocalizedMessage());
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onUnexpectedError(Exception e) {
+                                            onCommonDone(e.getLocalizedMessage());
+                                        }
+                                    }));
                                 }
                             });
                         }
@@ -314,14 +284,11 @@ public class SettingsFragment extends AbsHomeFragment {
 
     private void onCommonDone(final String errorMessage) {
         if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!TextUtils.isEmpty(errorMessage)) {
-                        Toast.makeText(VectorApp.getInstance(), errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                    hideLoadingView();
+            getActivity().runOnUiThread(() -> {
+                if (!TextUtils.isEmpty(errorMessage)) {
+                    Toast.makeText(VectorApp.getInstance(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
+                hideLoadingView();
             });
         }
     }

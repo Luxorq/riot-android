@@ -101,7 +101,7 @@ public class PeopleAdapter extends AbsAdapter {
                 mNoContactAccessPlaceholder : mNoResultPlaceholder);
 
         mKnownContactsSection = new KnownContactsAdapterSection(context, context.getString(R.string.user_directory_header), -1,
-                R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), null);
+                R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<>(), null);
         mKnownContactsSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
         mKnownContactsSection.setIsHiddenWhenNoFilter(true);
 

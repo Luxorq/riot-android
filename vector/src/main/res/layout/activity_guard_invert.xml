@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:minHeight="120dp"
+            android:padding="40dp"
+            android:text="@string/enter_ask_secret_tab"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/first_digit"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/digit_invert"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/second_digit"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/second_digit"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/digit_invert"
+            app:layout_constraintLeft_toRightOf="@id/first_digit"
+            app:layout_constraintRight_toLeftOf="@+id/third_digit"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/third_digit"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/digit_invert"
+            app:layout_constraintLeft_toRightOf="@id/second_digit"
+            app:layout_constraintRight_toLeftOf="@+id/fourth_digit"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/fourth_digit"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/digit_invert"
+            app:layout_constraintLeft_toRightOf="@id/third_digit"
+            app:layout_constraintRight_toLeftOf="@+id/fifth_digit"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/fifth_digit"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/digit_invert"
+            app:layout_constraintLeft_toRightOf="@id/fourth_digit"
+            app:layout_constraintRight_toLeftOf="@id/six_digit"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/six_digit"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/digit_invert"
+            app:layout_constraintLeft_toRightOf="@id/fifth_digit"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <android.support.constraint.Barrier
+            android:id="@+id/barrier0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="first_digit,second_digit,third_digit,fourth_digit,fifth_digit,six_digit" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="75dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/one"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/two"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/two"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/one"
+                app:layout_constraintRight_toLeftOf="@+id/three"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/three"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/two"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="one,two,three" />
+
+            <TextView
+                android:id="@+id/four"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="4"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/five"
+                app:layout_constraintTop_toBottomOf="@id/barrier1" />
+
+            <TextView
+                android:id="@+id/five"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="5"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/four"
+                app:layout_constraintRight_toLeftOf="@+id/six"
+                app:layout_constraintTop_toBottomOf="@id/barrier1" />
+
+            <TextView
+                android:id="@+id/six"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="6"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/five"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/barrier1" />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="four,five,six" />
+
+            <TextView
+                android:id="@+id/seven"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="7"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/five"
+                app:layout_constraintTop_toBottomOf="@id/barrier2" />
+
+            <TextView
+                android:id="@+id/eight"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="8"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/four"
+                app:layout_constraintRight_toLeftOf="@+id/six"
+                app:layout_constraintTop_toBottomOf="@id/barrier2" />
+
+            <TextView
+                android:id="@+id/nine"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="9"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/five"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/barrier2" />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="seven, eight, nine" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/auth_or_home"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/settings_auth_password"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/five"
+                app:layout_constraintTop_toBottomOf="@id/barrier3" />
+
+            <TextView
+                android:id="@+id/zero"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/four"
+                app:layout_constraintRight_toLeftOf="@+id/six"
+                app:layout_constraintTop_toBottomOf="@id/barrier3" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/del"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pad_invert"
+                android:clickable="true"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toRightOf="@id/five"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/barrier3"
+                app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/blocked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|top"
+            android:includeFontPadding="false"
+            android:text="@string/wrong_3_times"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:textColor="@color/grey400"
+            android:textSize="60sp"
+            tools:text="00:50" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

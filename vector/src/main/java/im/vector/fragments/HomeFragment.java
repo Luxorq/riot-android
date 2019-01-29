@@ -27,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -41,11 +42,16 @@ import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.HomeRoomAdapter;
+import im.vector.util.DB;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
+import im.vector.util.UtilsKt;
 import im.vector.view.HomeSectionView;
+
+import static im.vector.util.UtilsKt.isHome;
 
 public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     protected static final String LOG_TAG = HomeFragment.class.getSimpleName();
@@ -94,15 +100,15 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
      */
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NotNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home);
-        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home_secondary);
+        mPrimaryColor = ContextCompat.getColor(requireActivity(), R.color.tab_home);
+        mSecondaryColor = ContextCompat.getColor(requireActivity(), R.color.tab_home_secondary);
         initViews();
         // Eventually restore the pattern of adapter after orientation change
         for (HomeSectionView homeSectionView : mHomeSectionViews) {
@@ -258,13 +264,20 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         final boolean pinMissedNotifications = PreferencesManager.pinMissedNotifications(getActivity());
         final boolean pinUnreadMessages = PreferencesManager.pinUnreadMessages(getActivity());
         final Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
-        //sortAndDisplay(result.getFavourites(), notificationComparator, mFavouritesSection);
-        sortAndDisplay(result.getDirectChatsWithRooms(), notificationComparator, mDirectChatsSection);
-        sortAndDisplay(result.getLowPriorities(), notificationComparator, mLowPrioritySection);
-        //sortAndDisplay(result.getOtherRooms(), notificationComparator, mRoomsSection);
-        sortAndDisplay(result.getServerNotices(), notificationComparator, mServerNoticesSection);
-        mActivity.hideWaitingView();
-        mInvitationsSection.setRooms(mActivity.getRoomInvitations());
+        boolean isHome = isHome(requireActivity());
+        DB.getRoomsWithPin(isHome, VectorApp.currentPin, list -> requireActivity().runOnUiThread(() -> {
+            if (isHome) {
+                List<Room> chats = UtilsKt.filterRoomOut(result.getDirectChats(), list);
+                chats.addAll(result.getOtherRooms());
+                sortAndDisplay(chats, notificationComparator, mDirectChatsSection);
+                sortAndDisplay(result.getLowPriorities(), notificationComparator, mLowPrioritySection);
+                sortAndDisplay(result.getServerNotices(), notificationComparator, mServerNoticesSection);
+                mInvitationsSection.setRooms(mActivity.getRoomInvitations());
+            } else {
+                sortAndDisplay(UtilsKt.filterRoomIn(result.getDirectChats(), list), notificationComparator, mDirectChatsSection);
+            }
+            mActivity.hideWaitingView();
+        }));
     }
 
     /**
@@ -311,7 +324,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
                 mServerNoticesSection);
     }
 
-    protected int getSectionRes(){
+    protected int getSectionRes() {
         return R.string.bottom_action_home;
     }
 

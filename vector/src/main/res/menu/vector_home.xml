@@ -1,22 +1,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.matrix.vector.activity.VectorHomeActivity" >
+    tools:context="org.matrix.vector.activity.VectorHomeActivity">
 
-    <item android:id="@+id/ic_action_global_search"
-        android:title="@string/action_global_search"
+    <item
+        android:id="@+id/ic_action_global_search"
         android:icon="@drawable/ic_material_search_white"
-        app:showAsAction="collapseActionView"
-        android:visible="false"/>
-
-    <item android:id="@+id/ic_action_historical"
-        android:title="@string/action_historical"
-        android:icon="@drawable/ic_material_history_white"
-        app:showAsAction="collapseActionView"
-        android:visible="false"/>
-
-    <item android:id="@+id/ic_action_mark_all_as_read"
-        android:title="@string/action_mark_all_as_read"
-        android:icon="@drawable/ic_material_done_all_white"
+        android:title="@string/action_global_search"
+        android:visible="false"
         app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_historical"
+        android:icon="@drawable/ic_material_history_white"
+        android:title="@string/action_historical"
+        android:visible="false"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_mark_all_as_read"
+        android:icon="@drawable/ic_material_done_all_white"
+        android:title="@string/action_mark_all_as_read"
+        android:visible="false"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_invite"
+        android:icon="@drawable/contacts_invite"
+        android:title="@string/invite_contacts"
+        android:visible="false"
+        app:showAsAction="always" />
 </menu>

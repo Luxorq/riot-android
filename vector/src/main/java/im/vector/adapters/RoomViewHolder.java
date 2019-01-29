@@ -17,6 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -216,12 +217,14 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         // get last message to be displayed
         if (vRoomLastMessage != null) {
             boolean globalHide = PreferencesManager.isGlobalHidePreview(context);
-            boolean hideMessage = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance()).getBoolean("message_" + room.getRoomId(), false);
-            CharSequence lastMsgToDisplay = RoomUtils.getRoomMessageToDisplay(context, session, roomSummary);
-            if (globalHide || hideMessage) {
-                vRoomLastMessage.setText(context.getString(R.string.message));
+            int overrideMessageIndex = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance()).getInt("message_" + room.getRoomId(), -1);
+            if (overrideMessageIndex >= 0) {
+                String[] responses = context.getResources().getStringArray(R.array.quick_responses);
+                vRoomLastMessage.setText(responses[overrideMessageIndex]);
+            } else if (globalHide) {
+                vRoomLastMessage.setText("");
             } else {
-                vRoomLastMessage.setText(lastMsgToDisplay);
+                vRoomLastMessage.setText(RoomUtils.getRoomMessageToDisplay(context, session, roomSummary));
             }
         }
 

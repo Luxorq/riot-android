@@ -18,6 +18,7 @@
 package im.vector.activity
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.support.annotation.*
 import android.support.v7.app.AppCompatActivity
@@ -156,7 +157,7 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
 
         if (menuRes != -1) {
             menuInflater.inflate(menuRes, menu)
-            ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, getMenuTint()))
+            ThemeUtils.tintMenuIcons(menu, Color.BLACK)
             return true
 
         }

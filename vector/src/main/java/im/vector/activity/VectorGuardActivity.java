@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
@@ -20,52 +21,33 @@ import com.github.ajalt.reprint.core.AuthenticationFailureReason;
 import com.github.ajalt.reprint.core.AuthenticationListener;
 import com.github.ajalt.reprint.core.Reprint;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import im.vector.KedrPinCallback;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.util.DB;
+import im.vector.util.KedrPin;
 import im.vector.util.PreferencesManager;
 
+import static im.vector.activity.util.RequestCodesKt.GUARD_REQUEST_CODE;
+import static im.vector.util.UtilsKt.isHome;
+
 public class VectorGuardActivity extends VectorAppCompatActivity {
-    private static String MODE_GUARD = "mode_guard";
-    public static String MODE_NEW = "mode_new";
-    public static String MODE_CHANGE = "mode_change";
-    public static String MODE_ASK = "mode_ask";
+    private static final String MODE_GUARD = "mode_guard";
+    public static final String MODE_NEW = "mode_new";
+    public static final String MODE_CHANGE = "mode_change";
+    public static final String MODE_ASK = "mode_ask";
+    private static final String MODE_SECRET = "mode_secret";
+    public static boolean isLaunched;
 
-    @BindView(R.id.first_digit)
-    ImageView firstDot;
-    @BindView(R.id.second_digit)
-    ImageView secondDot;
-    @BindView(R.id.third_digit)
-    ImageView thirdDot;
-    @BindView(R.id.fourth_digit)
-    ImageView fourthDot;
-    @BindView(R.id.fifth_digit)
-    ImageView fifthDot;
-    @BindView(R.id.six_digit)
-    ImageView sixDot;
-
-    @BindView(R.id.one)
-    TextView one;
-    @BindView(R.id.two)
-    TextView two;
-    @BindView(R.id.three)
-    TextView three;
-    @BindView(R.id.four)
-    TextView four;
-    @BindView(R.id.five)
-    TextView five;
-    @BindView(R.id.six)
-    TextView six;
-    @BindView(R.id.seven)
-    TextView seven;
-    @BindView(R.id.eight)
-    TextView eight;
-    @BindView(R.id.nine)
-    TextView nine;
-    @BindView(R.id.zero)
-    TextView zero;
+    @BindView(R.id.auth_or_home)
+    ImageView authOrHome;
 
     @BindView(R.id.title)
     TextView title;
@@ -84,7 +66,9 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
     String mode;
     String pass;
 
-    private StringBuilder sb = new StringBuilder();
+    private StringBuilder builder = new StringBuilder();
+    private List<View> dotsList = new ArrayList<>();
+
     private CountDownTimer ctdTimer;
     private long timeLeft;
 
@@ -92,112 +76,175 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        for (int i = 1; i < 7; i++) {
+            dotsList.add(parent.getChildAt(i));
+        }
+
         int titleRes;
         mode = getIntent().getStringExtra(MODE_GUARD);
         if (mode.equalsIgnoreCase(MODE_NEW)) {
             titleRes = R.string.enter_new_secret;
         } else if (mode.equalsIgnoreCase(MODE_CHANGE)) {
             titleRes = R.string.enter_ask_secret;
+        } else if (mode.equalsIgnoreCase(MODE_SECRET)) {
+            titleRes = R.string.enter_ask_secret_tab;
         } else {
-            titleRes = R.string.enter_ask_secret;
+            titleRes = R.string.enter_pin_empty;
         }
         title.setText(titleRes);
 
-        one.setOnClickListener(this::updateDots);
-        two.setOnClickListener(this::updateDots);
-        three.setOnClickListener(this::updateDots);
-        four.setOnClickListener(this::updateDots);
-        five.setOnClickListener(this::updateDots);
-        six.setOnClickListener(this::updateDots);
-        seven.setOnClickListener(this::updateDots);
-        eight.setOnClickListener(this::updateDots);
-        nine.setOnClickListener(this::updateDots);
-        zero.setOnClickListener(this::updateDots);
-
-        ImageView auth = findViewById(R.id.auth);
         if (mode.equalsIgnoreCase(MODE_ASK)) {
-            auth.setVisibility(PreferencesManager.isTouchId(this) ? View.VISIBLE : View.INVISIBLE);
-            auth.setOnClickListener(v -> {
-                boolean isOk = Reprint.isHardwarePresent() && Reprint.hasFingerprintRegistered();
-                String postfix = isOk ? getString(R.string.available) : getString(R.string.not_available);
+            authOrHome.setVisibility(PreferencesManager.isTouchId(this) ? View.VISIBLE : View.INVISIBLE);
+            authOrHome.setOnClickListener(v -> {
+                boolean hwOk = Reprint.isHardwarePresent() && Reprint.hasFingerprintRegistered();
+                String postfix = hwOk ? getString(R.string.available) : getString(R.string.not_available);
                 Toast.makeText(VectorGuardActivity.this, getString(R.string.scanner_is, postfix), Toast.LENGTH_LONG).show();
             });
             if (!Reprint.isHardwarePresent() || !Reprint.hasFingerprintRegistered()) {
                 Toast.makeText(this, getString(R.string.fingerprint_error_hw_not_available), Toast.LENGTH_LONG).show();
             }
-        }
-        ImageView del = findViewById(R.id.del);
-        del.setOnClickListener(v -> {
-            if (sb.length() > 0) {
-                sb.setLength(sb.length() - 1);
+        } else if (mode.equalsIgnoreCase(MODE_SECRET) && !TextUtils.isEmpty(VectorApp.currentPin)) {
+            if (!isHome(this)) {
+                authOrHome.setVisibility(View.VISIBLE);
+                authOrHome.setImageResource(R.drawable.settings_default_list);
+                authOrHome.setOnClickListener(v -> lockAndExit(PreferencesManager.getDefaultPin(this)));
             }
-            updateDots(v);
+        }
+        findViewById(R.id.del).setOnClickListener(v -> {
+            builder.setLength(Math.max(0, builder.length() - 1));
+            updateDotListSelectionState();
         });
     }
 
-    private void updateDots(View view) {
-        if (view instanceof TextView) {
-            TextView textView = (TextView) view;
-            sb.append(textView.getText().toString());
+    private void updateDotListSelectionState() {
+        for (View dotView : dotsList) {
+            dotView.setSelected(dotsList.indexOf(dotView) < builder.length());
         }
-        View[] arr = {firstDot, secondDot, thirdDot, fourthDot, fifthDot, sixDot};
-        for (View anArr : arr) {
-            anArr.setSelected(false);
+    }
+
+    @OnClick({R.id.one, R.id.two, R.id.three, R.id.four, R.id.five, R.id.six, R.id.seven, R.id.eight, R.id.nine, R.id.zero})
+    void updateDots(TextView view) {
+        builder.append(view.getText().toString());
+        builder.setLength(Math.min(dotsList.size(), builder.length()));
+
+        updateDotListSelectionState();
+
+        if (builder.length() != dotsList.size()) {
+            return;
         }
-        sb.setLength(Math.min(6, sb.length()));
-        for (int i = 0; i < sb.length(); i++) {
-            arr[i].setSelected(true);
-        }
-        if (sb.length() == 6) {
-            if (mode.equals(MODE_NEW)) {
-                saveAndExt();
-            } else if (mode.equals(MODE_ASK)) {
-                if (sb.toString().equalsIgnoreCase(PreferencesManager.getGuardPass(this))) {
-                    saveAndExt();
-                } else {
-                    wrongPassCounter++;
-                    shake();
-                    reset(arr);
-                    if (wrongPassCounter >= 3) {
-                        timeLeft = 0;
-                        PreferencesManager.setGuardTime(this, timeLeft);
-                        parentBlocked.setVisibility(View.VISIBLE);
-                        parent.setVisibility(View.GONE);
-                        checkTimer(0);
-                    }
+
+        String pinValue = builder.toString();
+
+        switch (mode) {
+            case MODE_NEW:
+                repeatPassword(pinValue);
+                break;
+            case MODE_ASK:
+                if (PreferencesManager.getDefaultPin(this).equals(pinValue)) {
+                    lockAndExit(pinValue);
+                    return;
                 }
-            } else if (mode.equals(MODE_CHANGE)) {
-                if (TextUtils.isEmpty(pass)) {
-                    pass = sb.toString();
-                    title.setText(R.string.enter_change_secret);
-                    for (View anArr : arr) {
-                        anArr.setSelected(false);
-                    }
-                    sb.setLength(0);
-                } else {
-                    if (sb.toString().equals(pass)) {
-                        saveAndExt();
+                DB.findKedrPin(pinValue, entity -> {
+                    if (entity != null) {
+                        lockAndExit(entity.getPin());
                     } else {
-                        reset(arr);
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
+                            wrongPassCounter++;
+                            shake();
+                            reset(dotsList);
+                            if (wrongPassCounter >= 3) {
+                                parentBlocked.setVisibility(View.VISIBLE);
+                                parent.setVisibility(View.GONE);
+                                timeLeft = 0;
+                                checkTimer(0);
+                                PreferencesManager.setGuardTime(VectorGuardActivity.this, timeLeft);
+                            }
+                        });
+                    }
+                });
+                break;
+            case MODE_CHANGE:
+                repeatPassword(pinValue);
+                break;
+            case MODE_SECRET:
+                if (PreferencesManager.getDefaultPin(this).equals(pinValue)) {
+                    lockAndExit(pinValue);
+                    return;
+                }
+                DB.findKedrPin(pinValue, entity -> {
+                    if (entity == null) {
+                        runOnUiThread(() -> repeatPassword(pinValue));
+                    } else {
+                        lockAndExit(pinValue);
+                    }
+                });
+        }
+    }
+
+    private void repeatPassword(String pin) {
+        if (TextUtils.isEmpty(pass)) {
+            resetDots(dotsList);
+            title.setText(R.string.enter_change_secret);
+            pass = pin;
+            builder.setLength(0);
+            return;
+        }
+        if (!pin.equals(pass)) {
+            Toast.makeText(this, getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
+            reset(dotsList);
+            return;
+        }
+        if (mode.equals(MODE_NEW)) {
+            PreferencesManager.setDefaultPin(this, pin);
+            lockAndExit(pin);
+            return;
+        }
+        if (mode.equals(MODE_SECRET)) {
+            DB.saveKedrPin(KedrPin.createPin(pin));
+            lockAndExit(pin, RESULT_OK);
+            return;
+        }
+        if (mode.equals(MODE_CHANGE)) {
+            DB.findKedrPin(pin, entity -> runOnUiThread(() -> {
+                if (entity != null || pin.equals(PreferencesManager.getDefaultPin(VectorGuardActivity.this))) {
+                    Toast.makeText(this, getString(R.string.wrong_pin), Toast.LENGTH_LONG).show();
+                    reset(dotsList);
+                } else {
+                    if (isHome(this)) {
+                        PreferencesManager.setDefaultPin(this, pin);
+                        lockAndExit(pin);
+                    } else {
+                        DB.saveKedrPin(KedrPin.createPin(pin));
+                        lockAndExit(pin);
                     }
                 }
-            }
+            }));
         }
     }
 
-    private void saveAndExt() {
+    private void resetDots(List<View> dotsList) {
+        for (View dotView : dotsList) {
+            dotView.setSelected(false);
+        }
+    }
+
+    private void lockAndExit(String pin, int resultCode) {
+        VectorApp.currentPin = pin;
         VectorApp.locked = false;
-        PreferencesManager.setGuardPass(this, sb.toString());
+        setResult(resultCode);
         finish();
+        isLaunched = false;
     }
 
-    private void reset(View[] arr) {
-        Toast.makeText(this, getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
+    private void lockAndExit(String pin) {
+        lockAndExit(pin, RESULT_CANCELED);
+    }
+
+    private void reset(List<View> viewList) {
         title.setText(R.string.enter_ask_secret);
-        for (View anArr : arr) {
-            anArr.setSelected(false);
-        }
-        sb.setLength(0);
+        resetDots(viewList);
+        builder.setLength(0);
         pass = null;
     }
 
@@ -232,13 +279,13 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
             Reprint.authenticate(new AuthenticationListener() {
                 @Override
                 public void onSuccess(int moduleTag) {
-                    showSuccess();
+                    lockAndExit(PreferencesManager.getDefaultPin(VectorGuardActivity.this));
                 }
 
                 @Override
                 public void onFailure(AuthenticationFailureReason failureReason, boolean fatal,
                                       CharSequence errorMessage, int moduleTag, int errorCode) {
-                    showError(failureReason, fatal, errorMessage, errorCode);
+                    Toast.makeText(VectorGuardActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -252,19 +299,11 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
         }
     }
 
-    private void showSuccess() {
-        VectorApp.locked = false;
-        finish();
-    }
-
-    private void showError(AuthenticationFailureReason failureReason, boolean fatal,
-                           CharSequence errorMessage, int errorCode) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-    }
-
     @Override
     public void onBackPressed() {
-
+        if (mode.equals(MODE_CHANGE) || mode.equals(MODE_SECRET)) {
+            super.onBackPressed();
+        }
     }
 
     public static boolean checkGuardEnabled() {
@@ -273,16 +312,28 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
 
     @Override
     public int getLayoutRes() {
+        String mode = getIntent().getStringExtra(MODE_GUARD);
+        if (mode.equalsIgnoreCase(MODE_CHANGE) || mode.equalsIgnoreCase(MODE_SECRET)) {
+            return R.layout.activity_guard_invert;
+        }
         return R.layout.activity_guard;
     }
 
-    public static void startWithMode(Activity activity, String mode) {
-        new Handler().postDelayed(() -> {
+    public static void startWithMode(final Activity activity, final String mode) {
+        isLaunched = true;
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent guardIntent = new Intent(activity, VectorGuardActivity.class);
             guardIntent.putExtra(VectorGuardActivity.MODE_GUARD, mode);
             guardIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            activity.startActivity(guardIntent);
+            activity.startActivityForResult(guardIntent, GUARD_REQUEST_CODE);
         }, 300);
+    }
+
+    public static void startSecretMode(final Activity activity) {
+        isLaunched = true;
+        Intent guardIntent = new Intent(activity, VectorGuardActivity.class);
+        guardIntent.putExtra(VectorGuardActivity.MODE_GUARD, MODE_SECRET);
+        activity.startActivityForResult(guardIntent, GUARD_REQUEST_CODE);
     }
 
     private void checkTimer(long savedTime) {
@@ -294,7 +345,7 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
         ctdTimer = new CountDownTimer(time, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                String time = String.format("%02d : %02d",
+                String time = String.format(Locale.getDefault(), "%02d : %02d",
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))
@@ -306,9 +357,9 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
             public void onFinish() {
                 wrongPassCounter = 0;
                 timeLeft = 0;
-                PreferencesManager.setGuardTime(VectorGuardActivity.this, timeLeft);
                 parent.setVisibility(View.VISIBLE);
                 parentBlocked.setVisibility(View.GONE);
+                PreferencesManager.setGuardTime(VectorGuardActivity.this, timeLeft);
             }
 
         }.start();

@@ -7,7 +7,7 @@
 
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
-    <string name="title_activity_room">Комната</string>
+    <string name="title_activity_room">Чат</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_member_details">Информация об участнике</string>
     <string name="title_activity_historical">История</string>
@@ -37,10 +37,10 @@
     <string name="ongoing_conference_call_video">видео</string>
     <string name="cannot_start_call">Не удалось осуществить вызов, попробуйте позже</string>
     <string name="missing_permissions_warning">"Из-за отсутствия разрешений некоторые функции могут быть недоступны..</string>
-    <string name="missing_permissions_to_start_conf_call">Вам нужно разрешение на приглашение для начала конференции в этой комнате</string>
+    <string name="missing_permissions_to_start_conf_call">Вам нужно разрешение на приглашение для начала конференции в этом чате</string>
     <string name="missing_permissions_title_to_start_conf_call">Не удалось осуществить вызов</string>
     <string name="device_information">Информация об устройстве</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных чатах</string>
     <string name="send_anyway">Отправить все равно</string>
     <string name="or">или</string>
     <string name="invite">Пригласить</string>
@@ -65,20 +65,21 @@
     <string name="dialog_title_warning">Предупреждение</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Комнаты</string>
+    <string name="bottom_action_home">Чаты</string>
     <string name="bottom_action_favourites">Избранные</string>
     <string name="bottom_action_people">Люди</string>
-    <string name="bottom_action_rooms">Комнаты</string>
+    <string name="bottom_action_rooms">Чаты</string>
     <string name="bottom_action_contacts">Мои контакты</string>
+    <string name="bottom_action_secret">Скрытые чаты</string>
     <string name="bottom_action_calls">Звонки</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Поиск комнат</string>
+    <string name="home_filter_placeholder_home">Поиск чатов</string>
     <string name="home_filter_placeholder_calls">Поиск звонков</string>
     <string name="home_filter_placeholder_contacts">Поиск контактов</string>
     <string name="home_filter_placeholder_favorites">Поиск избранных</string>
     <string name="home_filter_placeholder_people">Поиск людей</string>
-    <string name="home_filter_placeholder_rooms">Поиск комнат</string>
+    <string name="home_filter_placeholder_rooms">Поиск чатов</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Приглашения</string>
@@ -93,15 +94,15 @@
     <string name="no_result_placeholder">Нет результатов</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Комнаты</string>
-    <string name="rooms_directory_header">Список комнат</string>
-    <string name="no_room_placeholder">Нет комнат</string>
-    <string name="no_public_room_placeholder">Публичные комнаты недоступны</string>
+    <string name="rooms_header">Чаты</string>
+    <string name="rooms_directory_header">Список чатов</string>
+    <string name="no_room_placeholder">Нет чатов</string>
+    <string name="no_public_room_placeholder">Публичные чаты недоступны</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">%d пользователь</item>
         <item quantity="few">%d пользователя</item>
         <item quantity="many">%d пользователей</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="send_bug_report_include_logs">Отправить логи</string>
@@ -120,7 +121,7 @@
     <string name="send_files_in">Отправить в</string>
     <string name="read_receipt">Прочитан</string>
 
-    <string name="join_room">Войти в Комнату</string>
+    <string name="join_room">Войти в Чат</string>
     <string name="username">Логин</string>
     <string name="create_account">Зарегистрироваться</string>
     <string name="login">Войти</string>
@@ -235,8 +236,8 @@ Email также позволит вам при необходимости во�
     <string name="today">Сегодня</string>
 
     <!-- room info dialog Screen -->
-    <string name="room_info_room_name">Название Комнаты</string>
-    <string name="room_info_room_topic">Тема комнаты</string>
+    <string name="room_info_room_name">Название чата</string>
+    <string name="room_info_room_topic">Тема чата</string>
 
     <!-- call string -->
     <string name="call_connected">Вызов соеденен</string>
@@ -293,11 +294,11 @@ Email также позволит вам при необходимости во�
     <string name="room_jump_to_first_unread">Перейти к первому непрочитанному сообщению.</string>
 
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">%s пригласил вас присоединиться к этой комнате</string>
+    <string name="room_preview_invitation_format">%s пригласил вас присоединиться к этой чату</string>
     <string name="room_preview_unlinked_email_warning">Приглашение пришло на адрес %s, который не связан с этим аккаунтом.\nВы можете войти под другим аккаунтом или связать email с этим аккаунтом.</string>
     <string name="room_preview_try_join_an_unknown_room">Вы пытаетесь получить доступ к %s. Хотите присоединиться к обсуждению?</string>
-    <string name="room_preview_try_join_an_unknown_room_default">комната</string>
-    <string name="room_preview_room_interactions_disabled">Это пред. просмотр комнаты. Вы в режиме только чтения.</string>
+    <string name="room_preview_try_join_an_unknown_room_default">чат</string>
+    <string name="room_preview_room_interactions_disabled">Это пред. просмотр чата. Вы в режиме только чтения.</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">Новый чат</string>
@@ -308,7 +309,7 @@ Email также позволит вам при необходимости во�
 
 Пока не стоит доверять ему, если хотите быть уверенными в безопасности ваших данных.
 
-Устройства не смогут расшифровать историю переписки, которая велась до их входа в комнату.
+Устройства не смогут расшифровать историю переписки, которая велась до их входа в чат.
 
 Зашифрованные сообщения не будут видны в клиентах, которые не применяют шифрование.</string>
 
@@ -386,7 +387,7 @@ Email также позволит вам при необходимости во�
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
-    <string name="room_details_title">Комната</string>
+    <string name="room_details_title">Чат</string>
     <string name="room_details_people">Люди</string>
     <string name="room_details_files">Файлы</string>
     <string name="room_details_settings">Настройки</string>
@@ -404,15 +405,15 @@ Email также позволит вам при необходимости во�
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Приглашение от %s</string>
-    <string name="room_displayname_room_invite">Приглашение в комнату</string>
+    <string name="room_displayname_room_invite">Приглашение в чат</string>
     <string name="room_displayname_two_members">%1$s и %2$s</string>
-    <string name="room_displayname_no_title">Пустая комната</string>
+    <string name="room_displayname_no_title">Пустой чат</string>
 
     <!-- Search -->
     <string name="search_hint">Поиск</string>
     <string name="search_members_hint">Фильтр списка пользователей</string>
     <string name="search_no_results">Нет результатов</string>
-    <string name="tab_title_search_rooms">КОМНАТЫ</string>
+    <string name="tab_title_search_rooms">ЧАТЫ</string>
     <string name="tab_title_search_messages">СООБЩЕНИЯ</string>
     <string name="tab_title_search_people">ЛЮДИ</string>
     <string name="tab_title_search_files">ФАЙЛЫ</string>
@@ -421,14 +422,14 @@ Email также позволит вам при необходимости во�
     <string name="room_recents_join">ПРИСОЕДИНИЛИСЬ</string>
     <string name="room_recents_directory">КАТАЛОГ</string>
     <string name="room_recents_favourites">ИЗБРАННОЕ</string>
-    <string name="room_recents_conversations">КОМНАТЫ</string>
+    <string name="room_recents_conversations">ЧАТЫ</string>
     <string name="room_recents_low_priority">НИЗКИЙ ПРИОРИТЕТ</string>
     <string name="room_recents_invites">ПРИГЛАШЕНИЯ</string>
-    <string name="room_recents_start_chat">Начать чат</string>
-    <string name="room_recents_create_room">Создать комнату</string>
-    <string name="room_recents_join_room">Войти в комнату</string>
-    <string name="room_recents_join_room_title">Войти в комнату</string>
-    <string name="room_recents_join_room_prompt">Введите ID комнаты или псевдоним</string>
+    <string name="room_recents_start_chat">Создать чат</string>
+    <string name="room_recents_create_room">Создать групповой чат</string>
+    <string name="room_recents_join_room">Войти в чат</string>
+    <string name="room_recents_join_room_title">Войти в чат</string>
+    <string name="room_recents_join_room_prompt">Введите ID чата или псевдоним</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Просмотр каталога</string>
@@ -499,8 +500,8 @@ Email также позволит вам при необходимости во�
     <string name="settings_contacts_app_permission">Доступ к контактам</string>
     <string name="settings_contacts_phonebook_country">Страна для контактов</string>
     <string name="settings_home_display">Домашний экран</string>
-    <string name="settings_pin_missed_notifications">Прикрепить комнаты с отключенными уведомлениями</string>
-    <string name="settings_pin_unread_messages">Прикрепить комнаты с непрочитанными сообщениями</string>
+    <string name="settings_pin_missed_notifications">Прикрепить чаты с отключенными уведомлениями</string>
+    <string name="settings_pin_unread_messages">Прикрепить чаты с непрочитанными сообщениями</string>
     <string name="settings_devices_list">Устройства</string>
     <string name="devices_details_dialog_title">Подробности о устройстве</string>
     <string name="devices_details_id_title">ID</string>
@@ -556,10 +557,10 @@ Email также позволит вам при необходимости во�
     <!-- Room Settings -->
 
     <!-- room global settings-->
-    <string name="room_settings_room_photo">Аватар комнаты</string>
-    <string name="room_settings_room_name">Название комнаты</string>
+    <string name="room_settings_room_photo">Аватар чата</string>
+    <string name="room_settings_room_name">Название чата</string>
     <string name="room_settings_topic">Тема</string>
-    <string name="room_settings_room_tag">Метки комнаты</string>
+    <string name="room_settings_room_tag">Метки чата</string>
     <string name="room_settings_tag_pref_dialog_title">Отмечено как:</string>
 
     <!-- Room settings: Room tag -->
@@ -573,11 +574,11 @@ Email также позволит вам при необходимости во�
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Доступность и видимость</string>
-    <string name="room_settings_directory_visibility">Отображать комнату в каталоге</string>
-    <string name="room_settings_room_access_rules_pref_title">Доступ к комнате</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Доступ к истории комнаты</string>
+    <string name="room_settings_directory_visibility">Отображать чат в каталоге</string>
+    <string name="room_settings_room_access_rules_pref_title">Доступ к чату</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Доступ к истории чата</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Кто может читать историю?</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">Кто имеет доступ к комнате?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Кто имеет доступ к чату?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Все</string>
@@ -588,15 +589,15 @@ Email также позволит вам при необходимости во�
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Для генерации ссылки команда должна иметь адрес.</string>
     <string name="room_settings_room_access_entry_only_invited">Только приглашенные</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Все у кого есть ссылка на комнату, кроме гостей</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Все у кого есть ссылка на комнату, включая гостей</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Все у кого есть ссылка на чат, кроме гостей</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Все у кого есть ссылка на чат, включая гостей</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Забаненые пользователи</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Дополнительно</string>
-    <string name="room_settings_room_internal_id">Внутренний ID комнаты</string>
+    <string name="room_settings_room_internal_id">Внутренний ID чата</string>
     <string name="room_settings_addresses_pref_title">Адреса</string>
     <string name="room_settings_labs_pref_title">Лаборатория</string>
     <string name="room_settings_labs_warning_message">Это экспериментальные функции, которые могут повести себя неожиданным образом. Используйте с осторожностью.</string>
@@ -604,24 +605,24 @@ Email также позволит вам при необходимости во�
     <string name="room_settings_labs_end_to_end_is_active">Сквозное шифрование активно</string>
     <string name="room_settings_labs_end_to_end_warnings">Вам необходимо выйти, чтобы включить шифрование.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Шифровать сообщения только для проверенных устройств</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные устройства в этой комнате с этого устройства.</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные устройства в этом чате с этого устройства.</string>
 
     <!-- Room settings: advanced addresses -->
-    <string name="room_settings_addresses_no_local_addresses">У этой комнаты еще нет локального адреса</string>
+    <string name="room_settings_addresses_no_local_addresses">У этого чаты еще нет локального адреса</string>
     <string name="room_settings_addresses_add_new_address">Новый адрес (например #foo:matrix.org")</string>
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Неверный формат псевдонима</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' неверный формат псевдонима</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Необходимо указать основной адрес. По-умолчанию основной адрес для этой комнаты будет выбран случайно"</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Необходимо указать основной адрес. По-умолчанию основной адрес для этого чаты будет выбран случайно"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Предупреждения основного адреса</string>
 
     <string name="room_settings_set_main_address">Установить как основной адрес</string>
     <string name="room_settings_unset_main_address">Сбросить основной адрес</string>
-    <string name="room_settings_copy_room_id">Копировать ID комнаты</string>
-    <string name="room_settings_copy_room_address">Копировать адрес комнаты</string>
+    <string name="room_settings_copy_room_id">Копировать ID чата</string>
+    <string name="room_settings_copy_room_address">Копировать адрес чата</string>
 
-    <string name="room_settings_addresses_e2e_enabled">В этой комнате включено шифрование.</string>
-    <string name="room_settings_addresses_e2e_disabled">В этой комнате выключено шифрование.</string>
+    <string name="room_settings_addresses_e2e_enabled">В этом чате включено шифрование.</string>
+    <string name="room_settings_addresses_e2e_disabled">В этом чате выключено шифрование.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование
 (внимание: не может быть снова отключено!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
@@ -629,9 +630,9 @@ Email также позволит вам при необходимости во�
 
 Пока не стоит доверять ему, если хотите быть уверенными в безопасности ваших данных.
 
-Устройства не смогут расшифровать историю переписки, которая велась до их входа в комнату.
+Устройства не смогут расшифровать историю переписки, которая велась до их входа в чат.
 
-После включения шифрования для комнаты его нельзя отключить снова (пока).
+После включения шифрования для чата его нельзя отключить снова (пока).
 
 Зашифрованные сообщения не будут видны в клиентах, которые не применяют шифрование.</string>
 
@@ -639,7 +640,7 @@ Email также позволит вам при необходимости во�
     <string name="directory_title">Каталог</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s пытается загрузить историю комнаты, но не может ее найти.</string>
+    <string name="failed_to_load_timeline_position">%s пытается загрузить историю чата, но не может ее найти.</string>
 
 
     <!-- encryption dialog -->
@@ -661,18 +662,18 @@ Email также позволит вам при необходимости во�
     <string name="encryption_information_verification">Проверка</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечаток</string>
 
-    <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей комнаты</string>
-    <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
+    <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей чата</string>
+    <string name="encryption_export_room_keys">Экспорт ключей чата</string>
     <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
     <string name="encryption_export_export">Экспорт</string>
     <string name="encryption_export_enter_passphrase">Введите пароль</string>
     <string name="encryption_export_confirm_passphrase">Подтвердите пароль</string>
-    <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'.
+    <string name="encryption_export_saved_as">E2E ключи чата сохранены в \'%s\'.
 
 Предупреждение: этот файл может быть удален после деинсталляции приложения.</string>
 
-    <string name="encryption_import_e2e_room_keys">Импорт E2E ключей комнаты</string>
-    <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
+    <string name="encryption_import_e2e_room_keys">Импорт E2E ключей чата</string>
+    <string name="encryption_import_room_keys">Импорт ключей чата</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
     <string name="encryption_import_import">Импорт</string>
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
@@ -701,20 +702,20 @@ Email также позволит вам при необходимости во�
 Вы можете сделать это сейчас или позже из настроек приложения.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
-    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.
+    <string name="unknown_devices_alert_title">Чат содержит неизвестные устройства</string>
+    <string name="unknown_devices_alert_message">Этот чат содержит неизвестные устройства, которые не были подтверждены.
 Это означает, что эти устройства могут не принадлежать тем пользователям, на которых они претендуют.
 Перед продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.
 
 Неизвестные устройства:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Выбор списка комнат</string>
+    <string name="select_room_directory">Выбор списка чатов</string>
     <string name="directory_server_fail_to_retrieve_server">Сервер возможно недоступен или перегружен</string>
-    <string name="directory_server_type_homeserver">Введите домашний сервер для отображения списка публичных комнат</string>
+    <string name="directory_server_type_homeserver">Введите домашний сервер для отображения списка публичных чатов</string>
     <string name="directory_server_placeholder">URL домашнего сервера</string>
-    <string name="directory_server_all_rooms_on_server">Все комнаты на сервере %s</string>
-    <string name="directory_server_native_rooms">Все местные комнаты %s</string>
+    <string name="directory_server_all_rooms_on_server">Все чаты на сервере %s</string>
+    <string name="directory_server_native_rooms">Все местные чаты %s</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Поиск в истории</string>
@@ -763,7 +764,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_hide_join_leave_messages">Скрывать сообщения присоединился/покинул (не затрагивает приглашение/кик/бан)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Скрывать изменения аватара и отображаемого имени</string>
 
-    <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>
+    <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этом чате</string>
     <string name="widget_creation_failure">Создание виджета не удалось</string>
     <string name="settings_labs_create_conference_with_jitsi">Осуществлять конференц звонки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Вы уверены, что хотите удалить виджет?</string>
@@ -772,11 +773,11 @@ Email также позволит вам при необходимости во�
     <string name="widget_integration_unable_to_create">Не удалось создать виджет.</string>
     <string name="widget_integration_failed_to_send_request">Не удалось отправить запрос.</string>
     <string name="widget_integration_positive_power_level">Уровень доступа должен быть числом больше 0.</string>
-    <string name="widget_integration_must_be_in_room">Вы не состоите в этой комнате.</string>
-    <string name="widget_integration_no_permission_in_room">У вас нет разрешений делать это в данной комнате.</string>
+    <string name="widget_integration_must_be_in_room">Вы не состоите в этой чате.</string>
+    <string name="widget_integration_no_permission_in_room">У вас нет разрешений делать это в данном чате.</string>
     <string name="widget_integration_missing_room_id">В запросе отсутствует room_id.</string>
     <string name="widget_integration_missing_user_id">В запросе отсутствует user_id.</string>
-    <string name="widget_integration_room_not_visible">Комната %s невидима.</string>
+    <string name="widget_integration_room_not_visible">Чат %s невидим.</string>
     <string name="settings_labs_matrix_apps">Приложения Matrix</string>
     <string name="room_add_matrix_apps">Добавить приложения Matrix</string>
     <string name="login_mobile_device">Мобильный</string>
@@ -870,14 +871,14 @@ Email также позволит вам при необходимости во�
     <!-- group details -->
     <string name="group_details_home">Начало</string>
     <string name="group_details_people">Люди</string>
-    <string name="group_details_rooms">Комнаты</string>
+    <string name="group_details_rooms">Чаты</string>
     <string name="no_users_placeholder">Нет пользователей</string>
 
-    <string name="rooms">Комнаты</string>
+    <string name="rooms">Чаты</string>
     <string name="joined">Присоединился</string>
     <string name="invited">Приглашен</string>
     <string name="filter_group_members">Фильтр участников группы</string>
-    <string name="filter_group_rooms">Фильтр комнат группы</string>
+    <string name="filter_group_rooms">Фильтр чатов группы</string>
 
     <string name="group_no_long_description">Администратор сообщества не предоставил подробного описания этого сообщества.</string>
 
@@ -885,7 +886,7 @@ Email также позволит вам при необходимости во�
     <string name="has_been_banned">Вас забанил %2$s в %1$s</string>
     <string name="reason_colon">Причина: %1$s</string>
     <string name="rejoin">Присоединиться снова</string>
-    <string name="forget_room">Забыть комнату</string>
+    <string name="forget_room">Забыть чат</string>
     <string name="send_bug_report_rage_shake">Встряхните устройство, чтобы сообщить об ошибке</string>
 
     <string name="actions">Действия</string>
@@ -893,16 +894,16 @@ Email также позволит вам при необходимости во�
     <string name="open_chat_header">Открыть заголовок</string>
     <string name="room_sync_in_progress">Синхронизация…</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 комната</item>
-        <item quantity="few">%d комнаты</item>
-        <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="one">1 чат</item>
+        <item quantity="few">%d чата</item>
+        <item quantity="many">%d чатов</item>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 комната</item>
-        <item quantity="few">%d комнаты</item>
-        <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="one">1 чат</item>
+        <item quantity="few">%d чата</item>
+        <item quantity="many">%d чатов</item>
+        <item quantity="other" />
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
 
@@ -910,7 +911,7 @@ Email также позволит вам при необходимости во�
         <item quantity="one">1 активный виджет</item>
         <item quantity="few">%d активных виджета</item>
         <item quantity="many">%d активных виджетов</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -920,51 +921,51 @@ Email также позволит вам при необходимости во�
         <item quantity="one">1 активный участник</item>
         <item quantity="few">%d активных участника</item>
         <item quantity="many">%d активных участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 новое сообщение</item>
         <item quantity="few">%d новых сообщения</item>
         <item quantity="many">%d новых сообщений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="directory_search_rooms_for">
-        <item quantity="one">%1$s комната найдена для %2$s</item>
-        <item quantity="few">%1$s комнаты найдено для %2$s</item>
-        <item quantity="many">%1$s комнат найдено для %2$s</item>
-        <item quantity="other"/>
+        <item quantity="one">%1$s чат найден для %2$s</item>
+        <item quantity="few">%1$s чата найдено для %2$s</item>
+        <item quantity="many">%1$s чатов найдено для %2$s</item>
+        <item quantity="other" />
     </plurals>
     <plurals name="membership_changes">
         <item quantity="one">1 изменение членства</item>
         <item quantity="few">%d изменения членства</item>
         <item quantity="many">%d изменений членства</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
     <string name="settings_flair">Настроение</string>
 
-    <string name="room_settings_no_flair">Эта комната не показывает настроение для сообществ</string>
+    <string name="room_settings_no_flair">Этот чат не показывает настроение для сообществ</string>
     <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
     <string name="settings_notification_privacy_warning">KEDR.im работает в фоновом режиме для сохранения приватности ваших уведомлений. Вы можете изменить этот параметр, чтобы уменьшить потребление заряда батареи.</string>
     <string name="settings_notification_privacy_normal">Нормальный</string>
@@ -1009,7 +1010,7 @@ Email также позволит вам при необходимости во�
     <string name="deactivate_account_prompt_password">Чтобы продолжить, введите пароль:</string>
     <string name="deactivate_account_submit">Деактивировать аккаунт</string>
 
-    <string name="deactivate_account_content">Это действие сделает вашу учетную запись непригодной для дальнейшего использования. Вы не сможете войти в систему и никто другой не сможет заново зарегистрировать учетную запись с вашим идентификатором. Также, это приведет к тому, что вы покинете все комнаты, в которых участвовали и данные о вашей учетной записи будут удалены с сервера идентификации. <b>Это действие необратимо</b>.
+    <string name="deactivate_account_content">Это действие сделает вашу учетную запись непригодной для дальнейшего использования. Вы не сможете войти в систему и никто другой не сможет заново зарегистрировать учетную запись с вашим идентификатором. Также, это приведет к тому, что вы покинете все чаты, в которых участвовали и данные о вашей учетной записи будут удалены с сервера идентификации. <b>Это действие необратимо</b>.
 
 По умолчанию, деактивация вашей учетной записи <b>не удаляет отправленные вами сообщения</b>. Если вы хотите, чтобы мы удалили все ваши сообщения - поставьте отметку в поле ниже.
 
@@ -1053,18 +1054,18 @@ Email также позволит вам при необходимости во�
 
 Учтите, что это действие перезапустит приложение и может занять некоторое время.</string>
     <string name="command_description_deop_user">Сбросить уровень доступа для пользователя с данным ID</string>
-    <string name="command_description_invite_user">Пригласить пользователя с данным ID в текущую комнату</string>
-    <string name="command_description_part_room">Покинуть комнату</string>
-    <string name="command_description_topic">Задать тему комнаты</string>
+    <string name="command_description_invite_user">Пригласить пользователя с данным ID в текущий чат</string>
+    <string name="command_description_part_room">Покинуть чат</string>
+    <string name="command_description_topic">Задать тему чата</string>
     <string name="command_description_kick_user">Выкинуть пользователя с заданным ID</string>
     <string name="command_description_nick">Изменить ваш псевдоним</string>
     <string name="command_description_markdown">Вкл/выкл markdown</string>
-    <string name="room_tombstone_versioned_description">Эта комната была заменена и больше не активна</string>
+    <string name="room_tombstone_versioned_description">Этот чат была заменена и больше не активна</string>
     <string name="room_tombstone_continuation_link">Этот разговор продолжается здесь</string>
-    <string name="room_tombstone_continuation_description">Эта комната является продолжением другого разговора</string>
+    <string name="room_tombstone_continuation_description">Этот чат является продолжением другого разговора</string>
     <string name="room_tombstone_predecessor_link">Нажмите здесь для просмотра старых сообщений</string>
 
-    <string name="command_description_join_room">Присоединиться к комнате с указанным псевдонимом</string>
+    <string name="command_description_join_room">Присоединиться к чату с указанным псевдонимом</string>
     <string name="command_description_clear_scalar_token">Для исправления управления приложениями Matrix</string>
 
     <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
@@ -1072,25 +1073,25 @@ Email также позволит вам при необходимости во�
         <item quantity="one">1сек.</item>
         <item quantity="few">%dсек.</item>
         <item quantity="many">%dсек.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">1мин.</item>
         <item quantity="few">%dмин.</item>
         <item quantity="many">%dмин.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">1ч.</item>
         <item quantity="few">%dч.</item>
         <item quantity="many">%dч.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">1д.</item>
         <item quantity="few">%dд.</item>
         <item quantity="many">%dд.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="room_participants_now">Сейчас %1$s</string>
@@ -1104,20 +1105,20 @@ Email также позволит вам при необходимости во�
         <item quantity="one">1 выбран</item>
         <item quantity="few">%d выбрано</item>
         <item quantity="many">%d выбраны</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="group_members">
         <item quantity="one">1 участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="group_rooms">
-        <item quantity="one">1 комната</item>
-        <item quantity="few">%d комнаты</item>
-        <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="one">1 чат</item>
+        <item quantity="few">%d чата</item>
+        <item quantity="many">%d чатов</item>
+        <item quantity="other" />
     </plurals>
     <string name="system_alerts_header">Системные оповещения</string>
 
@@ -1156,7 +1157,7 @@ Email также позволит вам при необходимости во�
     <string name="invite_sent">Приглашение отправлено</string>
     <string name="invite_wait">ожидаем подтверждения приглашения</string>
     <string name="outgoing_call">Исходящий звонок</string>
-    <string name="room_empty">Комната пуста. Покидаем…</string>
+    <string name="room_empty">Чат пуст. Покидаем…</string>
     <string name="no_participants">Необходим минимум 1 участник</string>
     <string name="slide_one_title">Безопасность</string>
     <string name="slide_one_content">Чат, звонки, голосовые сообщения и отправка файлов по самым защищщенным протоколам шифрования и безопасности</string>
@@ -1176,18 +1177,20 @@ Email также позволит вам при необходимости во�
     <string name="voice_msg_input_hint_time_limited_formatter" formatted="false">%d сек. осталось</string>
     <string name="voice_msg_input">%d сек.</string>
     <string name="room_settings_hide_avatar">Скрыть фото контакта</string>
-    <string name="hide_message_preview">Скрыть предпросмотр сообщения</string>
-    <string name="room_details">Комната</string>
+    <string name="override_message_preview">Заменить предпросмотр сообщения</string>
+    <string name="hide_message_preview">Скрыть предпросмотр сообщения </string>
+    <string name="show_message_in_notification">Показать сообщение в уведомлении</string>
+    <string name="room_details">Чат</string>
     <string name="message">Сообщение…</string>
-    <string name="edit_room">Редактировать комнату</string>
+    <string name="edit_room">Редактировать чат</string>
     <string name="edit_contact">Редактировать контакт</string>
     <string name="enter_note">Комментарий</string>
     <string name="enter_name">Название</string>
     <string name="collapse">свернуть</string>
     <string name="expand">развернуть</string>
     <string name="encrypted_key">Ключ шифрования</string>
-    <string name="ask_pin_code">Запрашивать PIN-код</string>
-    <string name="change_pin_code">Изменить PIN-код</string>
+    <string name="ask_pin_code">Запрашивать PIN-код на входе</string>
+    <string name="change_pin_code">Изменить PIN-код для текущего списка</string>
     <string name="touch_id">Использовать Touch ID</string>
     <string name="wrong_password">Неверный пароль</string>
     <string name="enter_password">Введите пароль</string>
@@ -1198,4 +1201,14 @@ Email также позволит вам при необходимости во�
     <string name="not_available">не доступен</string>
     <string name="scanner_is">Сканер %s</string>
     <string name="wrong_3_times">Вы ввели неверный код 3 раза. Попытайтесь снова через минуту</string>
+    <string name="message_from">Сообщение от %s</string>
+    <string name="enter_ask_secret_tab">Введите новый PIN-код для создания скрытого списка. Если хоть один скрытый список Вы уже создавали, то для переключения введите соответсвующий PIN-код.</string>
+    <string name="transfer_contacts">Перенос контактов</string>
+    <string name="transfer_contacts_hint">Вы можете перенести контакты из основной книги</string>
+    <string name="main_list">Основной список</string>
+    <string name="wrong_pin">PIN-код уже существует</string>
+    <string name="passwords_not_equal">Пароли не совпадают</string>
+    <string name="disable_notifications_title">Отключить уведомления?</string>
+    <string name="disable_notifications_message">Вы хотите выключить уведомления для %s?</string>
+    <string name="transfer_to_main_list">Перенести в основной список</string>
 </resources>

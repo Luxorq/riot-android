@@ -56,6 +56,10 @@ class HomeRoomsViewModel(private val session: MXSession) {
         fun getDirectChatsWithRooms(): List<Room> {
             return directChats + otherRooms.filter { !it.isDirect }
         }
+
+        fun getFilteredChats(pin: String): List<Room> {
+            return directChats.filter { it.roomId == pin }
+        }
     }
 
     /**

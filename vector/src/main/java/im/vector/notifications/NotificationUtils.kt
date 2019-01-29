@@ -339,10 +339,19 @@ object NotificationUtils {
         val inboxStyle = NotificationCompat.InboxStyle()
 
 
+        val defText = context.getString(R.string.message)
+        val showDefault = PreferencesManager.showNotificationMessage(context)
         for (roomNotifications in roomsNotifications.mRoomNotifications) {
-            val notifiedLine = SpannableString(roomNotifications.mMessagesSummary)
-            notifiedLine.setSpan(StyleSpan(android.graphics.Typeface.BOLD),
-                    0, roomNotifications.mMessageHeader.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val notifiedLine = if (showDefault) {
+                SpannableString(roomNotifications.mMessagesSummary)
+            } else {
+                val arr = roomNotifications.mMessagesSummary.split(":")
+                if (arr.size > 1) {
+                    SpannableString(arr[0] + ": " + defText)
+                } else {
+                    SpannableString(roomNotifications.mMessagesSummary)
+                }
+            }
             inboxStyle.addLine(notifiedLine)
         }
 
@@ -425,8 +434,10 @@ object NotificationUtils {
         var latestText: SpannableString? = null
         val inboxStyle = NotificationCompat.InboxStyle()
 
+        val defText = context.getString(R.string.message)
+        val showDefault = PreferencesManager.showNotificationMessage(context)
         for (sequence in roomsNotifications.mReversedMessagesList) {
-            inboxStyle.addLine(SpannableString(sequence))
+            inboxStyle.addLine(SpannableString(if (showDefault) sequence else defText))
         }
 
         inboxStyle.setBigContentTitle(roomsNotifications.mContentTitle)
@@ -667,13 +678,11 @@ object NotificationUtils {
             }
 
             Log.d(LOG_TAG, "prepareNotification : with sound " + BingRule.isDefaultNotificationSound(bingRule.notificationSound))
-
             createNotificationChannels(context)
-
             val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                     .setWhen(roomsNotifications.mContentTs)
                     .setContentTitle(ensureTitleNotEmpty(context, roomsNotifications.mContentTitle))
-                    .setContentText(roomsNotifications.mContentText)
+                    .setContentText(if (PreferencesManager.showNotificationMessage(context)) roomsNotifications.mContentText else context.getString(R.string.message))
                     .setSmallIcon(R.drawable.kedr_logo)
                     .setGroup(context.getString(R.string.riot_app_name))
                     .setGroupSummary(true)

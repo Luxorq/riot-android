@@ -31,8 +31,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.os.PersistableBundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -183,6 +181,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     // the password 1 name
     private EditText mCreationPassword1TextView;
+
+    private EditText mCreationRepeatPasswordTextView;
 
     // forgot my password
     private TextView mPasswordForgottenTxtView;
@@ -417,40 +417,27 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 null);
         mLoginPasswordTextView = findViewById(R.id.login_password);
         mLoginPasswordTextView.setOnEditorActionListener(
-                new EditText.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        // Identifier of the action. This will be either the identifier you supplied,
-                        // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
-                        if (v != null) {
-                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                            return true;
-                        }
-                        // Return true if you have consumed the action, else false.
-                        return false;
+                (v, actionId, event) -> {
+                    if (v != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        return true;
                     }
+                    return false;
                 });
-
+        mCreationRepeatPasswordTextView = findViewById(R.id.repeat_password);
+        mCreationRepeatPasswordTextView.setOnEditorActionListener(
+                (v, actionId, event) -> {
+                    if (v != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        return true;
+                    }
+                    return false;
+                });
         // account creation
         mCreationUsernameTextView = findViewById(R.id.creation_your_name);
         mCreationPassword1TextView = findViewById(R.id.creation_password1);
-        mCreationPassword1TextView.setOnEditorActionListener(
-                new EditText.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        // Identifier of the action. This will be either the identifier you supplied,
-                        // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
-                        if (v != null) {
-                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                            return true;
-                        }
-                        // Return true if you have consumed the action, else false.
-                        return false;
-                    }
-                });
-
         // account creation - three pid
         mThreePidInstructions = findViewById(R.id.instructions);
         mEmailAddress = findViewById(R.id.registration_email);
@@ -1609,6 +1596,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private void onRegisterClick(boolean checkRegistrationValues) {
         Log.d(LOG_TAG, "## onRegisterClick(): IN - checkRegistrationValues=" + checkRegistrationValues);
+        if (!mCreationPassword1TextView.getText().toString().equals(mCreationRepeatPasswordTextView.getText().toString())) {
+            mCreationPassword1TextView.setText("");
+            mCreationRepeatPasswordTextView.setText("");
+            Toast.makeText(this, getString(R.string.passwords_not_equal), Toast.LENGTH_LONG).show();
+            return;
+        }
         onClick();
 
         // the user switches to another mode
@@ -1796,9 +1789,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 //                                phoneNumberCountry,
 //                                password);
 //                    } else {
-                        Log.e(LOG_TAG, "onLoginClick : onMatrixError " + e.getLocalizedMessage());
-                        enableLoadingScreen(false);
-                        onFailureDuringAuthRequest(e);
+                    Log.e(LOG_TAG, "onLoginClick : onMatrixError " + e.getLocalizedMessage());
+                    enableLoadingScreen(false);
+                    onFailureDuringAuthRequest(e);
                     //}
                 }
             });
@@ -2022,10 +2015,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mButtonsView.setVisibility(View.VISIBLE);
 
         mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.GONE : View.GONE);
-        mLoginButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
-        mRegisterButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
+        mLoginButton.setVisibility(isLoginMode || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
+        mRegisterButton.setVisibility(isLoginMode || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
         //mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);
-        mLoginButton.setVisibility(mMode == MODE_LOGIN ? View.VISIBLE : View.GONE);
+        mLoginButton.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
         mRegisterButton.setVisibility(mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
 
         mForgotValidateEmailButton.setVisibility(mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION ? View.VISIBLE : View.GONE);
@@ -2551,6 +2544,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     private void updateBottomText() {
         boolean isLogin = mRegisterButton.getVisibility() == View.GONE;
+        //findViewById(R.id.repeat_password_parent).setVisibility(mMode == MODE_LOGIN ? View.GONE : View.VISIBLE);
         String partOne = getString(isLogin ? R.string.no_account : R.string.already_registered);
         String partTwo = getString(isLogin ? R.string.register_here : R.string.login_here);
         SpannableStringBuilder spannable = new SpannableStringBuilder();

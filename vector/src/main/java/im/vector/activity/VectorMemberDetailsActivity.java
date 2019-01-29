@@ -71,6 +71,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import im.vector.ChatListsCallback;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -78,11 +79,16 @@ import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.CallsManager;
+import im.vector.util.DB;
+import im.vector.util.KedrRoom;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
 import kotlin.Pair;
+
+import static im.vector.activity.VectorRoomActivity.FINISH;
+import static im.vector.util.UtilsKt.isHome;
 
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
@@ -154,6 +160,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private SwitchCompat mMuteSwitch;
     private SwitchCompat mHideAvatarSwitch;
     private SwitchCompat mHidePreviewSwitch;
+
+    private TextView mTransfer;
 
     // direct message
     /**
@@ -1301,6 +1309,16 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 displayFullScreenAvatar();
             }
 
+            mTransfer = findViewById(R.id.transfer_contact_home);
+            mTransfer.setVisibility(isHome(this) ? View.GONE : View.VISIBLE);
+            mTransfer.setOnClickListener(view -> {
+                DB.sendRoomToHome(mRoom.getRoomId(), entity -> runOnUiThread(() -> {
+                    Intent intent = getIntent();
+                    intent.putExtra(FINISH, true);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }));
+            });
             mMuteSwitch = findViewById(R.id.mute_swtich);
             BingRulesManager.RoomNotificationState state = mSession.getDataHandler().getBingRulesManager().getRoomNotificationState(mRoom.getRoomId());
             mMuteSwitch.setChecked(BingRulesManager.RoomNotificationState.MUTE == state);
@@ -1342,12 +1360,18 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
             mHidePreviewSwitch = findViewById(R.id.hide_history_swtich);
-            mHidePreviewSwitch.setChecked(prefs.getBoolean("message_" + mRoom.getRoomId(), false));
+            mHidePreviewSwitch.setChecked(prefs.getInt("message_" + mRoom.getRoomId(), -1) >= 0);
             mHidePreviewSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean("message_" + mRoom.getRoomId(), isChecked);
+                    if (isChecked) {
+                        String[] responses = getResources().getStringArray(R.array.quick_responses);
+                        int index = (int) (Math.random() * (responses.length - 1));
+                        editor.putInt("message_" + mRoom.getRoomId(), index);
+                    } else {
+                        editor.remove("message_" + mRoom.getRoomId());
+                    }
                     editor.apply();
                 }
             });

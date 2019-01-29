@@ -9,90 +9,87 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="30dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:minHeight="120dp"
+            android:padding="40dp"
             android:text="@string/enter_password"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/first_digit"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginTop="80dp"
             android:src="@drawable/digit"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/second_digit"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/second_digit"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginTop="80dp"
             android:src="@drawable/digit"
             app:layout_constraintLeft_toRightOf="@id/first_digit"
             app:layout_constraintRight_toLeftOf="@+id/third_digit"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/third_digit"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginTop="80dp"
             android:src="@drawable/digit"
             app:layout_constraintLeft_toRightOf="@id/second_digit"
             app:layout_constraintRight_toLeftOf="@+id/fourth_digit"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/fourth_digit"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginTop="80dp"
             android:src="@drawable/digit"
             app:layout_constraintLeft_toRightOf="@id/third_digit"
             app:layout_constraintRight_toLeftOf="@+id/fifth_digit"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/fifth_digit"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginTop="80dp"
             android:src="@drawable/digit"
             app:layout_constraintLeft_toRightOf="@id/fourth_digit"
             app:layout_constraintRight_toLeftOf="@id/six_digit"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/six_digit"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginTop="80dp"
             android:src="@drawable/digit"
             app:layout_constraintLeft_toRightOf="@id/fifth_digit"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
         <android.support.constraint.Barrier
             android:id="@+id/barrier0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="first_digit,second_digit,third_digit, fourth_digit" />
+            app:constraint_referenced_ids="first_digit,second_digit,third_digit,fourth_digit,fifth_digit,six_digit" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="75dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -254,15 +251,15 @@
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="seven, eight, nine" />
 
-            <ImageView
-                android:id="@+id/auth"
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/auth_or_home"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/pad"
                 android:clickable="true"
                 android:scaleType="centerInside"
-                android:src="@drawable/settings_authpassword"
+                android:src="@drawable/settings_auth_password"
                 android:textSize="18sp"
                 android:visibility="invisible"
                 app:layout_constraintLeft_toLeftOf="parent"

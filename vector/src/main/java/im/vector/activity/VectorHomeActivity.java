@@ -118,7 +118,6 @@ import im.vector.fragments.ContactsFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
-import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.SettingsFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.notifications.NotificationUtils;
@@ -134,6 +133,8 @@ import im.vector.util.ThemeUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 import kotlin.Pair;
+
+import static im.vector.activity.util.RequestCodesKt.GUARD_REQUEST_CODE;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -179,6 +180,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     private static final String TAG_FRAGMENT_HOME = "TAG_FRAGMENT_HOME";
     private static final String TAG_FRAGMENT_CALLS = "TAG_FRAGMENT_CALLS";
     private static final String TAG_FRAGMENT_CONTACTS = "TAG_FRAGMENT_CONTACTS";
+    private static final String TAG_FRAGMENT_SECRET = "TAG_FRAGMENT_SECRET";
     private static final String TAG_FRAGMENT_FAVOURITES = "TAG_FRAGMENT_FAVOURITES";
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
@@ -294,9 +296,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     protected void onStart() {
         super.onStart();
-        if (TextUtils.isEmpty(PreferencesManager.getGuardPass(this))) {
+        if (TextUtils.isEmpty(PreferencesManager.getDefaultPin(this))) {
             VectorGuardActivity.startWithMode(this, VectorGuardActivity.MODE_NEW);
-        } else if (VectorApp.locked) {
+            return;
+        }
+        if (PreferencesManager.isGuard(this) && VectorApp.locked && !VectorGuardActivity.isLaunched) {
             VectorGuardActivity.startWithMode(this, VectorGuardActivity.MODE_ASK);
         }
     }
@@ -512,14 +516,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Display the Floating Action Menu if it is required
      */
     private void showFloatingActionMenuIfRequired() {
-        if ((mCurrentMenuId == R.id.bottom_action_favourites)
-                || (mCurrentMenuId == R.id.bottom_action_groups)
-                || (mCurrentMenuId == R.id.bottom_action_settings)
-                || (mCurrentMenuId == R.id.bottom_action_contacts)
-                || (mCurrentMenuId == R.id.bottom_action_calls)) {
-            concealFloatingActionMenu();
-        } else {
+        if ((mCurrentMenuId == R.id.bottom_action_home)
+                || (mCurrentMenuId == R.id.bottom_action_contacts)) {
             revealFloatingActionMenu();
+        } else {
+            concealFloatingActionMenu();
         }
     }
 
@@ -626,12 +627,21 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GUARD_REQUEST_CODE) {
+            if (resultCode == RESULT_CANCELED) {
+                mBottomNavigationView.setSelectedItemId(R.id.bottom_action_home);
+                return;
+            }
+            mBottomNavigationView.setSelectedItemId(resultCode == RESULT_OK ? R.id.bottom_action_home : R.id.bottom_action_contacts);
+            return;
+        }
         if (resultCode == RESULT_OK) {
             if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE) {
                 // Ok, we can set the NORMAL privacy setting
                 Matrix.getInstance(this)
                         .getSharedGCMRegistrationManager()
                         .setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.NORMAL, null);
+                return;
             }
         }
     }
@@ -925,6 +935,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_calls));
                 mSearchView.setVisibility(View.VISIBLE);
                 break;
+            case R.id.bottom_action_secret:
+            case R.id.bottom_action_rooms:
+                Log.d(LOG_TAG, "onNavigationItemSelected SECRET");
+                VectorGuardActivity.startSecretMode(this);
+                break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
@@ -933,15 +948,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
-                break;
-            case R.id.bottom_action_rooms:
-                Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
-                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
-                if (fragment == null) {
-                    fragment = RoomsFragment.newInstance();
-                }
-                mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
                 break;
             case R.id.bottom_action_groups:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
@@ -1197,6 +1203,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         switch (mCurrentMenuId) {
             case R.id.bottom_action_home:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
+                break;
+            case R.id.bottom_action_secret:
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_SECRET);
                 break;
             case R.id.bottom_action_calls:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_CALLS);
@@ -1922,7 +1931,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     shiftingMode.setAccessible(false);
 
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage(), e);
+                    Log.w(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage(), e);
                 }
             }
         }
@@ -1977,7 +1986,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     mBadgeViewByIndex.put(itemId, badgeView);
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## addUnreadBadges failed " + e.getMessage(), e);
+                Log.w(LOG_TAG, "## addUnreadBadges failed " + e.getMessage(), e);
             }
         }
 

@@ -204,6 +204,10 @@
         <item name="default_text_light_color">@color/white</item>
     </style>
 
+    <style name="ActionBar.TabBar" parent="Widget.AppCompat.Light.ActionBar.TabBar">
+        <item name="android:background">@color/bg_grey</item>
+    </style>
+
     <style name="MemberActivityTheme" parent="AppTheme">
         <item name="colorAccent">@color/primary</item>
         <item name="primary_color">@color/bg_grey</item>
@@ -212,6 +216,7 @@
         <item name="primary_control_color">@color/primary</item>
         <item name="colorControlActivated">@color/primary</item>
         <item name="colorControlNormal">@color/primary</item>
+        <item name="actionBarTabBarStyle">@style/ActionBar.TabBar</item>
     </style>
 
     <!-- call activity -->

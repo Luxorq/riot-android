@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="quick_responses">
+        <item>Hey</item>
+        <item>Hi</item>
+        <item>Wie läufts?</item>
+        <item>Wie gehts?</item>
+        <item>Was geht ab?</item>
+        <item>Was gibts neues?</item>
+        <item>Was läuft?</item>
+        <item>Wie schauts aus?</item>
+        <item>Was geht?</item>
+        <item>Was macht das Leben?</item>
+        <item>Wie läuft dein Tag?</item>
+        <item>Wie ist dein Tag?</item>
+        <item>Nett dich zu sehen</item>
+        <item>Gut dich zu sehen</item>
+        <item>Lange nicht gesehen</item>
+        <item>Es hat lange gedauert</item>
+        <item>Auf Wiedersehen</item>
+        <item>Wiedersehen</item>
+        <item>Hab einen guten Tag</item>
+        <item>Machs gut</item>
+        <item>Bye</item>
+        <item>Bye bye</item>
+        <item>Später</item>
+        <item>Bis später</item>
+        <item>Reden später</item>
+        <item>Hab viel Spaß</item>
+        <item>So lange</item>
+        <item>Ok, bis dann</item>
+        <item>Reden später</item>
+        <item>Tschüss</item>
+        <item>Bin dann mal weg</item>
+        <item>Bin weg</item>
+        <item>Adios</item>
+        <item>Ciao</item>
+        <item>Au revoir</item>
+        <item>Sayonara</item>
+    </string-array>
+
+</resources>
