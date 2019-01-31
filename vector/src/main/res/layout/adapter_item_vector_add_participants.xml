@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:alpha="0.3"
                 android:src="@drawable/ic_add_black"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </RelativeLayout>
 
         <im.vector.view.VectorCircularImageView

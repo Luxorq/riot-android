@@ -115,6 +115,29 @@ public class DB {
         Realm.getDefaultInstance().executeTransactionAsync(realm -> realm.insertOrUpdate(entity));
     }
 
+    public static void saveKedrPin(String curPin, String newPin) {
+        Realm.getDefaultInstance().executeTransactionAsync(realm -> {
+            KedrPin kedrPin = realm.where(KedrPin.class).equalTo("pin", curPin).findFirst();
+            if (kedrPin != null) {
+                KedrPin newEntity = KedrPin.createPin(newPin);
+                realm.copyToRealmOrUpdate(newEntity);
+                List<KedrRoom> results = realm.copyFromRealm(realm.where(KedrRoom.class).equalTo("roomPin.pin", curPin).findAll());
+                for (KedrRoom result : results) {
+                    result.setRoomPin(newEntity);
+                }
+                realm.copyToRealmOrUpdate(results);
+                kedrPin.deleteFromRealm();
+                return;
+            }
+            realm.insertOrUpdate(KedrPin.createPin(newPin));
+        });
+    }
+
+    public static void saveKedrPinAndUpdateRooms(KedrPin entity) {
+        if (entity == null || !entity.isValid()) return;
+        Realm.getDefaultInstance().executeTransactionAsync(realm -> realm.insertOrUpdate(entity));
+    }
+
     public static void saveRoom(KedrRoom entity, boolean async) {
         if (entity == null || !entity.isValid()) return;
         if (async) {

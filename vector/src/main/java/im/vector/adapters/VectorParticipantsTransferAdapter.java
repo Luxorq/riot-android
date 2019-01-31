@@ -158,6 +158,7 @@ public class VectorParticipantsTransferAdapter extends BaseExpandableListAdapter
             }, onlineView);
             statusTextView.setText(TextUtils.isEmpty(status) ? participant.mUserId : status);
         }
+        convertView.findViewById(R.id.filtered_list_add_button).setVisibility(View.VISIBLE);
         return convertView;
     }
 

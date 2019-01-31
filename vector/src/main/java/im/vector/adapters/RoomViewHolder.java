@@ -218,11 +218,11 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         if (vRoomLastMessage != null) {
             boolean globalHide = PreferencesManager.isGlobalHidePreview(context);
             int overrideMessageIndex = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance()).getInt("message_" + room.getRoomId(), -1);
-            if (overrideMessageIndex >= 0) {
+            if (globalHide) {
+                vRoomLastMessage.setText("");
+            } else if (overrideMessageIndex >= 0) {
                 String[] responses = context.getResources().getStringArray(R.array.quick_responses);
                 vRoomLastMessage.setText(responses[overrideMessageIndex]);
-            } else if (globalHide) {
-                vRoomLastMessage.setText("");
             } else {
                 vRoomLastMessage.setText(RoomUtils.getRoomMessageToDisplay(context, session, roomSummary));
             }

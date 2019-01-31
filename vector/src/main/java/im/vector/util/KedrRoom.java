@@ -19,6 +19,10 @@ public class KedrRoom extends RealmObject {
         return roomPin.getPin();
     }
 
+    public void setRoomPin(KedrPin roomPin) {
+        this.roomPin = roomPin;
+    }
+
     public String getRoomId() {
         return roomId;
     }

@@ -71,11 +71,7 @@ import im.vector.activity.LoginActivity;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorGuardActivity;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.activity.VectorMemberDetailsActivity;
-import im.vector.activity.VectorRoomActivity;
-import im.vector.activity.VectorRoomCreationActivity;
 import im.vector.activity.WidgetActivity;
 import im.vector.analytics.Analytics;
 import im.vector.analytics.AppAnalytics;
@@ -96,8 +92,6 @@ import im.vector.util.VectorMarkdownParser;
 import im.vector.util.realm.Migration;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-
-import static im.vector.activity.VectorGuardActivity.checkGuardEnabled;
 
 /**
  * The main application injection point
@@ -219,7 +213,6 @@ public class VectorApp extends MultiDexApplication {
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .schemaVersion(Migration.DB_VERSION)
                 .migration(new Migration())
-                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(config);
         currentPin = PreferencesManager.getDefaultPin(this);
@@ -337,6 +330,9 @@ public class VectorApp extends MultiDexApplication {
                 numStarted--;
                 if (numStarted == 0) {
                     locked = true;
+                    if (!PreferencesManager.isGuard(getInstance())) {
+                        currentPin = PreferencesManager.getDefaultPin(getInstance());
+                    }
                 }
             }
 

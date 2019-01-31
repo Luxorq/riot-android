@@ -144,20 +144,19 @@ public class VectorRoomTransferMembersActivity extends VectorAppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.disable_notifications_title))
                 .setMessage(getString(R.string.disable_notifications_message, VectorUtils.getRoomDisplayName(this, mSession, room)))
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    mSession.getDataHandler().getBingRulesManager().updateRoomNotificationState(room.getRoomId(),
-                            BingRulesManager.RoomNotificationState.MUTE,
-                            new BingRulesManager.onBingRuleUpdateListener() {
-                                @Override
-                                public void onBingRuleUpdateSuccess() {
-                                }
+                .setPositiveButton(android.R.string.yes, (dialog, which) ->
+                        mSession.getDataHandler().getBingRulesManager().updateRoomNotificationState(room.getRoomId(),
+                        BingRulesManager.RoomNotificationState.MUTE,
+                        new BingRulesManager.onBingRuleUpdateListener() {
+                            @Override
+                            public void onBingRuleUpdateSuccess() {
+                            }
 
-                                @Override
-                                public void onBingRuleUpdateFailure(final String errorMessage) {
+                            @Override
+                            public void onBingRuleUpdateFailure(final String errorMessage) {
 
-                                }
-                            });
-                })
+                            }
+                        }))
                 .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
                 .create().show();
     }

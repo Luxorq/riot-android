@@ -70,6 +70,7 @@ android {
             resValue "string", "git_branch_name", "\"${gitBranchName()}\""
             resValue "string", "build_number", rootProject.ext.buildNumberProp
             minifyEnabled false
+            shrinkResources false
         }
 
         release {
@@ -78,7 +79,10 @@ android {
             resValue "string", "git_branch_name", "\"${gitBranchName()}\""
             resValue "string", "build_number", rootProject.ext.buildNumberProp
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+            signingConfig signingConfigs.release
         }
 
         matrixorg.initWith(buildTypes.release)

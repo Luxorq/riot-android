@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import im.vector.KedrPinCallback;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.DB;
@@ -141,11 +140,17 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
                 break;
             case MODE_ASK:
                 if (PreferencesManager.getDefaultPin(this).equals(pinValue)) {
+                    if (!isHome(this)) {
+                        clearActivityStack();
+                    }
                     lockAndExit(pinValue);
                     return;
                 }
                 DB.findKedrPin(pinValue, entity -> {
                     if (entity != null) {
+                        if (!entity.getPin().equals(pinValue)) {
+                            clearActivityStack();
+                        }
                         lockAndExit(entity.getPin());
                     } else {
                         runOnUiThread(() -> {
@@ -182,6 +187,11 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
         }
     }
 
+    private void clearActivityStack() {
+        finishAffinity();
+        startActivity(new Intent(this, VectorHomeActivity.class));
+    }
+
     private void repeatPassword(String pin) {
         if (TextUtils.isEmpty(pass)) {
             resetDots(dotsList);
@@ -215,7 +225,7 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
                         PreferencesManager.setDefaultPin(this, pin);
                         lockAndExit(pin);
                     } else {
-                        DB.saveKedrPin(KedrPin.createPin(pin));
+                        DB.saveKedrPin(VectorApp.currentPin, pin);
                         lockAndExit(pin);
                     }
                 }
@@ -279,6 +289,9 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
             Reprint.authenticate(new AuthenticationListener() {
                 @Override
                 public void onSuccess(int moduleTag) {
+                    if (!isHome(VectorGuardActivity.this)) {
+                        clearActivityStack();
+                    }
                     lockAndExit(PreferencesManager.getDefaultPin(VectorGuardActivity.this));
                 }
 
@@ -304,10 +317,6 @@ public class VectorGuardActivity extends VectorAppCompatActivity {
         if (mode.equals(MODE_CHANGE) || mode.equals(MODE_SECRET)) {
             super.onBackPressed();
         }
-    }
-
-    public static boolean checkGuardEnabled() {
-        return VectorApp.locked;
     }
 
     @Override
